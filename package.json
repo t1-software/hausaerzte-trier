@@ -1,0 +1,57 @@
+{
+	"name": "hausaerzte-trier",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"lint": "prettier --plugin-search-dir . --check . && eslint .",
+		"format": "prettier --plugin-search-dir . --write ."
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "^2.0.0",
+		"@sveltejs/kit": "^1.20.4",
+		"@typescript-eslint/eslint-plugin": "^6.0.0",
+		"@typescript-eslint/parser": "^6.0.0",
+		"autoprefixer": "^10.4.16",
+		"eslint": "^8.28.0",
+		"eslint-config-prettier": "^8.5.0",
+		"eslint-plugin-svelte": "^2.30.0",
+		"postcss": "^8.4.31",
+		"prettier": "^2.8.8",
+		"prettier-plugin-svelte": "^2.10.1",
+		"svelte": "^4.0.5",
+		"svelte-check": "^3.4.3",
+		"svelte-preprocess": "^5.0.4",
+		"tailwindcss": "^3.3.3",
+		"tslib": "^2.4.1",
+		"typescript": "^5.0.0",
+		"vite": "^4.4.2"
+	},
+	"type": "module",
+	"prettier": {
+		"printWidth": 120,
+		"tabWidth": 4,
+		"useTabs": false,
+		"semi": true,
+		"singleQuote": false,
+		"quoteProps": "consistent",
+		"trailingComma": "es5",
+		"bracketSpacing": true,
+		"bracketSameLine": false,
+		"arrowParens": "always",
+		"htmlWhitespaceSensitivity": "strict",
+		"endOfLine": "lf",
+		"singleAttributePerLine": false,
+		"plugins": [
+			"prettier-plugin-svelte"
+		]
+	},
+	"dependencies": {
+		"node-sass": "^9.0.0",
+		"sass": "^1.69.5"
+	}
+}
