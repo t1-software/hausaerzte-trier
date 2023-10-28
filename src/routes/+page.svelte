@@ -60,7 +60,7 @@
                     </div>
                 </div>
             </div>
-            <div class="grow min-w-[400px]">
+            <div class="grow min-w-[350px]">
                 {#if vacations.length >= 1}
                     <h1 class="mt-6">Urlaub</h1>
                     <table class="mt-6 w-full">
