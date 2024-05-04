@@ -10,26 +10,35 @@
         { day: "Freitag", time: "8:00-12:00 Uhr" },
     ];
 
-    const vacations = [{ from: "16.10.2023", to: "27.10.2023" }];
+    const vacations: { from: string; to: string }[] = []; //[{ from: "16.10.2023", to: "27.10.2023" }];
     let modalVisible = true;
 </script>
 
 <div class="flex md:flex-row flex-col gap-8 md:px-16">
     <div class="w-full lg:w-2/3">
-        <h1> Herzlich Willkommen</h1>
+        <h1>Herzlich Willkommen</h1>
 
         <div class="pt-6 text-justify w-full lg:w-[80%]">
-            Wir freuen uns auf Ihren Besuch in unserer modern ausgestatteten hausärztlichen Praxis. Unabhängig von der
-            Behandlung versuchen wir unsere Patienten umfassend zu informieren, denn nur gut informierte Patienten sind
-            in der Lage richtige Entscheidungen zu treffen. Ihre Gesundheit steht bei uns im Mittelpunkt. Uns ist es ein
-            großes Anliegen, dass Sie sich in unserer hausärztlichen Praxis wohl und gut aufgehoben fühlen. Für
-            Rückmeldungen sind wir stets dankbar.
+            Herzlich Willkommen in unserer Hausärztlichen Praxis.<br /><br />
+            Auf den folgenden Seiten möchten wir uns bei Ihnen vorstellen. Sie erhalten Auskünfte zum Leistungsspektrum sowie
+            zur Diagnostik der hausärztlichen Praxis.<br /><br />
+            Wir freuen uns auf Ihren Besuch in unserer modern ausgestatteten hausärztlichen Praxis. Unabhängig von der Behandlung
+            versuchen wir unsere Patienten umfassend zu informieren, denn nur gut informierte Patienten sind in der Lage
+            richtige Entscheidungen zu treffen.<br /><br />
+            Ihre Gesundheit steht bei uns im Mittelpunkt.<br /><br />
+            Uns ist es ein großes Anliegen, dass Sie sich in unserer hausärztlichen Praxis wohl und gut aufgehoben fühlen.
+            Für Rückmeldungen sind wir stets dankbar. Uns ist es ein großes Anliegen, dass Sie sich in unserer hausärztlichen
+            Praxis wohl und gut aufgehoben fühlen. Für Rückmeldungen sind wir stets dankbar.<br /><br />
+            Ihr Praxisteam
         </div>
 
         <h1 class="mt-8">Ihr Weg zu uns</h1>
 
         <div class="pt-6 text-justify w-full lg:w-[80%]">
-            Sie finden uns in der <b>Gilbertstraße 59, 54290 Trier</b> (<a href="">Google Maps</a>).<br />
+            Sie finden uns in der <b>Gilbertstraße 59, 54290 Trier</b> (<a
+                target="_blank"
+                href="https://maps.app.goo.gl/UEnPB2gXVbd8kf7e9">Google Maps</a
+            >).<br />
             <div class="mt-4">
                 <b>Anfahrt mit dem Bus:</b><br />
                 Bushaltestelle "Barbarathermen" in der Südallee: Linien 1, 10, 40, 81<br />
@@ -73,10 +82,11 @@
 
         <h1 class="mt-8">Termin vereinbaren</h1>
 
-        <div class="mt-6"
-            >Mit dem Telefon unter <a class="font-bold hover:text-gulfstream-700" href="tel:+49651975150"
-                >+49(0)651 975150</a
-            >
+        <div class="mt-6">
+            Terminvereinbarungen aller Art sowie Therapie-,<br /> Diagnoseanfragen sind nur persönlich oder telefonisch
+            möglich!<br /><br />
+            Mit dem Telefon unter
+            <a class="font-bold hover:text-gulfstream-700" href="tel:+49651975150">+49(0)651 975150</a>
             oder <br />
             per E-Mail unter der
             <a class="font-bold hover:text-gulfstream-700" href="mailto:praxis@hausaerzte-trier.de"

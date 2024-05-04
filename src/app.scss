@@ -101,9 +101,17 @@
 body {
     font-family: "Roboto", sans-serif;   
     font-weight: 400;
-    @apply bg-gulfstream-50;
+    @apply bg-gulfstream-50;    
+}
+
+p {
+    overflow: hidden;
 }
 
 h1 {    
     @apply text-2xl font-bold tracking-tight;
+}
+
+h2 {
+    @apply text-xl font-bold tracking-tight;
 }

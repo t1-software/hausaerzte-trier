@@ -1,35 +1,32 @@
 <h1>Datenschutz</h1>
-<h2>Datenschutzhinweise gemäß Art. 13 DSGVO</h2>
-<h3>Einleitung</h3>
-<p>In dieser Datenschutzerklärung erfahren Sie:</p>
-<ul>
-    <li
-        >wie wir auf unserer Website und bei unserer täglichen Arbeit mit personenbezogenen Daten (nachfolgend kurz
-        „Daten“) umgehen,</li
-    >
-    <li>welche Informationen über die Besucher unserer Website wir erfassen und auswerten,</li>
-    <li>ob und wie wir diese Informationen nutzen, weitergeben oder anderweitig verarbeiten.</li>
-</ul>
+Datenschutzhinweise gemäß Art. 13 DSGVO
+
+<h2 class="pt-6">Einleitung</h2>
+
+<p
+    >In dieser Datenschutzerklärung erfahren Sie: wie wir auf unserer Website und bei unserer täglichen Arbeit mit
+    personenbezogenen Daten (nachfolgend kurz „Daten“) umgehen, welche Informationen über die Besucher unserer Website
+    wir erfassen und auswerten, ob und wie wir diese Informationen nutzen, weitergeben oder anderweitig verarbeiten.
+</p>
 <p
     >Diese Datenschutzerklärung gilt für Ihren Besuch unserer Website (nachfolgend bezeichnet als „Onlineangebot“). Im
     Hinblick auf die verwendeten Begrifflichkeiten, wie z. B. „Verarbeitung“ oder „Verantwortlicher“ verweisen wir auf
     die Definitionen im Art. 4 der Datenschutzgrundverordnung (DSGVO).</p
 >
-<h3>Verantwortlicher</h3>
+<h2>Verantwortlicher</h2>
 <p
     >Diese Datenschutzerklärung gilt für die Datenverarbeitung durch uns als Verantwortlicher gem. Art. 4 Abs. 7
     Datenschutzgrundverordnung (DSGVO). Kontaktdaten sind:</p
 >
 <p
-    ><strong>Hausarztpraxis Thiemo Stiemert</strong>, Facharzt für Allgemeinmedizin<br />Gilbertstraße 59 | 54290 Trier,
-    Deutschland<br />Telefon: <a href="tel:0651-975150">+49(0)651-975150</a> | E-Mail:
+    ><strong>Hausarztpraxis Thiemo Stiemert</strong><br />Facharzt für Allgemeinmedizin<br />Gilbertstraße 59 | 54290
+    Trier, Deutschland<br />Telefon: <a href="tel:0651-975150">+49(0)651-975150</a> | E-Mail:
     <a title="E-Mail" href="mailto:praxis@hausaerzte-trier.de" target="_blank" rel="noopener noreferrer"
         >praxis@hausaerzte-trier.de</a
-    ><br /><span class="tsmcontroller">Link zum Impressum:</span>
-    <a href="https://hausaerzte-trier.de/impressum/">https://hausaerzte-trier.de/impressum/</a></p
+    ><br /><a href="/impressum/">Link zum Impressum</a></p
 >
 <h3>Arten der verarbeiteten Daten:</h3>
-<ul>
+<ul class="list-disc list-inside">
     <li>Bestandsdaten (z. B., Namen, Adressen).</li>
     <li>Kontaktdaten (z. B., E-Mail, Telefonnummern).</li>
     <li>Inhaltsdaten (z. B., Texteingaben, Fotografien, Videos).</li>
@@ -42,7 +39,7 @@
     als „Nutzer“).</p
 >
 <h3>Zweck der Verarbeitung</h3>
-<ul>
+<ul class="list-disc list-inside">
     <li>Zurverfügungstellung des Onlineangebotes, seiner Funktionen und Inhalte.</li>
     <li>Beantwortung von Kontaktanfragen und Kommunikation mit Nutzern.</li>
     <li>Sicherheitsmaßnahmen.</li>
@@ -254,16 +251,15 @@
     Onlineangebotes gem. Art. 6 Abs. 1 lit. f DSGVO i.V.m. Art. 28 DSGVO (Abschluss Auftragsverarbeitungsvertrag).</p
 >
 <p><strong>Eingesetzte Dienste und Diensteanbieter:</strong></p>
-<ul>
+<ul class="list-disc list-inside">
     <li
         ><strong>Host Europe: </strong>Leistungen auf dem Gebiet der Bereitstellung von informationstechnischer
         Infrastruktur und verbundenen Dienstleistungen (z.B. Speicherplatz und/oder Rechenkapazitäten, E-Mail-Hosting);
         <strong>Dienstanbieter: </strong>Host Europe GmbH, Hansestraße 111, 51149 Köln, Deutschland;
         <strong>Website: </strong><a href="https://www.hosteurope.de">https://www.hosteurope.de</a>;
         <strong>Datenschutzerklärung: </strong><a href="https://www.hosteurope.de/AGB/Datenschutzerklaerung"
-            >https://www.hosteurope.de/AGB/Datenschutzerklaerung</a
-        >; <strong>Auftragsverarbeitungsvertrag: </strong><a href="https://www.hosteurope.de/Dokumente/"
-            >https://www.hosteurope.de/Dokumente/</a
+            >Datenschutzerklaerung</a
+        >; <strong>Auftragsverarbeitungsvertrag: </strong><a href="https://www.hosteurope.de/Dokumente/">Dokumente/</a
         >.</li
     >
 </ul>
@@ -329,21 +325,19 @@
     und Service. Rechtsgrundlagen: Berechtigte Interessen (Art. 6 Abs. 1 S. 1 lit. f. DSGVO).</p
 >
 <p><strong>Eingesetzte Dienste und Diensteanbieter:</strong></p>
-<ul>
+<ul class="list-disc list-inside">
     <li
         ><strong>OpenStreetMap:</strong> Wir binden die Landkarten des Dienstes „OpenStreetMap“ ein, die auf Grundlage
         der Open Data Commons Open Database Lizenz (ODbL) durch die OpenStreetMap Foundation (OSMF) angeboten werden.
         <strong>Diensteanbieter:</strong>
-        FOSSGIS e.V., Bundesallee 23, 10717 Berlin, Deutschland. Die Daten der Nutzer werden durch OpenStreetMap
-        ausschließlich zu Zwecken der Darstellung der Kartenfunktionen und zur Zwischenspeicherung der gewählten
-        Einstellungen verwendet. Zu diesen Daten können insbesondere IP-Adressen und Standortdaten der Nutzer gehören,
-        die jedoch nicht ohne deren Einwilligung (im Regelfall im Rahmen der Einstellungen ihrer Mobilgeräte vollzogen)
-        erhoben werden. Dienstanbieter: OpenStreetMap Foundation (OSMF); <strong>Website:</strong>
-        <a href="https://www.openstreetmap.de">https://www.openstreetmap.de</a>;
+        FOSSGIS e.V., Bundesallee 23, 10717 Berlin, Deutschland. Die Daten der Nutzer werden durch OpenStreetMap ausschließlich
+        zu Zwecken der Darstellung der Kartenfunktionen und zur Zwischenspeicherung der gewählten Einstellungen verwendet.
+        Zu diesen Daten können insbesondere IP-Adressen und Standortdaten der Nutzer gehören, die jedoch nicht ohne deren
+        Einwilligung (im Regelfall im Rahmen der Einstellungen ihrer Mobilgeräte vollzogen) erhoben werden. Dienstanbieter:
+        OpenStreetMap Foundation (OSMF); <strong>Website:</strong>
+        <a href="https://www.openstreetmap.de">openstreetmap.de</a>;
         <strong>Datenschutzerklärung:</strong>
-        <a href="https://wiki.openstreetmap.org/wiki/Privacy_Policy"
-            >https://wiki.openstreetmap.org/wiki/Privacy_Policy</a
-        >.</li
+        <a href="https://wiki.openstreetmap.org/wiki/Privacy_Policy">Privacy_Policy</a>.</li
     >
 </ul>
 

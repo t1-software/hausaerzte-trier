@@ -6,7 +6,8 @@
 >
 
 <p
-    ><strong>Kontakt:</strong><br />E-Mail: praxis@hausaerzte-trier.de<br />Telefon:
+    ><strong>Kontakt:</strong><br />E-Mail:
+    <a href="mailto:praxis@hausaerzte-trier.de">praxis@hausaerzte-trier.de</a><br />Telefon:
     <a href="tel:0651-975150">+49(0)651-975150</a><br />Telefax: +49(0)651 9751520</p
 >
 
@@ -44,7 +45,7 @@
     Rheinland-Pfalz, 1978, S. 649.</p
 >
 
-<ul>
+<ul class="list-disc list-inside">
     <li
         ><a
             href="https://www.laek-rlp.de/assets/downloads/5bbf3e8d/w7e371d0d1506001c7777d562c0cbaaf/berufsordn_021022.pdf"
@@ -82,7 +83,7 @@
     nachfolgenden urheberrechtlichen Informationen gem. § 13 UrhG verwiesen:</p
 >
 
-<ul>
+<ul class="list-disc list-inside">
     <li>Alle Fotos ©&nbsp;Dr. med. Gerrit Fischer / hausaerzte-trier.de</li>
 
     <li
