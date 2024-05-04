@@ -109,7 +109,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-    class="fixed right-[-200px] lg:top-[510px] md:top-[410px] w-[270px] h-16 border b-1 border-gulfstream-500 hidden md:flex bg-gulfstream-400 hover:right-0 transition-all duration-200 ease-in-out shadow-md cursor-pointer"
+    class="fixed right-[-200px] lg:top-[510px] top-[310px] md:top-[410px] w-[270px] h-16 border b-1 border-gulfstream-500 flex bg-gulfstream-400 hover:right-0 transition-all duration-200 ease-in-out shadow-md cursor-pointer"
     on:click={() => goto("tel:+496519751521")}
 >
     <svg
