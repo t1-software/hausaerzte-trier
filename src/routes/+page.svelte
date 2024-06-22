@@ -1,12 +1,47 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
+    import { Loader } from "@googlemaps/js-api-loader";
     import Modal from "../components/Modal.svelte";
+    import { onMount } from "svelte";
+
+    onMount(async () => {
+        const loader = new Loader({
+            apiKey: "AIzaSyApmS8897U1qdEjB3BYH2QHmNDjG2o3N4I",
+            version: "weekly",
+            id: "__googleMapsScriptId",
+        });
+
+        await loader.load();
+
+        const mapOptions = {
+            center: {
+                lat: 49.749053955078125,
+                lng: 6.63014554977417,
+            },
+            zoom: 17,
+            mapId: "1",
+        };
+
+        const { Map } = await loader.importLibrary("maps");
+        const { AdvancedMarkerElement } = await loader.importLibrary("marker");
+
+        const element = document.getElementById("map");
+        if (element !== null) {
+            const map = new Map(element, mapOptions);
+
+            new AdvancedMarkerElement({
+                map,
+                position: { lat: 49.749053955078125, lng: 6.63014554977417 },
+                title: "Hausärztliche Praxis",
+            });
+        }
+    });
 
     const times = [
         { day: "Montag", time: "8:00-12:00 Uhr, 16:00-19:00 Uhr" },
-        { day: "Dienstag", time: "8:00-12:00 Uhr, 16:00-18:00 Uhr mit Termin" },
+        { day: "Dienstag", time: "8:00-12:00 Uhr, Nachmittags: nur nach Vereinbarung" },
         { day: "Mittwoch", time: "8:00-12:00 Uhr" },
-        { day: "Donnerstag", time: "8:00-12:00 Uhr, 16:00-18:00 Uhr mit Termin" },
+        { day: "Donnerstag", time: "8:00-12:00 Uhr, Nachmittags: nur nach Vereinbarung" },
         { day: "Freitag", time: "8:00-12:00 Uhr" },
     ];
 
@@ -32,13 +67,15 @@
             Ihr Praxisteam
         </div>
 
+        <h1 class="pt-6">Aktuelle Neuigkeiten</h1>
+        <div class="pt-6 text-justify w-full lg:w-[80%]"> Wir machen Urlaub vom 20.05 - 31.05.2024. </div>
+
         <h1 class="mt-8">Ihr Weg zu uns</h1>
 
         <div class="pt-6 text-justify w-full lg:w-[80%]">
-            Sie finden uns in der <b>Gilbertstraße 59, 54290 Trier</b> (<a
-                target="_blank"
-                href="https://maps.app.goo.gl/UEnPB2gXVbd8kf7e9">Google Maps</a
-            >).<br />
+            Sie finden uns in der <b>Gilbertstraße 59, 54290 Trier</b>.
+            <div id="map" class="w-[100%] h-[400px]" />
+            <br />
             <div class="mt-4">
                 <b>Anfahrt mit dem Bus:</b><br />
                 Bushaltestelle "Barbarathermen" in der Südallee: Linien 1, 10, 40, 81<br />
