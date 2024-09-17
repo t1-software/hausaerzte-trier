@@ -55,8 +55,7 @@
             richtige Entscheidungen zu treffen.<br /><br />
             Ihre Gesundheit steht bei uns im Mittelpunkt.<br /><br />
             Uns ist es ein großes Anliegen, dass Sie sich in unserer hausärztlichen Praxis wohl und gut aufgehoben fühlen.
-            Für Rückmeldungen sind wir stets dankbar. Uns ist es ein großes Anliegen, dass Sie sich in unserer hausärztlichen
-            Praxis wohl und gut aufgehoben fühlen. Für Rückmeldungen sind wir stets dankbar.<br /><br />
+            Für Rückmeldungen sind wir stets dankbar.<br /><br />
             Ihr Praxisteam
         </div>
 
