@@ -85,11 +85,6 @@
 
 <ul class="list-disc list-inside">
     <li>Alle Fotos ©&nbsp;Dr. med. Gerrit Fischer / hausaerzte-trier.de</li>
-
-    <li
-        >Karten-Daten von <a href="http://www.openstreetmap.org/">OpenStreetMap</a> – Veröffentlicht unter
-        <a href="http://opendatacommons.org/licenses/odbl/">ODbL</a></li
-    >
 </ul>
 
 <h3 class="wp-block-heading" id="hinweis">Hinweis</h3>
@@ -104,7 +99,7 @@
 
 <p />
 
-<p>Stand: 01.01.2023</p>
+<p>Stand: 17.09.2024</p>
 
 <style>
     p {

@@ -341,7 +341,7 @@ Datenschutzhinweise gemäß Art. 13 DSGVO
     >
 </ul>
 
-<p>Stand: 01.01.2023</p>
+<p>Stand: 17.09.2024</p>
 
 <style>
     p {
