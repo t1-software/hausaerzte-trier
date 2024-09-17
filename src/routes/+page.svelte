@@ -116,27 +116,27 @@
             </tbody>
         </table>
 
-        <h1 class="mt-8">Termin vereinbaren</h1>
+        <h1 class="mt-8">Termin vereinbaren / Rezepte</h1>
 
         <div class="mt-6">
             Terminvereinbarungen aller Art sowie Therapie-,<br /> Diagnoseanfragen sind nur persönlich oder telefonisch
-            möglich!<br /><br />
-            Mit dem Telefon unter
-            <a class="font-bold hover:text-gulfstream-700" href="tel:+49651975150">+49(0)651 975150</a>
-            oder <br />
-            per E-Mail unter der
-            <a class="font-bold hover:text-gulfstream-700" href="mailto:praxis@hausaerzte-trier.de"
-                >praxis@hausaerzte-trier.de</a
-            >.
+            möglich! Beachten Sie die Bandansage.<br /><br />
+            <ul>
+                <li
+                    >Telefon: <a class="font-bold hover:text-gulfstream-700" href="tel:+49651975150">+49(0)651 975150</a
+                    ></li
+                >
+                <li
+                    >E-Mail: <a class="font-bold hover:text-gulfstream-700" href="mailto:praxis@hausaerzte-trier.de"
+                        >praxis@hausaerzte-trier.de</a
+                    ></li
+                >
+                <li
+                    >Fax: <a class="font-bold hover:text-gulfstream-700" href="tel:+496519751520">+49(0)651 9751520</a
+                    ></li
+                >
+            </ul>
         </div>
-
-        <h1 class="mt-8">Rezeptbestellungen</h1>
-
-        <div class="mt-6">
-            Per Telefon unter der <a class="font-bold hover:text-gulfstream-700" href="tel:+496519751521"
-                >+49(0)651 9751521</a
-            >.</div
-        >
     </div>
 </div>
 
