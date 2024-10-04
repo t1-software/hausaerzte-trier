@@ -105,7 +105,11 @@
             <tbody class="">
                 {#each times as time}
                     <tr class="even:bg-gulfstream-100 odd:bg-gulfstrem-200 border b-1">
-                        <td class="p-4">{time[0]}</td><td class="p-4 text-right">{time[1]}<br />{time[2]}</td>
+                        {#if time[1] !== ""}
+                            <td class="p-4">{time[0]}</td><td class="p-4 text-right">{time[1]}<br />{time[2]}</td>
+                        {:else}
+                            <td colspan="2" class="p-4 text-center">{time[0]}</td>
+                        {/if}
                     </tr>
                 {/each}
             </tbody>
