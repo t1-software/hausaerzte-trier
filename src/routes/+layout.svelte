@@ -23,7 +23,7 @@
                     <div
                         class="absolute right-0 bottom-0 mb-4 mr-4 bg-gulfstream-400 opacity-90 py-2 px-4 lg:text-3xl md:text-2xl text-2xl text-left"
                     >
-                        Hausartztpraxis in Trier<br />
+                        Hausarztpraxis in Trier<br />
                         Thiemo Stiemert
                     </div>
                 </div>
