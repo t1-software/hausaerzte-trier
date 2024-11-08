@@ -11,6 +11,7 @@
             {#if news.length > 0}
                 <a href="/#neuigkeiten" class="text-white">Neuigkeiten</a>
             {/if}
+            <a href="/team" class="text-white">Über uns</a>
             <a href="/leistungsspektrum" class="text-white">Leistungsspektrum</a>
         </div>
     </div>
