@@ -27,7 +27,7 @@ kennen.
 
     <div class="text-center text-sm flex flex-col gap-1 align-center">
         <div class="flex justify-center"
-            ><div class="w-80 h-80 bg-gradient-to-tr from-gulfstream-300 to-gulfstream-400" /></div
+            ><img src="/dahm_susanne.jpg" alt="Susanne Dahm" class="w-80 h-80 object-cover" /></div
         >
         <div class="font-semibold">Susanne Dahm</div>
         <div>Medizinische Fachangestellte</div>
