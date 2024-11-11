@@ -1,14 +1,17 @@
 <script lang="ts">
-    import { onMount, setContext } from "svelte";
+    import { onMount } from "svelte";
     import Footer from "../components/Footer.svelte";
     import Header from "../components/Header.svelte";
-    import { getData } from "../content";
+    import { content, getData } from "../content";
 
     let dataLoaded = false;
+    let important = "";
 
     onMount(async () => {
         await getData();
         dataLoaded = true;
+
+        important = $content["Wichtig"][0][0].replaceAll("\r", "");
     });
 </script>
 
@@ -32,6 +35,11 @@
         <div
             class="lg:mt-[500px] md:mt-[400px] mt-[300px] bg-gradient-to-r from-gulfstream-400 to-gulfstream-500 h-1"
         />
+        {#if important.length > 0}
+            <div class="bg-gulfstream-100 w-full py-4 flex align-center justify-center text-center font-bold">
+                {important}
+            </div>
+        {/if}
         <div class="w-full max-w-7xl mx-auto p-4 mt-8 mb-8">
             <slot />
         </div>
