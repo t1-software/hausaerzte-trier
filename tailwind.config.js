@@ -22,7 +22,7 @@ export default {
         black: "#000000",
         transparent: "transparent",
         current: "currentColor",
-        gulfstream: {
+        gulfstream2: {
         '50': '#f1f8f2',
         '100': '#dcefdc',
         '200': '#bcdebe',
@@ -34,6 +34,19 @@ export default {
         '800': '#1f4628',
         '900': '#1a3a23',
         '950': '#0e2013',
+    },
+    'gulfstream': {
+        '50': '#f4f6f3',
+        '100': '#e7eae1',
+        '200': '#cfd5c5',
+        '300': '#acb89d',
+        '400': '#899977',
+        '500': '#647752',
+        '600': '#4c5e3d',
+        '700': '#3c4b31',
+        '800': '#313c29',
+        '900': '#293222',
+        '950': '#171c12',
     },
     
       },  

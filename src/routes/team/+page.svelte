@@ -19,7 +19,7 @@ kennen.
 
     <div class="text-center text-sm flex flex-col gap-1 align-center">
         <div class="flex justify-center"
-            ><img src="/stiemert_detlef.jpg" alt="Detlef Stiemert" class="w-80 h-80 object-cover" /></div
+            ><img src="/stiemert_detlef2.jpeg" alt="Detlef Stiemert" class="w-80 h-80 object-cover" /></div
         >
         <div class="font-semibold">San.-rat. Dr. med. Detlef Stiemert</div>
         <div>angestellter Arzt - Facharzt Allgemeinmedizin, Notfallmedizin</div>
