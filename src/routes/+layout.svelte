@@ -20,7 +20,7 @@
         <div class="flex flex-col">
             <Header />
             <div
-                class="absolute -z-10 bg-[url('/praxis.jpeg')] bg-cover bg-top-left bg-no-repeat opacity-80 w-full lg:h-[500px] md:h-[400px] h-[300px]"
+                class="absolute -z-10 bg-[url('/praxis.jpeg')] bg-cover bg-center bg-no-repeat opacity-80 w-full lg:h-[500px] md:h-[400px] h-[300px]"
             >
                 <div class="w-full h-full max-w-7xl relative mx-auto">
                     <div
