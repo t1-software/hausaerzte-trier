@@ -51,9 +51,9 @@ kennen.
 
     <div class="text-center text-sm flex flex-col gap-1 align-center">
         <div class="flex justify-center"
-            ><img src="/huebsch_jenny.jpeg" alt="Jenny Hübsch" class="w-80 h-80 object-cover" /></div
+            ><div class="w-80 h-80 bg-gradient-to-tr from-gulfstream-300 to-gulfstream-400" /></div
         >
-        <div class="font-semibold">Jenny Hübsch</div>
+        <div class="font-semibold">Julia Heinz</div>
         <div>Medizinische Fachangestellte</div>
     </div>
 </div>
