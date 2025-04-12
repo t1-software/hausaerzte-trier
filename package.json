@@ -54,6 +54,7 @@
 	"dependencies": {
 		"@googlemaps/js-api-loader": "^1.16.6",
 		"node-sass": "^9.0.0",
-		"sass": "^1.69.5"
+		"sass": "^1.69.5",
+		"svelte-markdown": "^0.4.1"
 	}
 }

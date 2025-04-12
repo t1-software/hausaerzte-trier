@@ -38,10 +38,14 @@ export async function getData() {
     const result: Content = {};
 
     headersWithPos.forEach((header) => {
-        result[header.header] = lines
-            .slice(1)
-            .map((line) => line.split("\t").slice(header.from, header.to + 1))
-            .filter((line) => line.some((cell) => cell !== ""));
+        if (header.header === "Neuigkeiten") {
+            result[header.header] = lines.slice(1).map((line) => line.split("\t").slice(header.from, header.to + 1));
+        } else {
+            result[header.header] = lines
+                .slice(1)
+                .map((line) => line.split("\t").slice(header.from, header.to + 1))
+                .filter((line) => line.some((cell) => cell !== ""));
+        }
     });
     content.set(result);
 }

@@ -4,10 +4,16 @@
     import { onMount } from "svelte";
     import { content } from "../content";
     import Location from "../components/Location.svelte";
+    import SvelteMarkdown from "svelte-markdown";
+    import MdList from "../components/MDList.svelte";
+    import MdParagraph from "../components/MDParagraph.svelte";
 
     let news = $content["Neuigkeiten"];
     let vacations = $content["Urlaub"];
     let times = $content["Sprechzeiten"];
+
+    let newsString = news.map((n) => n[0]).join("\n");
+    console.log(newsString);
 
     onMount(async () => {
         const loader = new Loader({
@@ -74,10 +80,8 @@
 
         {#if news.length > 0}
             <h1 class="anchor" id="neuigkeiten">Aktuelle Neuigkeiten</h1>
-            <div class="pt-6 text-justify w-full lg:w-[80%]">
-                {#each news as content}
-                    {content}<br />
-                {/each}
+            <div class="pt-6 text-justify w-full lg:w-[80%] news">
+                <SvelteMarkdown source={newsString} renderers={{ list: MdList, paragraph: MdParagraph }} />
             </div>
         {/if}
 
