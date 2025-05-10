@@ -27,6 +27,18 @@ kennen.
 
     <div class="text-center text-sm flex flex-col gap-1 align-center">
         <div class="flex justify-center"
+            ><img
+                src="/van_der_werff-stiemert_anne-brit.jpg"
+                alt="Anne-Britt van der Werff-Stiemert"
+                class="w-80 h-80 object-cover"
+            /></div
+        >
+        <div class="font-semibold">Anne-Britt van der Werff-Stiemert</div>
+        <div>Weiterbildungsassistentin, Ehefrau und Mutter</div>
+    </div>
+
+    <div class="text-center text-sm flex flex-col gap-1 align-center">
+        <div class="flex justify-center"
             ><img src="/dahm_susanne.jpg" alt="Susanne Dahm" class="w-80 h-80 object-cover" /></div
         >
         <div class="font-semibold">Susanne Dahm</div>
