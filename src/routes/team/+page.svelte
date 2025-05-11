@@ -34,7 +34,7 @@ kennen.
             /></div
         >
         <div class="font-semibold">Anne-Britt van der Werff-Stiemert</div>
-        <div>Weiterbildungsassistentin, Ehefrau und Mutter</div>
+        <div>Weiterbildungsassistentin</div>
     </div>
 
     <div class="text-center text-sm flex flex-col gap-1 align-center">
