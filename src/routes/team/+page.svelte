@@ -73,7 +73,7 @@ kennen.
         <div class="flex justify-center"
             ><div class="w-80 h-80 bg-gradient-to-tr from-gulfstream-300 to-gulfstream-400" /></div
         >
-        <div class="font-semibold">Leman Toomeh</div>
+        <div class="font-semibold">Ieman Toomeh</div>
         <div>Auszubildende</div>
     </div>
 </div>
