@@ -154,3 +154,11 @@ h2 {
   --color-gulfstream-900: #1f3523;
   --color-gulfstream-950: #111d13;
 }
+
+.anchor::before {
+    content: "";
+    display: block;
+    height: 75px;
+    margin-top: -75px;
+    visibility: hidden;
+}
