@@ -39,5 +39,5 @@
 <Footer />
 
 <style lang="scss" global>
-    @import "../app.scss";
+    @import "../app.css";
 </style>

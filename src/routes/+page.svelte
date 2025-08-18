@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { goto } from "$app/navigation";
     import type { PageData } from "./$types";
     import { marked } from "marked";
 
@@ -79,7 +78,9 @@
             <table class="mt-6 w-full">
                 <tbody class="">
                     {#each vacations as vacation}
-                        <tr class="odd:bg-gulfstream-100 even:bg-gulfstrem-200 border b-1 text-center font-bold">
+                        <tr
+                            class="odd:bg-gulfstream-100 even:bg-gulfstream-200 border border-gray-300 text-center font-bold"
+                        >
                             <td class="p-4">{vacation[0]} bis {vacation[1]}</td>
                         </tr>
                     {/each}
@@ -91,7 +92,7 @@
         <table class="mt-6 w-full">
             <tbody class="">
                 {#each times as time}
-                    <tr class="even:bg-gulfstream-100 odd:bg-gulfstrem-200 border b-1">
+                    <tr class="even:bg-gulfstream-100 odd:bg-gulfstream-200 border border-gray-300">
                         {#if time[1] !== ""}
                             <td class="p-4">{time[0]}</td><td class="p-4 text-right">{time[1]}<br />{time[2]}</td>
                         {:else}
@@ -162,18 +163,15 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-    class="fixed right-[-200px] lg:top-[510px] top-[310px] md:top-[410px] w-[270px] h-16 border b-1 border-gulfstream-500 flex bg-gulfstream-400 hover:right-0 transition-all duration-200 ease-in-out shadow-md cursor-pointer"
-    on:click={() => window.location.href = "tel:+49651975150"}
+    class="fixed right-[-210px] lg:top-[510px] top-[310px] md:top-[410px] w-[270px] h-16 border border-gulfstream-500 flex items-center bg-gulfstream-400 hover:right-0 transition-all duration-200 ease-in-out shadow-md cursor-pointer"
+    on:click={() => (window.location.href = "tel:+49651975150")}
 >
-    <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        class="w-100 h-100 stroke-gulstream-400 bg-gulstream-500"
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-8 h-8 ml-4 fill-black"
         ><path
             d="M17.707 12.293a.999.999 0 0 0-1.414 0l-1.594 1.594c-.739-.22-2.118-.72-2.992-1.594s-1.374-2.253-1.594-2.992l1.594-1.594a.999.999 0 0 0 0-1.414l-4-4a.999.999 0 0 0-1.414 0L3.581 5.005c-.38.38-.594.902-.586 1.435.023 1.424.4 6.37 4.298 10.268s8.844 4.274 10.269 4.298h.028c.528 0 1.027-.208 1.405-.586l2.712-2.712a.999.999 0 0 0 0-1.414l-4-4.001zm-.127 6.712c-1.248-.021-5.518-.356-8.873-3.712-3.366-3.366-3.692-7.651-3.712-8.874L7 4.414 9.586 7 8.293 8.293a1 1 0 0 0-.272.912c.024.115.611 2.842 2.271 4.502s4.387 2.247 4.502 2.271a.991.991 0 0 0 .912-.271L17 14.414 19.586 17l-2.006 2.005z"
         /></svg
     >
-    <div class="h-100 flex items-center pl-4 text-xl font-bold">+49(0)651 975150</div>
+    <div class="flex items-center pl-4 text-xl font-bold text-black">+49(0)651 975150</div>
 </div>
 
 <style lang="scss">

@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @font-face {    
     font-display: swap;
@@ -101,7 +99,7 @@
 body {
     font-family: "Roboto", sans-serif;   
     font-weight: 400;
-    @apply bg-gulfstream-50;    
+    background-color: var(--color-gulfstream-50);
 }
 
 p {
@@ -109,11 +107,17 @@ p {
 }
 
 h1 {    
-    @apply text-2xl font-bold tracking-tight;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
 }
 
 h2 {
-    @apply text-xl font-bold tracking-tight;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
 }
 
 .news {
@@ -135,4 +139,18 @@ h2 {
     strong {
         font-weight: 700;
     }
+}
+
+@theme {
+  --color-gulfstream-50: #f2f7f2;
+  --color-gulfstream-100: #e0ecdf;
+  --color-gulfstream-200: #c2d8c2;
+  --color-gulfstream-300: #8db58f;
+  --color-gulfstream-400: #6c9b70;
+  --color-gulfstream-500: #4b7e51;
+  --color-gulfstream-600: #38633e;
+  --color-gulfstream-700: #2d4f32;
+  --color-gulfstream-800: #254029;
+  --color-gulfstream-900: #1f3523;
+  --color-gulfstream-950: #111d13;
 }

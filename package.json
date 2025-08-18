@@ -15,7 +15,6 @@
 		"@sveltejs/adapter-auto": "^6.1.0",
 		"@sveltejs/kit": "^2.31.1",
 		"@sveltejs/vite-plugin-svelte": "^6.1.2",
-		"@types/google.maps": "^3.58.1",
 		"@typescript-eslint/eslint-plugin": "^8.39.1",
 		"@typescript-eslint/parser": "^8.39.1",
 		"autoprefixer": "^10.4.17",
@@ -29,7 +28,7 @@
 		"svelte": "^5.0.0-next.1",
 		"svelte-check": "^4.3.1",
 		"svelte-preprocess": "^6.0.3",
-		"tailwindcss": "^3.4.17",
+		"tailwindcss": "^4.1.12",
 		"tslib": "^2.8.1",
 		"typescript": "^5.3.3",
 		"vite": "^7.1.2"
@@ -54,7 +53,6 @@
 		]
 	},
 	"dependencies": {
-		"@googlemaps/js-api-loader": "^1.16.10",
 		"@tailwindcss/postcss": "^4.1.12",
 		"marked": "^16.2.0"
 	}

@@ -1,6 +1,6 @@
 export default {
   content: ['./src/**/*.{html,js,svelte,ts}'],
-  theme: {  
+  theme: {
     fontSize: {
       xs: ['0.75rem', { lineHeight: '1rem' }],
       sm: ['0.875rem', { lineHeight: '1.5rem' }],
@@ -17,53 +17,6 @@ export default {
       '9xl': ['8rem', { lineHeight: '1' }],
     },
     extend: {
-      colors: {
-        white: "#ffffff",
-        black: "#000000",
-        transparent: "transparent",
-        current: "currentColor",
-        gulfstream2: {
-        '50': '#f1f8f2',
-        '100': '#dcefdc',
-        '200': '#bcdebe',
-        '300': '#90c597',
-        '400': '#6faf79',
-        '500': '#3f8a4d',
-        '600': '#2d6e3b',
-        '700': '#245830',
-        '800': '#1f4628',
-        '900': '#1a3a23',
-        '950': '#0e2013',
-    },
-    'gulfstream3': {
-        '50': '#f4f6f3',
-        '100': '#e7eae1',
-        '200': '#cfd5c5',
-        '300': '#acb89d',
-        '400': '#899977',
-        '500': '#647752',
-        '600': '#4c5e3d',
-        '700': '#3c4b31',
-        '800': '#313c29',
-        '900': '#293222',
-        '950': '#171c12',
-    },
-    'gulfstream': {
-        '50': '#f2f7f2',
-        '100': '#e0ecdf',
-        '200': '#c2d8c2',
-        '300': '#8db58f',
-        '400': '#6c9b70',
-        '500': '#4b7e51',
-        '600': '#38633e',
-        '700': '#2d4f32',
-        '800': '#254029',
-        '900': '#1f3523',
-        '950': '#111d13',
-    },
-    
-    
-      },  
       borderRadius: {
         '4xl': '2rem',
       },
@@ -75,6 +28,6 @@ export default {
         '2xl': '40rem',
       },
     },
-  },  
+  },
   plugins: []
 };
