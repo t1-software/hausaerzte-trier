@@ -22,7 +22,7 @@
         class="fixed left-0 top-0 right-0 bottom-0 z-10 bg-gray-700 opacity-50"
         on:mousedown|self={hideModal}
         on:keydown={handleKeydown}
-    />
+    ></div>
 
     <div class="fixed left-0 top-0 right-0 bottom-0 z-20 flex justify-center items-center">
         <div class="bg-white rounded-lg shadow-lg p-4 w-full max-w-7xl max-h-full overflow-y-auto">

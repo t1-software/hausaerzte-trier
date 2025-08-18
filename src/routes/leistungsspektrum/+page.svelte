@@ -1,7 +1,10 @@
 <script lang="ts">
-    import { content } from "../../content";
+    import type { PageData } from "./$types";
 
-    let leistungen = $content["Leistungsspektrum"];
+    export let data: PageData;
+
+    $: content = data.content;
+    $: leistungen = content["Leistungsspektrum"] || [];
 </script>
 
 <h1>Leistungsspektrum</h1>

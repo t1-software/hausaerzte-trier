@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { content } from "../content";
+    export let content: Record<string, string[][]> = {};
 
-    let news = $content["Neuigkeiten"];
+    $: news = content["Neuigkeiten"] || [];
 </script>
 
 <div class="fixed bg-gradient-to-r from-gulfstream-400 to-gulfstream-500 w-full p-3">

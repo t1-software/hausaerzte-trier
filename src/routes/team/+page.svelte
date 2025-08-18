@@ -55,7 +55,7 @@ kennen.
 
     <div class="text-center text-sm flex flex-col gap-1 align-center">
         <div class="flex justify-center"
-            ><div class="w-80 h-80 bg-gradient-to-tr from-gulfstream-300 to-gulfstream-400" /></div
+            ><div class="w-80 h-80 bg-gradient-to-tr from-gulfstream-300 to-gulfstream-400"></div></div
         >
         <div class="font-semibold">Linda Hontheim</div>
         <div>Medizinische Fachangestellte</div>
@@ -71,7 +71,7 @@ kennen.
 
     <div class="text-center text-sm flex flex-col gap-1 align-center">
         <div class="flex justify-center"
-            ><div class="w-80 h-80 bg-gradient-to-tr from-gulfstream-300 to-gulfstream-400" /></div
+            ><div class="w-80 h-80 bg-gradient-to-tr from-gulfstream-300 to-gulfstream-400"></div></div
         >
         <div class="font-semibold">Ieman Toomeh</div>
         <div>Auszubildende</div>

@@ -1,62 +1,15 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import { Loader } from "@googlemaps/js-api-loader";
-    import { onMount } from "svelte";
-    import { content } from "../content";
-    import Location from "../components/Location.svelte";
-    import SvelteMarkdown from "svelte-markdown";
-    import MdList from "../components/MDList.svelte";
-    import MdParagraph from "../components/MDParagraph.svelte";
+    import type { PageData } from "./$types";
+    import { marked } from "marked";
 
-    let news = $content["Neuigkeiten"];
-    let vacations = $content["Urlaub"];
-    let times = $content["Sprechzeiten"];
+    export let data: PageData;
 
-    let newsString = news.map((n) => n[0]).join("\n");
-    console.log(newsString);
-
-    onMount(async () => {
-        const loader = new Loader({
-            apiKey: "AIzaSyApmS8897U1qdEjB3BYH2QHmNDjG2o3N4I",
-            version: "weekly",
-            id: "__googleMapsScriptId",
-        });
-
-        await loader.load();
-
-        const mapOptions = {
-            center: {
-                lat: 49.749053955078125,
-                lng: 6.63014554977417,
-            },
-            zoom: 17,
-            mapId: "1",
-        };
-
-        const { Map } = await loader.importLibrary("maps");
-        const { AdvancedMarkerElement } = await loader.importLibrary("marker");
-
-        const element1 = document.getElementById("map1");
-        const element2 = document.getElementById("map2");
-        if (element1 !== null) {
-            const map1 = new Map(element1, mapOptions);
-
-            new AdvancedMarkerElement({
-                map: map1,
-                position: { lat: 49.749053955078125, lng: 6.63014554977417 },
-                title: "Hausärztliche Praxis",
-            });
-        }
-        if (element2 !== null) {
-            const map2 = new Map(element2, mapOptions);
-
-            new AdvancedMarkerElement({
-                map: map2,
-                position: { lat: 49.749053955078125, lng: 6.63014554977417 },
-                title: "Hausärztliche Praxis",
-            });
-        }
-    });
+    $: content = data.content;
+    $: news = content["Neuigkeiten"] || [];
+    $: vacations = content["Urlaub"] || [];
+    $: times = content["Sprechzeiten"] || [];
+    $: newsString = news.map((n) => n[0]).join("\n");
 </script>
 
 <div class="flex md:flex-row flex-col gap-8 md:px-16">
@@ -76,17 +29,47 @@
             Ihr Praxisteam
         </div>
 
-        <div class="pt-6" />
+        <div class="pt-6"></div>
 
         {#if news.length > 0}
             <h1 class="anchor" id="neuigkeiten">Aktuelle Neuigkeiten</h1>
             <div class="pt-6 text-justify w-full lg:w-[80%] news">
-                <SvelteMarkdown source={newsString} renderers={{ list: MdList, paragraph: MdParagraph }} />
+                {@html marked(newsString)}
             </div>
         {/if}
 
         <div class="hidden md:block">
-            <Location id="map1" />
+            <h1 class="mt-8">Ihr Weg zu uns</h1>
+            <div class="pt-6 text-justify w-full lg:w-[80%]">
+                Sie finden uns in der <b>Gilbertstraße 59, 54290 Trier</b>.
+                <div id="map1" class="w-[100%] h-[400px] mt-4">
+                    <a
+                        href="https://maps.google.com/?q=Gilbertstraße+59,+54290+Trier,+Germany"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="block w-full h-full bg-gray-200 rounded-lg shadow-md flex items-center justify-center hover:bg-gray-300 transition-colors"
+                    >
+                        <div class="text-center">
+                            <div class="text-4xl mb-2">📍</div>
+                            <div class="text-lg font-semibold text-gray-700">Gilbertstraße 59, 54290 Trier</div>
+                            <div class="text-sm text-gray-500 mt-1">Klicken Sie hier, um die Karte zu öffnen</div>
+                        </div>
+                    </a>
+                </div>
+                <br />
+                <div class="mt-4">
+                    <b>Anfahrt mit dem Bus:</b><br />
+                    Bushaltestelle "Barbarathermen" in der Südallee: Linien 1, 10, 40, 81<br />
+                    Von dort zu Fuß in 3 Minuten (ca. 210 m). Auf Friedrich-Wilhelm-Straße ca. 170 m nach Süden Richtung
+                    Gilbertstraße. Dann rechts abbiegen und ca. 42 m auf Gilbertstraße. Die Gemeinschaftspraxis befindet
+                    sich auf der linken Seite.
+                </div>
+                <div class="mt-4">
+                    <b>Anfahrt mit dem Auto:</b><br />
+                    Kurzzeitparkplätze (2 Stunden) in der Gilbertstraße und Friedrich-Wilhelm-Straße. 3 Parkplätze vor der
+                    Praxis.
+                </div>
+            </div>
         </div>
     </div>
 
@@ -141,7 +124,37 @@
             </ul>
         </div>
         <div class="block md:hidden">
-            <Location id="map2" />
+            <h1 class="mt-8">Ihr Weg zu uns</h1>
+            <div class="pt-6 text-justify w-full lg:w-[80%]">
+                Sie finden uns in der <b>Gilbertstraße 59, 54290 Trier</b>.
+                <div id="map2" class="w-[100%] h-[400px] mt-4">
+                    <a
+                        href="https://maps.google.com/?q=Gilbertstraße+59,+54290+Trier,+Germany"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="block w-full h-full bg-gray-200 rounded-lg shadow-md flex items-center justify-center hover:bg-gray-300 transition-colors"
+                    >
+                        <div class="text-center">
+                            <div class="text-4xl mb-2">📍</div>
+                            <div class="text-lg font-semibold text-gray-700">Gilbertstraße 59, 54290 Trier</div>
+                            <div class="text-sm text-gray-500 mt-1">Klicken Sie hier, um die Karte zu öffnen</div>
+                        </div>
+                    </a>
+                </div>
+                <br />
+                <div class="mt-4">
+                    <b>Anfahrt mit dem Bus:</b><br />
+                    Bushaltestelle "Barbarathermen" in der Südallee: Linien 1, 10, 40, 81<br />
+                    Von dort zu Fuß in 3 Minuten (ca. 210 m). Auf Friedrich-Wilhelm-Straße ca. 170 m nach Süden Richtung
+                    Gilbertstraße. Dann rechts abbiegen und ca. 42 m auf Gilbertstraße. Die Gemeinschaftspraxis befindet
+                    sich auf der linken Seite.
+                </div>
+                <div class="mt-4">
+                    <b>Anfahrt mit dem Auto:</b><br />
+                    Kurzzeitparkplätze (2 Stunden) in der Gilbertstraße und Friedrich-Wilhelm-Straße. 3 Parkplätze vor der
+                    Praxis.
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -150,7 +163,7 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
     class="fixed right-[-200px] lg:top-[510px] top-[310px] md:top-[410px] w-[270px] h-16 border b-1 border-gulfstream-500 flex bg-gulfstream-400 hover:right-0 transition-all duration-200 ease-in-out shadow-md cursor-pointer"
-    on:click={() => goto("tel:+49651975150")}
+    on:click={() => window.location.href = "tel:+49651975150"}
 >
     <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -164,10 +177,6 @@
 </div>
 
 <style lang="scss">
-    .no-overflow {
-        overflow: hidden;
-    }
-
     .anchor::before {
         content: "";
         display: block;
