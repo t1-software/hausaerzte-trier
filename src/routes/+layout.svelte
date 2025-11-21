@@ -9,16 +9,18 @@
     $: content = data.content;
     $: important = content["Wichtig"]?.[0]?.[0]?.replaceAll("\r", "") || "";
 
-    // Determine header image based on current route
-    $: headerImage = getHeaderImage($page.route.id);
+    let headerImage: string;
+    let headerPosition: string;
 
-    function getHeaderImage(routeId: string | null): string {
+    $: ({ headerImage, headerPosition } = getHeaderImage($page.route.id));
+
+    function getHeaderImage(routeId: string | null): { headerImage: string; headerPosition: string } {
         if (routeId === "/team") {
-            return "praxis3.jpeg";
+            return { headerImage: "praxis3.jpeg", headerPosition: "0% 30%" };
         } else if (routeId === "/leistungsspektrum") {
-            return "praxis1.jpeg";
+            return { headerImage: "praxis1.jpeg", headerPosition: "center" };
         }
-        return "praxis2.jpeg"; // default image
+        return { headerImage: "praxis2.jpeg", headerPosition: "center" };
     }
 </script>
 
@@ -26,8 +28,8 @@
     <div class="flex flex-col">
         <Header {content} />
         <div
-            class="absolute -z-10 bg-cover bg-center bg-no-repeat opacity-80 w-full lg:h-[500px] md:h-[400px] h-[300px]"
-            style="background-image: url('/{headerImage}')"
+            class="absolute -z-10 bg-cover bg-no-repeat opacity-80 w-full lg:h-[500px] md:h-[400px] h-[300px]"
+            style="background-image: url('/{headerImage}'); background-position: {headerPosition};"
         >
             <div class="w-full h-full max-w-7xl relative mx-auto">
                 <div
