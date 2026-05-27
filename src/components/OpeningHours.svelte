@@ -9,7 +9,7 @@
     {#if hasContent(times)}
         <table class="opening-hours-table">
             <tbody>
-                {#each times as time}
+                {#each times as time, index (time.join("|") + "|" + index)}
                     <tr class="opening-hours-row">
                         {#if time[1] !== ""}
                             <td class="opening-hours-cell">{time[0]}</td>

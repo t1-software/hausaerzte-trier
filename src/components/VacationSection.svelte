@@ -9,7 +9,7 @@
         <h1 class="vacation-title">Urlaub</h1>
         <table class="vacation-table">
             <tbody>
-                {#each vacations as vacation}
+                {#each vacations as vacation, index (vacation.join("|") + "|" + index)}
                     <tr class="vacation-row">
                         <td class="vacation-cell">{vacation[0]} bis {vacation[1]}</td>
                     </tr>

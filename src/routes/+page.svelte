@@ -6,6 +6,7 @@
     import LocationMap from "../components/LocationMap.svelte";
     import ContactSection from "../components/ContactSection.svelte";
     import FloatingPhoneButton from "../components/FloatingPhoneButton.svelte";
+    import HomepagePopup from "../components/HomepagePopup.svelte";
 
     export let data: PageData;
 
@@ -32,7 +33,7 @@
             <div class="ml-3">
                 <h3 class="text-sm font-medium text-yellow-800"> Wichtiger Hinweis </h3>
                 <div class="mt-2 text-sm text-yellow-700">
-                    {#each notice as item}
+                    {#each notice as item, index (item.join("|") + "|" + index)}
                         <p class="mb-2 last:mb-0">
                             {@html item}
                         </p>
@@ -78,3 +79,4 @@
 </div>
 
 <FloatingPhoneButton />
+<HomepagePopup />

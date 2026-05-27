@@ -1,103 +1,103 @@
 @import "tailwindcss";
 
-@font-face {    
+@font-face {
     font-display: swap;
     font-family: "Roboto";
     font-style: normal;
-    font-weight: 100;    
+    font-weight: 100;
     src: url("/fonts/roboto/Roboto-Thin.ttf") format("truetype");
 }
 
-@font-face {    
+@font-face {
     font-display: swap;
     font-family: "Roboto";
     font-style: italic;
-    font-weight: 100;    
+    font-weight: 100;
     src: url("/fonts/roboto/Roboto-ThinItalic.ttf") format("truetype");
 }
 
-@font-face {    
+@font-face {
     font-display: swap;
     font-family: "Roboto";
     font-style: normal;
-    font-weight: 300;    
+    font-weight: 300;
     src: url("/fonts/roboto/Roboto-Light.ttf") format("truetype");
 }
 
-@font-face {    
+@font-face {
     font-display: swap;
     font-family: "Roboto";
     font-style: italic;
-    font-weight: 300;    
+    font-weight: 300;
     src: url("/fonts/roboto/Roboto-LightItalic.ttf") format("truetype");
 }
 
-@font-face {    
+@font-face {
     font-display: swap;
     font-family: "Roboto";
     font-style: normal;
-    font-weight: 400;    
+    font-weight: 400;
     src: url("/fonts/roboto/Roboto-Regular.ttf") format("truetype");
 }
 
-@font-face {    
+@font-face {
     font-display: swap;
     font-family: "Roboto";
     font-style: italic;
-    font-weight: 400;    
+    font-weight: 400;
     src: url("/fonts/roboto/Roboto-RegularItalic.ttf") format("truetype");
 }
 
-@font-face {    
+@font-face {
     font-display: swap;
     font-family: "Roboto";
     font-style: normal;
-    font-weight: 500;    
+    font-weight: 500;
     src: url("/fonts/roboto/Roboto-Medium.ttf") format("truetype");
 }
 
-@font-face {    
+@font-face {
     font-display: swap;
     font-family: "Roboto";
     font-style: italic;
-    font-weight: 500;    
+    font-weight: 500;
     src: url("/fonts/roboto/Roboto-MediumItalic.ttf") format("truetype");
 }
 
-@font-face {    
+@font-face {
     font-display: swap;
     font-family: "Roboto";
     font-style: normal;
-    font-weight: 700;    
+    font-weight: 700;
     src: url("/fonts/roboto/Roboto-Bold.ttf") format("truetype");
 }
 
-@font-face {    
+@font-face {
     font-display: swap;
     font-family: "Roboto";
     font-style: italic;
-    font-weight: 700;    
+    font-weight: 700;
     src: url("/fonts/roboto/Roboto-BoldItalic.ttf") format("truetype");
 }
 
-@font-face {    
+@font-face {
     font-display: swap;
     font-family: "Roboto";
     font-style: normal;
-    font-weight: 900;    
+    font-weight: 900;
     src: url("/fonts/roboto/Roboto-Black.ttf") format("truetype");
 }
 
-@font-face {    
+@font-face {
     font-display: swap;
     font-family: "Roboto";
     font-style: italic;
-    font-weight: 900;    
+    font-weight: 900;
     src: url("/fonts/roboto/Roboto-BlackItalic.ttf") format("truetype");
 }
 
 body {
-    font-family: "Roboto", sans-serif;   
+    font-family: "Roboto", sans-serif;
     font-weight: 400;
     background-color: var(--color-gulfstream-50);
 }
@@ -106,7 +106,7 @@ p {
     overflow: hidden;
 }
 
-h1 {    
+h1 {
     font-size: 1.5rem;
     line-height: 2rem;
     font-weight: 700;
@@ -126,33 +126,33 @@ h2 {
         margin-left: 1.5rem;
         margin-bottom: 1rem;
     }
-    
+
     li {
         margin-bottom: 0.5rem;
     }
-    
+
     p {
         margin-bottom: 1rem;
         overflow: visible;
     }
-    
+
     strong {
         font-weight: 700;
     }
 }
 
 @theme {
-  --color-gulfstream-50: #f2f7f2;
-  --color-gulfstream-100: #e0ecdf;
-  --color-gulfstream-200: #c2d8c2;
-  --color-gulfstream-300: #8db58f;
-  --color-gulfstream-400: #6c9b70;
-  --color-gulfstream-500: #4b7e51;
-  --color-gulfstream-600: #38633e;
-  --color-gulfstream-700: #2d4f32;
-  --color-gulfstream-800: #254029;
-  --color-gulfstream-900: #1f3523;
-  --color-gulfstream-950: #111d13;
+    --color-gulfstream-50: #f2f7f2;
+    --color-gulfstream-100: #e0ecdf;
+    --color-gulfstream-200: #c2d8c2;
+    --color-gulfstream-300: #8db58f;
+    --color-gulfstream-400: #6c9b70;
+    --color-gulfstream-500: #4b7e51;
+    --color-gulfstream-600: #38633e;
+    --color-gulfstream-700: #2d4f32;
+    --color-gulfstream-800: #254029;
+    --color-gulfstream-900: #1f3523;
+    --color-gulfstream-950: #111d13;
 }
 
 .anchor::before {

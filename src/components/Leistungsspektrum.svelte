@@ -9,7 +9,7 @@
 
     {#if hasContent(leistungen)}
         <div class="leistungsspektrum-content">
-            {#each leistungen as leistung}
+            {#each leistungen as leistung, index (leistung.join("|") + "|" + index)}
                 <div class="leistung-item">
                     <h2 class="leistung-title">{leistung[0]}</h2>
                     <div class="leistung-description">
