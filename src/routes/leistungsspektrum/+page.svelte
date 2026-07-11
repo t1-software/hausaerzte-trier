@@ -6,6 +6,7 @@
 
     $: content = data.content;
     $: leistungen = content["Leistungsspektrum"] || [];
+    $: isEditor = data.isEditor;
 </script>
 
-<Leistungsspektrum {leistungen} />
+<Leistungsspektrum {leistungen} {isEditor} redirectTo="/leistungsspektrum" />

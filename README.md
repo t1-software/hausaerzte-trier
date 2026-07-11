@@ -29,7 +29,7 @@ Diese Website dient als digitale Präsenz für die Hausarztpraxis in Trier. Sie 
 
 ### Datenmanagement
 
-- **Google Sheets Integration** - Dynamische Inhaltsverwaltung
+- **Vercel Blob** - Dynamische Inhaltsverwaltung über `/admin`
 - **Server-Side Rendering (SSR)** - Optimale Performance und SEO
 
 ## 🚀 Schnellstart
@@ -62,6 +62,21 @@ Diese Website dient als digitale Präsenz für die Hausarztpraxis in Trier. Sie 
 
 4. **Website öffnen**
    Öffnen Sie [http://localhost:5173](http://localhost:5173) in Ihrem Browser.
+
+### Bearbeitungsmodus
+
+Nach dem Login über `/admin` können Inhalte direkt auf der Website bearbeitet und in Vercel Blob gespeichert werden.
+
+Notwendige Environment Variables:
+
+```bash
+ADMIN_PASSWORD=...
+ADMIN_SESSION_SECRET=...
+BLOB_READ_WRITE_TOKEN=...
+```
+
+`ADMIN_SESSION_SECRET` sollte ein langer zufälliger Wert sein. Vercel Blob ist die einzige Inhaltsquelle; wenn noch
+keine Inhalte gespeichert wurden, startet die Website mit leeren dynamischen Bereichen.
 
 ## 🎨 Design-System
 
