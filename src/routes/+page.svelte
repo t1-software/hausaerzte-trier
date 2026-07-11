@@ -6,7 +6,6 @@
     import LocationMap from "../components/LocationMap.svelte";
     import ContactSection from "../components/ContactSection.svelte";
     import FloatingPhoneButton from "../components/FloatingPhoneButton.svelte";
-    import HomepagePopup from "../components/HomepagePopup.svelte";
 
     export let data: PageData;
 
@@ -79,4 +78,3 @@
 </div>
 
 <FloatingPhoneButton />
-<HomepagePopup />
