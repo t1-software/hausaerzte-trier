@@ -93,7 +93,11 @@
                             {:else}
                                 <li>
                                     <span>{row[1]}</span>
-                                    <span class="tabular-nums">{[row[2], row[3]].filter(Boolean).join(" · ")}</span>
+                                    <span class="quick-hours-times tabular-nums">
+                                        {#each [row[2], row[3]].filter(Boolean) as time (time)}
+                                            <span>{time}</span>
+                                        {/each}
+                                    </span>
                                 </li>
                             {/if}
                         {/each}
@@ -286,11 +290,21 @@
         text-align: right;
     }
 
+    .quick-hours .quick-hours-times {
+        display: flex;
+        flex-direction: column;
+        text-align: right;
+        font-weight: 400;
+    }
+
     .quick-hours li.quick-hours-note {
         justify-content: center;
         text-align: center;
         font-size: 0.85rem;
         color: var(--color-sand-900);
+        margin: 0.5rem -0.5rem 0;
+        padding-top: 0.5rem;
+        border-top: 1px solid var(--color-sand-200);
     }
 
     .quick-hours--editing li {
