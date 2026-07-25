@@ -8,7 +8,7 @@
 </script>
 
 <div class="contact-section card">
-    <h2 class="contact-title">Termin vereinbaren / Rezepte</h2>
+    <h2 class="contact-title">Termin & Rezepte</h2>
 
     <div class="contact-description">
         <EditableText
