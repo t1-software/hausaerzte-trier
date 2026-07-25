@@ -3,12 +3,12 @@
     import "@fontsource-variable/source-sans-3";
     import "@fontsource-variable/caveat";
     import type { LayoutData } from "./$types";
-    import EditableText from "../components/EditableText.svelte";
     import Footer from "../components/Footer.svelte";
     import Header from "../components/Header.svelte";
     import NoticeBanner from "../components/NoticeBanner.svelte";
     import QuickInfoBand from "../components/QuickInfoBand.svelte";
     import { page } from "$app/stores";
+    import { marked } from "marked";
     import { editMode } from "$lib/edit-mode";
     import { textOf } from "$lib/content";
 
@@ -105,15 +105,9 @@
             >
                 <p class="eyebrow !text-sand-200">{hero.eyebrow}</p>
                 {#if hero.home}
-                    <div class="hero-title mt-1" role="heading" aria-level="1">
-                        <EditableText
-                            sectionKey="Titelbild"
-                            ariaLabel="Text im Titelbild"
-                            text={heroText}
-                            {isEditor}
-                            {redirectTo}
-                        />
-                    </div>
+                    <h1 class="hero-title mt-1">
+                        {@html marked(heroText)}
+                    </h1>
                 {:else}
                     <h1 class="hero-title mt-1">{hero.title}</h1>
                 {/if}
@@ -121,7 +115,13 @@
         </section>
 
         {#if hero.home}
-            <QuickInfoBand times={content["Sprechzeiten"] || []} {isEditor} {redirectTo} />
+            <QuickInfoBand
+                times={content["Sprechzeiten"] || []}
+                vacations={content["Urlaub"] || []}
+                appointmentText={textOf(content, "Termine")}
+                {isEditor}
+                {redirectTo}
+            />
         {/if}
 
         <NoticeBanner {content} {isEditor} {redirectTo} />

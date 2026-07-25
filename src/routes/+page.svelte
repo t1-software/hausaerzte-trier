@@ -2,9 +2,7 @@
     import type { PageData } from "./$types";
     import EditableText from "../components/EditableText.svelte";
     import NewsSection from "../components/NewsSection.svelte";
-    import VacationSection from "../components/VacationSection.svelte";
     import LocationMap from "../components/LocationMap.svelte";
-    import ContactSection from "../components/ContactSection.svelte";
     import FloatingPhoneButton from "../components/FloatingPhoneButton.svelte";
     import { editMode } from "$lib/edit-mode";
     import { textOf } from "$lib/content";
@@ -14,12 +12,10 @@
 
     $: content = data.content;
     $: news = content["Neuigkeiten"] || [];
-    $: vacations = content["Urlaub"] || [];
     $: suggestionEntries = content["Vertretungen"] || [];
     $: welcome = textOf(content, "Willkommen");
     $: busDirections = textOf(content, "AnfahrtBus");
     $: carDirections = textOf(content, "AnfahrtAuto");
-    $: appointments = textOf(content, "Termine");
     $: isEditor = data.isEditor && $editMode;
 </script>
 
@@ -33,15 +29,11 @@
             <p class="welcome-signature" aria-hidden="true">Thiemo Stiemert</p>
         </div>
 
-        <NewsSection {news} {isEditor} {redirectTo} {suggestionEntries} />
+        <LocationMap {isEditor} {redirectTo} busText={busDirections} carText={carDirections} />
     </div>
 
-    <div class="w-full shrink-0 lg:w-[380px]">
-        <VacationSection {vacations} {isEditor} {redirectTo} />
-
-        <ContactSection {isEditor} {redirectTo} appointmentText={appointments} />
-
-        <LocationMap {isEditor} {redirectTo} busText={busDirections} carText={carDirections} />
+    <div class="order-first w-full shrink-0 lg:order-none lg:w-[380px]">
+        <NewsSection {news} {isEditor} {redirectTo} {suggestionEntries} variant="card" />
     </div>
 </div>
 

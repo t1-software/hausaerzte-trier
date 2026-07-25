@@ -73,6 +73,24 @@
         font-weight: 700;
     }
 
+    /* Während des Hintergrund-Speicherns dreht sich der Übernehmen-Knopf. */
+    :global(form.saving .inline-icon-btn--apply) {
+        pointer-events: none;
+    }
+
+    :global(form.saving .inline-icon-btn--apply svg) {
+        animation: saving-spin 0.8s linear infinite;
+    }
+
+    @keyframes saving-spin {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
     /* Gezogene Zeile bleibt sichtbar, während die Liste sich schon neu ordnet. */
     :global(.row-dragging) {
         opacity: 0.55;

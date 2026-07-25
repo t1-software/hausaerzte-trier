@@ -120,6 +120,13 @@ top and re-ported: design markup stays ours, editing logic is upstream's. Rules 
       "Startseite" yields while the news section is in focus.
     - "Ihr Weg zu uns" moved into a card in the right sidebar (Urlaub → Kontakt → Weg zu uns);
       left column is welcome text + Neuigkeiten only.
+- 2026-07-25 (late iteration): band now holds Sprechzeiten + Urlaub + Termin & Rezepte
+  (sidebar keeps only "Ihr Weg zu uns"); hero title is content-driven but no longer inline-editable;
+  navbar brand fades in after scrolling past the homepage hero; hours rows have per-day dividers and
+  stacked time lines (also in the editor); notice banner is a single "Wichtig" text area again;
+  Leistungsspektrum cards got plus-marks + hover; all editor forms save in the background via
+  `$lib/ajax-save` (fetch + invalidateAll + spinner — no reload, no scroll jump; beware: `form.action`
+  is shadowed by the hidden input named "action").
 - Known follow-ups: hydration warning in admin session (sessionStorage editMode vs SSR — inherited
   from upstream, not design-related); production Willkommen/Titelbild texts may still contain the
   now-duplicated heading sentences until an editor trims them.

@@ -4,6 +4,7 @@
     import InlineEditorActions from "./InlineEditorActions.svelte";
     import RichText from "./RichText.svelte";
     import RowDragHandle from "./RowDragHandle.svelte";
+    import { ajaxSave } from "$lib/ajax-save";
     import { cellsOf, isDirty, moveRow, nextRowId, toRows, type EditableRow } from "$lib/editable-rows";
     import { createRowDnd } from "$lib/row-dnd";
 
@@ -55,7 +56,13 @@
         {open ? "▾" : "▸"} Vorschlagsliste für Aufzählungen ({rows.length})
     </button>
     {#if open}
-        <form class="suggestion-list__form" method="post" action="/admin/content">
+        <form
+            class="suggestion-list__form"
+            method="post"
+            action="/admin/content"
+            use:ajaxSave
+            on:saved={() => (baseline = cellsOf(rows))}
+        >
             <input type="hidden" name="action" value="saveRows" />
             <input type="hidden" name="sectionKey" value="Vertretungen" />
             <input type="hidden" name="redirectTo" value={redirectTo} />

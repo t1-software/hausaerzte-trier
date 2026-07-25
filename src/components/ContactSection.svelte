@@ -5,10 +5,23 @@
     export let isEditor = false;
     export let redirectTo = "/";
     export let appointmentText = "";
+    /** "card" in der Seitenleiste, "band" als Karte im Info-Band unter dem Titelbild. */
+    export let variant: "card" | "band" = "card";
 </script>
 
-<div class="contact-section card">
-    <h2 class="contact-title">Termin & Rezepte</h2>
+<div class="contact-section" class:card={variant === "card"} class:quick-card={variant === "band"}>
+    {#if variant === "band"}
+        <span class="quick-label">
+            <svg aria-hidden="true" viewBox="0 0 24 24" class="quick-icon">
+                <path
+                    d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24 11.36 11.36 0 0 0 3.57.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.36 11.36 0 0 0 .57 3.57 1 1 0 0 1-.25 1.02z"
+                />
+            </svg>
+            Termin & Rezepte
+        </span>
+    {:else}
+        <h2 class="contact-title">Termin & Rezepte</h2>
+    {/if}
 
     <div class="contact-description">
         <EditableText
@@ -37,9 +50,18 @@
 </div>
 
 <style>
-    .contact-section {
+    .contact-section.card {
         margin-top: 1.5rem;
         padding: 1.5rem;
+    }
+
+    .contact-section.quick-card .contact-description,
+    .contact-section.quick-card .contact-item {
+        font-size: 0.9rem;
+    }
+
+    .contact-section.quick-card .contact-item {
+        padding: 0.3rem 0;
     }
 
     .contact-title {

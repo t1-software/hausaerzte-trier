@@ -3,12 +3,15 @@
     import InlineEditorActions from "./InlineEditorActions.svelte";
     import RichText from "./RichText.svelte";
     import SuggestionListEditor from "./SuggestionListEditor.svelte";
+    import { ajaxSave } from "$lib/ajax-save";
     import { marked } from "marked";
     import { hasContent, formatNewsContent } from "../utils/content";
 
     export let news: string[][] = [];
     export let isEditor = false;
     export let redirectTo = "/";
+    /** "flow" im Textfluss, "card" als Karte in der Seitenleiste. */
+    export let variant: "flow" | "card" = "flow";
     /** Gepflegte Einträge, die beim Tippen als Vorschlag erscheinen. */
     export let suggestionEntries: string[][] = [];
 
@@ -30,13 +33,22 @@
 
 {#if isEditor || hasContent(news)}
     <EditableBlock {isEditor}>
-        <div class="news-section">
+        <div class="news-section" class:card={variant === "card"} class:news-section--card={variant === "card"}>
             <h2 class="news-title anchor" id="neuigkeiten">Aktuelle Neuigkeiten</h2>
             <div class="news-content">
                 {@html marked(newsString)}
             </div>
         </div>
-        <form slot="editor" class="news-section" method="post" action="/admin/content">
+        <form
+            slot="editor"
+            class="news-section"
+            class:card={variant === "card"}
+            class:news-section--card={variant === "card"}
+            method="post"
+            action="/admin/content"
+            use:ajaxSave
+            on:saved={() => (baseline = draft)}
+        >
             <input type="hidden" name="action" value="saveBlock" />
             <input type="hidden" name="sectionKey" value="Neuigkeiten" />
             <input type="hidden" name="redirectTo" value={redirectTo} />
@@ -66,6 +78,15 @@
 <style>
     .news-section {
         margin-top: 3rem;
+    }
+
+    .news-section--card {
+        margin-top: 0;
+        padding: 1.5rem;
+    }
+
+    .news-section--card .news-content {
+        font-size: 0.95rem;
     }
 
     .news-title {

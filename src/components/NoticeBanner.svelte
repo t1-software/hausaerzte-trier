@@ -2,39 +2,29 @@
     import EditableBlock from "./EditableBlock.svelte";
     import InlineEditorActions from "./InlineEditorActions.svelte";
     import RichText from "./RichText.svelte";
+    import { ajaxSave } from "$lib/ajax-save";
     import { marked } from "marked";
 
-    /**
-     * The one notice banner, shown on every page. Renders the "Wichtig" and
-     * "Hinweis" sections together so both stay visible and editable in one place.
-     */
+    /** The one notice banner, shown on every page. Content comes from the "Wichtig" section. */
     export let content: Record<string, string[][]> = {};
     export let isEditor = false;
     export let redirectTo = "/";
 
     $: important = content["Wichtig"]?.[0]?.[0]?.replaceAll("\r", "") || "";
-    $: notice = content["Hinweis"]?.[0]?.[0]?.replaceAll("\r", "") || "";
 
-    const sections = [
-        { key: "Wichtig", label: "Wichtig" },
-        { key: "Hinweis", label: "Hinweis" },
-    ];
+    let baseline: string | null = null;
+    let draft = "";
+    let resetKey = 0;
 
-    let baselines: Record<string, string | null> = { Wichtig: null, Hinweis: null };
-    let drafts: Record<string, string> = { Wichtig: "", Hinweis: "" };
-    let resetKeys: Record<string, number> = { Wichtig: 0, Hinweis: 0 };
+    $: dirty = baseline !== null && draft !== baseline;
 
-    function textFor(key: string): string {
-        return key === "Wichtig" ? important : notice;
-    }
-
-    function discard(key: string) {
-        drafts[key] = baselines[key] ?? "";
-        resetKeys[key] += 1;
+    function discard() {
+        draft = baseline ?? "";
+        resetKey += 1;
     }
 </script>
 
-{#if isEditor || important.length > 0 || notice.length > 0}
+{#if isEditor || important.length > 0}
     <div class="mx-auto w-full max-w-7xl px-4">
         <div class="notice-banner mt-6 rounded-xl border border-copper-500/30 bg-sand-100 p-4">
             <div class="flex">
@@ -49,40 +39,38 @@
                 </div>
                 <div class="ml-3 w-full">
                     <h2 class="notice-heading">Wichtiger Hinweis</h2>
-                    {#each sections as section (section.key)}
-                        {#if isEditor || textFor(section.key).length > 0}
-                            <EditableBlock {isEditor}>
-                                <div class="notice-text">
-                                    {@html marked(textFor(section.key))}
-                                </div>
-                                <form slot="editor" class="notice-editor" method="post" action="/admin/content">
-                                    <input type="hidden" name="action" value="saveBlock" />
-                                    <input type="hidden" name="sectionKey" value={section.key} />
-                                    <input type="hidden" name="redirectTo" value={redirectTo} />
-                                    <span class="notice-editor-label">{section.label}</span>
-                                    <div class="notice-text">
-                                        {#key resetKeys[section.key]}
-                                            <RichText
-                                                name="text"
-                                                ariaLabel={section.label}
-                                                value={baselines[section.key] ?? textFor(section.key)}
-                                                on:init={(event) => {
-                                                    baselines[section.key] = event.detail;
-                                                    drafts[section.key] = event.detail;
-                                                }}
-                                                on:change={(event) => (drafts[section.key] = event.detail)}
-                                            />
-                                        {/key}
-                                    </div>
-                                    <InlineEditorActions
-                                        dirty={baselines[section.key] !== null &&
-                                            drafts[section.key] !== baselines[section.key]}
-                                        onDiscard={() => discard(section.key)}
+                    <EditableBlock {isEditor}>
+                        <div class="notice-text">
+                            {@html marked(important)}
+                        </div>
+                        <form
+                            slot="editor"
+                            class="notice-editor"
+                            method="post"
+                            action="/admin/content"
+                            use:ajaxSave
+                            on:saved={() => (baseline = draft)}
+                        >
+                            <input type="hidden" name="action" value="saveBlock" />
+                            <input type="hidden" name="sectionKey" value="Wichtig" />
+                            <input type="hidden" name="redirectTo" value={redirectTo} />
+                            <div class="notice-text">
+                                {#key resetKey}
+                                    <RichText
+                                        name="text"
+                                        ariaLabel="Wichtiger Hinweis"
+                                        value={baseline ?? important}
+                                        on:init={(event) => {
+                                            baseline = event.detail;
+                                            draft = event.detail;
+                                        }}
+                                        on:change={(event) => (draft = event.detail)}
                                     />
-                                </form>
-                            </EditableBlock>
-                        {/if}
-                    {/each}
+                                {/key}
+                            </div>
+                            <InlineEditorActions {dirty} onDiscard={discard} />
+                        </form>
+                    </EditableBlock>
                 </div>
             </div>
         </div>
@@ -113,16 +101,6 @@
     }
 
     .notice-editor {
-        margin-top: 0.5rem;
-    }
-
-    .notice-editor-label {
-        display: block;
-        font-size: 0.75rem;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--color-pine-600);
-        margin-bottom: 0.25rem;
+        margin-top: 0.25rem;
     }
 </style>

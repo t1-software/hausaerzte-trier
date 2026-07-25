@@ -97,6 +97,42 @@ a {
     color: var(--color-pine-500);
 }
 
+/* Sandstone info card in the band under the hero */
+.quick-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    background: var(--color-sand-100);
+    border: 1px solid var(--color-sand-200);
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 20px -8px rgb(14 31 24 / 0.35);
+    padding: 1rem 1.25rem;
+    text-decoration: none;
+    color: var(--color-pine-950);
+    transition: background-color 0.15s ease;
+}
+
+.quick-card:hover {
+    background: white;
+}
+
+.quick-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-pine-600);
+}
+
+.quick-icon {
+    width: 1rem;
+    height: 1rem;
+    fill: currentColor;
+}
+
 /* White card on sandstone background */
 .card {
     background: white;

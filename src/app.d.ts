@@ -7,6 +7,14 @@ declare global {
         // interface PageData {}
         // interface Platform {}
     }
+
+    // Custom-Event der ajaxSave-Action (Hintergrund-Speichern der Editor-Formulare).
+    namespace svelteHTML {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        interface HTMLAttributes<T> {
+            "on:saved"?: (event: CustomEvent) => void;
+        }
+    }
 }
 
 export {};

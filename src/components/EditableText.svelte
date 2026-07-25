@@ -2,6 +2,7 @@
     import EditableBlock from "./EditableBlock.svelte";
     import InlineEditorActions from "./InlineEditorActions.svelte";
     import RichText from "./RichText.svelte";
+    import { ajaxSave } from "$lib/ajax-save";
     import { marked } from "marked";
 
     /** Ein Textbereich, der im Bearbeitungsmodus direkt an der Stelle editiert wird. */
@@ -28,7 +29,14 @@
 
 <EditableBlock {isEditor}>
     <div class="editable-text">{@html marked(text)}</div>
-    <form slot="editor" class="editable-text" method="post" action="/admin/content">
+    <form
+        slot="editor"
+        class="editable-text"
+        method="post"
+        action="/admin/content"
+        use:ajaxSave
+        on:saved={() => (baseline = draft)}
+    >
         <input type="hidden" name="action" value="saveBlock" />
         <input type="hidden" name="sectionKey" value={sectionKey} />
         <input type="hidden" name="redirectTo" value={redirectTo} />

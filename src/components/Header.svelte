@@ -12,9 +12,14 @@
     // third of the viewport — or when the page is scrolled to the end and the
     // section is visible (short pages can't scroll it all the way to the top).
     let newsInView = false;
+    let scrolledPastHero = false;
     const NAV_OFFSET = 80;
 
     function updateNewsInView() {
+        // On the homepage the hero already shows the practice name; the navbar
+        // brand fades in once the hero title is scrolled out of view.
+        scrolledPastHero = window.scrollY > 240;
+
         const anchor = document.getElementById("neuigkeiten");
         const section = anchor?.closest(".news-section");
 
@@ -50,11 +55,18 @@
     }
 
     $: newsActive = routeId === "/" && newsInView;
+    $: brandVisible = routeId !== "/" || scrolledPastHero;
 </script>
 
 <header class="fixed top-0 z-40 w-full bg-pine-900/95 shadow-md backdrop-blur-sm">
     <div class="mx-auto flex h-14 w-full max-w-7xl items-center justify-center gap-4 px-4 md:justify-between">
-        <a href="/" class="site-brand shrink-0" aria-label="Zur Startseite">
+        <a
+            href="/"
+            class="site-brand shrink-0"
+            class:site-brand--hidden={!brandVisible}
+            aria-label="Zur Startseite"
+            tabindex={brandVisible ? 0 : -1}
+        >
             <span class="hidden lg:inline">Hausarztpraxis</span>
             <span>Thiemo Stiemert</span>
         </a>
@@ -86,6 +98,13 @@
         font-weight: 650;
         color: white;
         text-decoration: none;
+        opacity: 1;
+        transition: opacity 0.25s ease;
+    }
+
+    .site-brand--hidden {
+        opacity: 0;
+        pointer-events: none;
     }
 
     @media (min-width: 768px) {
