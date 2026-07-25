@@ -107,9 +107,6 @@
                             aria-invalid={loginFailed}
                             on:input={() => (loginFailed = false)}
                         />
-                        {#if loginFailed}
-                            <span class="footer-login__error" role="alert">Das Passwort ist nicht korrekt.</span>
-                        {/if}
                     </form>
                 </details>
             {/if}
@@ -200,10 +197,9 @@
         align-items: center;
     }
 
-    .footer-login__error {
-        font-size: 0.8rem;
-        color: var(--color-sand-300);
-        white-space: nowrap;
+    .footer-login__form input[aria-invalid="true"] {
+        border-color: #d4462e;
+        outline: none;
     }
 
     .footer-login__form input {
