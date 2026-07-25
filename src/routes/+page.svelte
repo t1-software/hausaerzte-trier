@@ -30,6 +30,7 @@
 
         <div class="welcome-text mt-6 max-w-prose">
             <EditableText sectionKey="Willkommen" ariaLabel="Begrüßung" text={welcome} {isEditor} {redirectTo} />
+            <p class="welcome-signature" aria-hidden="true">Thiemo Stiemert</p>
         </div>
 
         <NewsSection {news} {isEditor} {redirectTo} {suggestionEntries} />
@@ -45,3 +46,16 @@
 </div>
 
 <FloatingPhoneButton />
+
+<style>
+    .welcome-signature {
+        font-family: var(--font-hand);
+        font-size: 2.1rem;
+        line-height: 1;
+        color: var(--color-pine-700);
+        transform: rotate(-2deg);
+        transform-origin: left center;
+        margin-top: 0.5rem;
+        overflow: visible;
+    }
+</style>

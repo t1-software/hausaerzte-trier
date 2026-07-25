@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "@fontsource-variable/source-serif-4";
 @import "@fontsource-variable/source-sans-3";
+@import "@fontsource-variable/caveat";
 
 @theme {
     /* Tiefgrün & Sandstein — see DESIGN_DECISIONS.md */
@@ -42,6 +43,7 @@
 
     --font-display: "Source Serif 4 Variable", Georgia, serif;
     --font-sans: "Source Sans 3 Variable", system-ui, sans-serif;
+    --font-hand: "Caveat Variable", cursive;
 }
 
 body {
