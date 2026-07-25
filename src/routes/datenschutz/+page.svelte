@@ -1,8 +1,8 @@
 <div class="legal-page">
     <h1>Datenschutz</h1>
-    Datenschutzhinweise gemäß Art. 13 DSGVO
+    <p>Datenschutzhinweise gemäß Art. 13 DSGVO</p>
 
-    <h2 class="pt-6">Einleitung</h2>
+    <h2>Einleitung</h2>
 
     <p
         >In dieser Datenschutzerklärung erfahren Sie: wie wir auf unserer Website und bei unserer täglichen Arbeit mit
@@ -264,25 +264,25 @@
     <p><strong>Eingesetzte Dienste und Diensteanbieter:</strong></p>
     <ul class="list-disc list-inside">
         <li
-            ><strong>Vercel: </strong>Bereitstellung von informationstechnischer Infrastruktur und verbundenen
+            ><strong>Vercel</strong>: Bereitstellung von informationstechnischer Infrastruktur und verbundenen
             Dienstleistungen für den Betrieb dieser Website (z.B. Rechenkapazitäten, Speicherplatz,
             Content-Delivery-Network);
-            <strong>Dienstanbieter: </strong>Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA;
-            <strong>Website: </strong><a href="https://vercel.com">https://vercel.com</a>;
-            <strong>Datenschutzerklärung: </strong><a href="https://vercel.com/legal/privacy-policy"
-                >vercel.com/legal/privacy-policy</a
-            >; <strong>Auftragsverarbeitungsvertrag: </strong><a href="https://vercel.com/legal/dpa"
-                >vercel.com/legal/dpa</a
-            >. Die Übermittlung in die USA erfolgt auf Grundlage des EU-US Data Privacy Framework sowie von
-            Standardvertragsklauseln gem. Art. 46 DSGVO.</li
+            <strong>Dienstanbieter</strong>: Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA;
+            <strong>Website</strong>: <a href="https://vercel.com">https://vercel.com</a>;
+            <strong>Datenschutzerklärung</strong>:
+            <a href="https://vercel.com/legal/privacy-policy">vercel.com/legal/privacy-policy</a>;
+            <strong>Auftragsverarbeitungsvertrag</strong>:
+            <a href="https://vercel.com/legal/dpa">vercel.com/legal/dpa</a>. Die Übermittlung in die USA erfolgt auf
+            Grundlage des EU-US Data Privacy Framework sowie von Standardvertragsklauseln gem. Art. 46 DSGVO.</li
         >
         <li
-            ><strong>Microsoft 365 (Exchange Online): </strong>E-Mail-Hosting und -Versand;
-            <strong>Dienstanbieter: </strong>Microsoft Ireland Operations Limited, One Microsoft Place, South County
+            ><strong>Microsoft 365 (Exchange Online)</strong>: E-Mail-Hosting und -Versand;
+            <strong>Dienstanbieter</strong>: Microsoft Ireland Operations Limited, One Microsoft Place, South County
             Business Park, Leopardstown, Dublin 18, Irland;
-            <strong>Website: </strong><a href="https://www.microsoft.com/de-de/microsoft-365"
-                >microsoft.com/de-de/microsoft-365</a
-            >; <strong>Datenschutzerklärung: </strong><a href="https://privacy.microsoft.com/de-de/privacystatement"
+            <strong>Website</strong>:
+            <a href="https://www.microsoft.com/de-de/microsoft-365">microsoft.com/de-de/microsoft-365</a>;
+            <strong>Datenschutzerklärung</strong>:
+            <a href="https://privacy.microsoft.com/de-de/privacystatement"
                 >privacy.microsoft.com/de-de/privacystatement</a
             >.</li
         >
