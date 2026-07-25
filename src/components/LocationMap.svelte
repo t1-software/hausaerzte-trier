@@ -8,7 +8,7 @@
     export let carText = "";
 </script>
 
-<div class="location-section">
+<div class="location-section card">
     <h2 class="location-title">Ihr Weg zu uns</h2>
     <p class="location-address">
         Sie finden uns in der <strong>{CONTACT_INFO.ADDRESS}</strong>.
@@ -54,15 +54,16 @@
 
 <style>
     .location-section {
-        margin-top: 3rem;
+        margin-top: 1.5rem;
+        padding: 1.5rem;
     }
 
     .location-title {
-        margin-bottom: 1rem;
+        margin-bottom: 0.75rem;
     }
 
     .location-address {
-        margin-bottom: 1rem;
+        margin-bottom: 0.75rem;
     }
 
     .location-map-link {

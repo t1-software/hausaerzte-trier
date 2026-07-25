@@ -33,14 +33,14 @@
         </div>
 
         <NewsSection {news} {isEditor} {redirectTo} {suggestionEntries} />
-
-        <LocationMap {isEditor} {redirectTo} busText={busDirections} carText={carDirections} />
     </div>
 
     <div class="w-full shrink-0 lg:w-[380px]">
         <VacationSection {vacations} {isEditor} {redirectTo} />
 
         <ContactSection {isEditor} {redirectTo} appointmentText={appointments} />
+
+        <LocationMap {isEditor} {redirectTo} busText={busDirections} carText={carDirections} />
     </div>
 </div>
 

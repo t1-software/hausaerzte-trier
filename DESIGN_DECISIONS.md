@@ -106,14 +106,20 @@ top and re-ported: design markup stays ours, editing logic is upstream's. Rules 
   desktop + mobile + edit mode + admin login page. Dev-only sample content added
   (`src/lib/server/sample-content.ts`) so the site renders without the blob token.
 - 2026-07-25 (evening iteration with Thomas):
-  - Big map placeholder removed — "Ihr Weg zu uns" now has a compact "Karte in Google Maps öffnen"
-    pill link (the quick-band address card already links to Maps).
-  - The two notice banners (pine "Wichtig" strip + copper homepage "Hinweis" box) merged into ONE
-    copper callout (`NoticeBanner.svelte`), shown on every page; it renders BOTH content sections
-    (Wichtig + Hinweis) and keeps both editable in place — no content loss.
-  - Rule from Thomas: no thick left accent borders on boxes (removed from notice banner and Urlaub card).
-  - Impressum/Datenschutz: shared `.legal-page` prose styles in app.css (top margin, paragraph/list
-    spacing, underlined links, 75ch measure); pages wrapped in `<div class="legal-page">`.
+    - Big map placeholder removed — "Ihr Weg zu uns" now has a compact "Karte in Google Maps öffnen"
+      pill link (the quick-band address card already links to Maps).
+    - The two notice banners (pine "Wichtig" strip + copper homepage "Hinweis" box) merged into ONE
+      copper callout (`NoticeBanner.svelte`), shown on every page; it renders BOTH content sections
+      (Wichtig + Hinweis) and keeps both editable in place — no content loss.
+    - Rule from Thomas: no thick left accent borders on boxes (removed from notice banner and Urlaub card).
+    - Impressum/Datenschutz: shared `.legal-page` prose styles in app.css (top margin, paragraph/list
+      spacing, underlined links, 75ch measure); pages wrapped in `<div class="legal-page">`.
+- 2026-07-25 (navbar + sidebar iteration):
+    - "Neuigkeiten" is the second navbar item and gets its active state from a scroll spy
+      (activation line at 35% viewport height, bottom-of-page fallback for short pages);
+      "Startseite" yields while the news section is in focus.
+    - "Ihr Weg zu uns" moved into a card in the right sidebar (Urlaub → Kontakt → Weg zu uns);
+      left column is welcome text + Neuigkeiten only.
 - Known follow-ups: hydration warning in admin session (sessionStorage editMode vs SSR — inherited
   from upstream, not design-related); production Willkommen/Titelbild texts may still contain the
   now-duplicated heading sentences until an editor trims them.
