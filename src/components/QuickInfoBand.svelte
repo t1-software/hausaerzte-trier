@@ -282,6 +282,10 @@
         font-weight: 600;
     }
 
+    .quick-hours li span:last-child {
+        text-align: right;
+    }
+
     .quick-hours-note {
         justify-content: center;
         font-size: 0.85rem;

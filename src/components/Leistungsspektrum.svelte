@@ -54,10 +54,6 @@
 
 <EditableBlock {isEditor}>
     <div class="leistungsspektrum-section">
-        <p class="leistungsspektrum-intro">
-            Ein Überblick über die Untersuchungen und Behandlungen, die wir in unserer Praxis anbieten.
-        </p>
-
         {#if hasContent(leistungen)}
             <div class="leistungsspektrum-content">
                 {#each leistungen as leistung, index (leistung.join("|") + "|" + index)}
@@ -134,16 +130,11 @@
 
 <style>
     .leistungsspektrum-section {
-        padding: 1rem 0 2rem;
+        padding: 2rem 0;
     }
 
     .leistungsspektrum-title {
         margin-bottom: 1rem;
-    }
-
-    .leistungsspektrum-intro {
-        max-width: 65ch;
-        margin-bottom: 2rem;
     }
 
     .leistungsspektrum-content {
