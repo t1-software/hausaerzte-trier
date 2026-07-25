@@ -54,12 +54,14 @@
 
 <EditableBlock {isEditor}>
     <div class="leistungsspektrum-section">
-        <h1 class="leistungsspektrum-title">Leistungsspektrum</h1>
+        <p class="leistungsspektrum-intro">
+            Ein Überblick über die Untersuchungen und Behandlungen, die wir in unserer Praxis anbieten.
+        </p>
 
         {#if hasContent(leistungen)}
             <div class="leistungsspektrum-content">
                 {#each leistungen as leistung, index (leistung.join("|") + "|" + index)}
-                    <div class="leistung-item">
+                    <div class="leistung-item card">
                         <h2 class="leistung-title">{leistung[0]}</h2>
                         <div class="leistung-description">
                             {@html marked(leistung[1] ?? "")}
@@ -70,7 +72,7 @@
         {/if}
     </div>
     <form slot="editor" class="leistungsspektrum-section" method="post" action="/admin/content">
-        <h1 class="leistungsspektrum-title">Leistungsspektrum</h1>
+        <h2 class="leistungsspektrum-title">Leistungsspektrum</h2>
         <input type="hidden" name="action" value="saveRows" />
         <input type="hidden" name="sectionKey" value="Leistungsspektrum" />
         <input type="hidden" name="redirectTo" value={redirectTo} />
@@ -79,7 +81,7 @@
             <div class="leistungsspektrum-content" role="list">
                 {#each rows as row, index (row.id)}
                     <div
-                        class="leistung-item"
+                        class="leistung-item card"
                         role="listitem"
                         class:row-dragging={$dragIndex === index}
                         animate:flip={{ duration: 180 }}
@@ -132,44 +134,43 @@
 
 <style>
     .leistungsspektrum-section {
-        padding: 2rem 0;
+        padding: 1rem 0 2rem;
     }
 
     .leistungsspektrum-title {
-        font-size: 1.5rem;
-        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .leistungsspektrum-intro {
+        max-width: 65ch;
         margin-bottom: 2rem;
-        letter-spacing: -0.025em;
     }
 
     .leistungsspektrum-content {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
+        display: grid;
+        gap: 1rem;
+    }
+
+    @media (min-width: 768px) {
+        .leistungsspektrum-content {
+            grid-template-columns: 1fr 1fr;
+        }
     }
 
     .leistung-item {
-        border-bottom: 1px solid var(--color-gulfstream-200);
-        padding-bottom: 1.5rem;
-    }
-
-    .leistung-item:last-child {
-        border-bottom: none;
+        padding: 1.5rem;
     }
 
     .leistung-title {
-        font-size: 1.25rem;
-        font-weight: 700;
+        font-size: 1.2rem;
         margin-bottom: 0.5rem;
-        letter-spacing: -0.025em;
-        color: var(--color-gulfstream-700);
     }
 
     .leistung-description {
-        padding-top: 0.5rem;
-        padding-bottom: 1.5rem;
-        text-align: justify;
-        width: 100%;
         line-height: 1.6;
+    }
+
+    .leistung-description :global(p) {
+        overflow: visible;
     }
 </style>

@@ -31,7 +31,7 @@
 {#if isEditor || hasContent(news)}
     <EditableBlock {isEditor}>
         <div class="news-section">
-            <h1 class="news-title anchor" id="neuigkeiten">Aktuelle Neuigkeiten</h1>
+            <h2 class="news-title anchor" id="neuigkeiten">Aktuelle Neuigkeiten</h2>
             <div class="news-content">
                 {@html marked(newsString)}
             </div>
@@ -40,7 +40,7 @@
             <input type="hidden" name="action" value="saveBlock" />
             <input type="hidden" name="sectionKey" value="Neuigkeiten" />
             <input type="hidden" name="redirectTo" value={redirectTo} />
-            <h1 class="news-title anchor" id="neuigkeiten">Aktuelle Neuigkeiten</h1>
+            <h2 class="news-title anchor" id="neuigkeiten">Aktuelle Neuigkeiten</h2>
             <div class="news-content">
                 {#key resetKey}
                     <RichText
@@ -65,26 +65,15 @@
 
 <style>
     .news-section {
-        margin-top: 2rem;
+        margin-top: 3rem;
     }
 
     .news-title {
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin-bottom: 1.5rem;
-        letter-spacing: -0.025em;
+        margin-bottom: 1rem;
     }
 
     .news-content {
-        padding-top: 1.5rem;
-        text-align: justify;
-        width: 100%;
-    }
-
-    @media (min-width: 1024px) {
-        .news-content {
-            width: 80%;
-        }
+        max-width: 65ch;
     }
 
     .news-content :global(ul) {

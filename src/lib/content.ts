@@ -116,11 +116,11 @@ export const EDITABLE_CONTENT_SECTIONS: ContentSection[] = [
 /** Ausgangstexte, solange für einen Bereich nichts gespeichert ist. */
 export const SECTION_DEFAULT_TEXT: Record<string, string> = {
     Titelbild: "Hausarztpraxis in Trier\\\nThiemo Stiemert",
+    // Die Überschrift der Startseite übernimmt "Herzlich Willkommen" und
+    // "Ihre Gesundheit steht bei uns im Mittelpunkt" — hier nicht wiederholen.
     Willkommen: [
-        "Herzlich Willkommen in unserer Hausärztlichen Praxis.",
         "Auf den folgenden Seiten möchten wir uns bei Ihnen vorstellen. Sie erhalten Auskünfte zum Leistungsspektrum sowie zur Diagnostik der hausärztlichen Praxis.",
         "Wir freuen uns auf Ihren Besuch in unserer modern ausgestatteten hausärztlichen Praxis. Unabhängig von der Behandlung versuchen wir unsere Patienten umfassend zu informieren, denn nur gut informierte Patienten sind in der Lage richtige Entscheidungen zu treffen.",
-        "Ihre Gesundheit steht bei uns im Mittelpunkt.",
         "Uns ist es ein großes Anliegen, dass Sie sich in unserer hausärztlichen Praxis wohl und gut aufgehoben fühlen. Für Rückmeldungen sind wir stets dankbar.",
         "Ihr Praxisteam",
     ].join("\n\n"),

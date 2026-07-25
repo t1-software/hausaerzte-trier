@@ -1,16 +1,60 @@
 <script lang="ts">
+    import { CONTACT_INFO } from "../constants/contact";
+
     export let isAuthenticated = false;
 </script>
 
-<div class="bg-gradient-to-r from-gulfstream-400 to-gulfstream-500 w-full">
-    <div class="w-full max-w-7xl relative mx-auto">
-        <div class="flex flex-col gap-2 px-3 py-3 text-sm md:flex-row md:items-center md:justify-between md:text-lg">
-            <div class="flex flex-start justify-center md:justify-start item-center gap-2 md:gap-8">
-                <a href="/impressum" class="text-white">Impressum</a>
-                <a href="/datenschutz" class="text-white">Datenschutz</a>
+<footer class="bg-pine-950 text-pine-100">
+    <div class="mx-auto w-full max-w-7xl px-4 py-10">
+        <div class="grid gap-8 md:grid-cols-3">
+            <div>
+                <h2 class="footer-heading">Hausarztpraxis Thiemo Stiemert</h2>
+                <address class="not-italic leading-relaxed">
+                    Gilbertstraße 59<br />
+                    54290 Trier
+                </address>
+                <ul class="mt-3 space-y-1">
+                    <li>
+                        <a class="footer-link tabular-nums" href="tel:{CONTACT_INFO.PHONE}">{CONTACT_INFO.PHONE}</a>
+                    </li>
+                    <li>
+                        <a class="footer-link" href="mailto:{CONTACT_INFO.EMAIL}">{CONTACT_INFO.EMAIL}</a>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <h2 class="footer-heading">Seiten</h2>
+                <ul class="space-y-1">
+                    <li><a class="footer-link" href="/">Startseite</a></li>
+                    <li><a class="footer-link" href="/team">Über uns</a></li>
+                    <li><a class="footer-link" href="/leistungsspektrum">Leistungsspektrum</a></li>
+                    <li><a class="footer-link" href="/#sprechzeiten">Sprechzeiten</a></li>
+                </ul>
+            </div>
+            <div>
+                <h2 class="footer-heading">Im Notfall</h2>
+                <ul class="space-y-2">
+                    <li>
+                        <span class="block text-sm text-pine-300">Ärztlicher Bereitschaftsdienst</span>
+                        <a class="footer-link footer-link--big tabular-nums" href="tel:116117">116 117</a>
+                    </li>
+                    <li>
+                        <span class="block text-sm text-pine-300">Notruf (lebensbedrohliche Notfälle)</span>
+                        <a class="footer-link footer-link--big tabular-nums" href="tel:112">112</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div
+            class="mt-10 flex flex-col items-center gap-2 border-t border-pine-800 pt-4 md:flex-row md:justify-between"
+        >
+            <div class="flex gap-6 text-sm">
+                <a class="footer-link" href="/impressum">Impressum</a>
+                <a class="footer-link" href="/datenschutz">Datenschutz</a>
             </div>
             {#if isAuthenticated}
-                <form class="footer-login text-center md:text-right" method="post" action="/admin?/logout">
+                <form class="footer-login" method="post" action="/admin?/logout">
                     <button
                         class="footer-login__summary footer-login__summary--active"
                         type="submit"
@@ -25,7 +69,7 @@
                     </button>
                 </form>
             {:else}
-                <details class="footer-login text-center md:text-right">
+                <details class="footer-login">
                     <summary class="footer-login__summary" aria-label="Admin anmelden" title="Admin anmelden">
                         <svg aria-hidden="true" viewBox="0 0 24 24">
                             <path
@@ -47,9 +91,34 @@
             {/if}
         </div>
     </div>
-</div>
+</footer>
 
 <style>
+    .footer-heading {
+        font-family: var(--font-display);
+        font-size: 1.05rem;
+        font-weight: 650;
+        color: white;
+        margin-bottom: 0.75rem;
+    }
+
+    .footer-link {
+        color: var(--color-pine-100);
+        text-decoration: none;
+    }
+
+    .footer-link:hover {
+        color: white;
+        text-decoration: underline;
+    }
+
+    .footer-link--big {
+        font-family: var(--font-display);
+        font-size: 1.35rem;
+        font-weight: 650;
+        color: white;
+    }
+
     .footer-login {
         position: relative;
         display: inline-flex;
@@ -67,7 +136,7 @@
         width: 2rem;
         height: 2rem;
         border-radius: 9999px;
-        color: white;
+        color: var(--color-pine-300);
         padding: 0.2rem;
         transition:
             background-color 0.15s ease,
@@ -76,15 +145,16 @@
 
     .footer-login__summary:hover {
         background: rgba(255, 255, 255, 0.16);
+        color: white;
     }
 
     .footer-login__summary--active {
         background: white;
-        color: var(--color-gulfstream-700);
+        color: var(--color-pine-700);
     }
 
     .footer-login__summary--active:hover {
-        background: var(--color-gulfstream-100);
+        background: var(--color-pine-100);
     }
 
     .footer-login__summary::marker {
@@ -111,15 +181,8 @@
         height: 2rem;
         border: 1px solid rgba(255, 255, 255, 0.65);
         background: rgba(255, 255, 255, 0.95);
-        color: var(--color-gulfstream-950);
+        color: var(--color-pine-950);
         padding: 0 0.5rem;
         font-weight: 400;
-    }
-
-    @media (max-width: 767px) {
-        .footer-login__form {
-            margin-right: auto;
-            margin-left: auto;
-        }
     }
 </style>
