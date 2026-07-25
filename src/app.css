@@ -1,7 +1,5 @@
+/* Fonts are imported in +layout.svelte (JS imports) so Vite emits the woff2 assets. */
 @import "tailwindcss";
-@import "@fontsource-variable/source-serif-4";
-@import "@fontsource-variable/source-sans-3";
-@import "@fontsource-variable/caveat";
 
 @theme {
     /* Tiefgrün & Sandstein — see DESIGN_DECISIONS.md */

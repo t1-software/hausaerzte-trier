@@ -74,6 +74,13 @@ Tastatur: Alt + Pfeil hoch/runter auf dem Griff.
 
 - `npm run dev`, `npm run check` (svelte-check muss ohne Fehler und Warnungen durchlaufen),
   `npx prettier --write src`.
+- **Port 5173 niemals für die eigene Verifikation benutzen** — dort läuft parallel Thomas' eigener
+  Dev-Server. Immer einen anderen Port explizit setzen, z. B. `npm run dev -- --port 5199 --strictPort`.
+- Mit `BLOB_READ_WRITE_TOKEN` in `.env` liest UND schreibt der lokale Dev-Server die
+  Produktionsinhalte — beim Testen keine Editor-Speicherungen absenden.
+- Schriften sind selbst gehostete @fontsource-Pakete und werden als JS-Imports in
+  `src/routes/+layout.svelte` geladen (nicht per CSS-`@import` in `app.css` — der Sass-Umweg
+  zerbricht die relativen woff2-Pfade im Produktions-Build).
 - Nach dem Installieren neuer Abhängigkeiten `node_modules/.vite` löschen und den Dev-Server neu starten.
   Veraltete optimierte Abhängigkeiten führen sonst zu `Failed to hydrate` und einer leeren Seite.
 - `.env`: `ADMIN_PASSWORD`, `ADMIN_SESSION_SECRET`, `BLOB_READ_WRITE_TOKEN`, `BLOB_STORE_ID`.

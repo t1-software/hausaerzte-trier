@@ -124,10 +124,8 @@ export const SECTION_DEFAULT_TEXT: Record<string, string> = {
         "Uns ist es ein großes Anliegen, dass Sie sich in unserer hausärztlichen Praxis wohl und gut aufgehoben fühlen. Für Rückmeldungen sind wir stets dankbar.",
         "Ihr Praxisteam",
     ].join("\n\n"),
-    AnfahrtBus: [
-        'Bushaltestelle "Barbarathermen" in der Südallee: Linien 1, 10, 40, 81\\',
-        "Von dort zu Fuß in 3 Minuten (ca. 210 m). Auf Friedrich-Wilhelm-Straße ca. 170 m nach Süden Richtung Gilbertstraße. Dann rechts abbiegen und ca. 42 m auf Gilbertstraße. Die Gemeinschaftspraxis befindet sich auf der linken Seite.",
-    ].join("\n"),
+    AnfahrtBus:
+        'Bushaltestelle "Barbarathermen" in der Südallee: Linien 1, 10, 40, 81. Von dort zu Fuß in 3 Minuten (ca. 210 m). Auf Friedrich-Wilhelm-Straße ca. 170 m nach Süden Richtung Gilbertstraße. Dann rechts abbiegen und ca. 42 m auf Gilbertstraße. Die Gemeinschaftspraxis befindet sich auf der linken Seite.',
     AnfahrtAuto:
         "Kurzzeitparkplätze (2 Stunden) in der Gilbertstraße und Friedrich-Wilhelm-Straße. 3 Parkplätze vor der Praxis.",
     Termine:

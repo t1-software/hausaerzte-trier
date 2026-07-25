@@ -1,4 +1,7 @@
 <script lang="ts">
+    import "@fontsource-variable/source-serif-4";
+    import "@fontsource-variable/source-sans-3";
+    import "@fontsource-variable/caveat";
     import type { LayoutData } from "./$types";
     import EditableText from "../components/EditableText.svelte";
     import Footer from "../components/Footer.svelte";

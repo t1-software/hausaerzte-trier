@@ -11,7 +11,7 @@
 <div class="location-section card">
     <h2 class="location-title">Ihr Weg zu uns</h2>
     <p class="location-address">
-        Sie finden uns in der <strong>{CONTACT_INFO.ADDRESS}</strong>.
+        Sie finden uns in der <strong>Gilbertstraße 59</strong> in Trier.
     </p>
 
     <a href={CONTACT_INFO.GOOGLE_MAPS_URL} target="_blank" rel="noopener noreferrer" class="location-map-link">
