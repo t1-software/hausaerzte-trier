@@ -11,7 +11,7 @@
 
 <main class="min-h-screen bg-gulfstream-50 px-4 py-8 text-gulfstream-950">
     <section class="mx-auto mt-20 max-w-md rounded border border-gulfstream-200 bg-white p-6 shadow-sm">
-        <h1>Bearbeitungsmodus</h1>
+        <h1>Admin</h1>
         {#if !data.configured}
             <p class="mt-4 rounded border border-yellow-300 bg-yellow-50 p-3 text-sm text-yellow-900">
                 ADMIN_PASSWORD ist nicht konfiguriert.

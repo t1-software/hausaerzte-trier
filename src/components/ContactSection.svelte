@@ -1,15 +1,25 @@
 <script lang="ts">
     import { CONTACT_INFO } from "../constants/contact";
+    import EditableText from "./EditableText.svelte";
+
+    export let isEditor = false;
+    export let redirectTo = "/";
+    export let appointmentText = "";
 </script>
 
 <div class="contact-section">
     <h1 class="contact-title">Termin vereinbaren / Rezepte</h1>
 
     <div class="contact-content">
-        <p class="contact-description">
-            Terminvereinbarungen aller Art sowie Therapie-,<br />
-            Diagnoseanfragen sind nur persönlich oder telefonisch möglich! Beachten Sie die Bandansage.
-        </p>
+        <div class="contact-description">
+            <EditableText
+                sectionKey="Termine"
+                ariaLabel="Termin vereinbaren"
+                text={appointmentText}
+                {isEditor}
+                {redirectTo}
+            />
+        </div>
 
         <ul class="contact-list">
             <li class="contact-item">

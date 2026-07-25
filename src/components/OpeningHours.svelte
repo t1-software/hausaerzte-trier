@@ -1,32 +1,61 @@
 <script lang="ts">
+    import { onMount } from "svelte";
+    import { flip } from "svelte/animate";
     import EditableBlock from "./EditableBlock.svelte";
+    import InlineEditorActions from "./InlineEditorActions.svelte";
+    import RichText from "./RichText.svelte";
+    import RowDragHandle from "./RowDragHandle.svelte";
     import { hasContent } from "../utils/content";
+    import { cellsOf, isDirty, moveRow, nextRowId, toRows, type EditableRow } from "$lib/editable-rows";
+    import { createRowDnd } from "$lib/row-dnd";
 
     export let times: string[][] = [];
     export let isEditor = false;
     export let redirectTo = "/";
 
-    let draftTimes = cloneRows(times);
+    let rows: EditableRow[] = toRows(normalise(times), 4);
+    let baseline = cellsOf(rows);
+    let initialised = false;
+    let resetKey = 0;
 
-    function cloneRows(rows: string[][]): string[][] {
-        return rows.map((row) => [row[0] || "Sprechzeit", row[1] ?? "", row[2] ?? "", row[3] ?? ""]);
+    $: dirty = initialised && isDirty(rows, baseline);
+
+    const dnd = createRowDnd((from, to) => (rows = moveRow(rows, from, to)));
+    const { dragIndex } = dnd;
+
+    onMount(() => {
+        initialised = true;
+    });
+
+    function normalise(source: string[][]): string[][] {
+        return source.map((row) => [row[0] || "Sprechzeit", row[1] ?? "", row[2] ?? "", row[3] ?? ""]);
     }
 
-    function addTime() {
-        draftTimes = [...draftTimes, ["Sprechzeit", "", "", ""]];
+    function setCell(rowIndex: number, column: number, value: string, fromInit: boolean) {
+        rows[rowIndex].cells[column] = value;
+        rows = rows;
+
+        if (fromInit && !initialised) {
+            baseline[rowIndex][column] = value;
+            baseline = baseline;
+        }
+    }
+
+    function addRow(kind: "Sprechzeit" | "Hinweis") {
+        rows = [...rows, { id: nextRowId(), cells: [kind, "", "", ""] }];
     }
 
     function removeTime(index: number) {
-        draftTimes = draftTimes.filter((_, rowIndex) => rowIndex !== index);
+        rows = rows.filter((_, rowIndex) => rowIndex !== index);
     }
 
-    function discardTimeChanges(close: () => void) {
-        draftTimes = cloneRows(times);
-        close();
+    function discard() {
+        rows = toRows(baseline, 4);
+        resetKey += 1;
     }
 </script>
 
-<EditableBlock {isEditor} label="Sprechzeiten bearbeiten">
+<EditableBlock {isEditor}>
     <div class="opening-hours-section">
         <h1 class="opening-hours-title">Sprechzeiten</h1>
         {#if hasContent(times)}
@@ -51,49 +80,113 @@
             </table>
         {/if}
     </div>
-    <form
-        slot="editor"
-        let:close
-        class="opening-hours-section inline-editor-panel"
-        method="post"
-        action="/admin/content"
-    >
+    <form slot="editor" class="opening-hours-section" method="post" action="/admin/content">
         <h1 class="opening-hours-title">Sprechzeiten</h1>
         <input type="hidden" name="action" value="saveRows" />
         <input type="hidden" name="sectionKey" value="Sprechzeiten" />
         <input type="hidden" name="redirectTo" value={redirectTo} />
-        <input type="hidden" name="rowCount" value={draftTimes.length} />
-        {#each draftTimes as time, index (index)}
-            <div class="editor-row">
-                <label class="inline-editor-label">
-                    Art
-                    <select class="inline-editor-select" name={`cell:${index}:0`} bind:value={time[0]}>
-                        <option value="Sprechzeit">Sprechzeit</option>
-                        <option value="Hinweis">Hinweis</option>
-                    </select>
-                </label>
-                <label class="inline-editor-label">
-                    Tag oder Hinweis
-                    <input class="inline-editor-input" name={`cell:${index}:1`} bind:value={time[1]} />
-                </label>
-                <label class="inline-editor-label">
-                    Vormittag
-                    <input class="inline-editor-input" name={`cell:${index}:2`} bind:value={time[2]} />
-                </label>
-                <label class="inline-editor-label">
-                    Nachmittag
-                    <input class="inline-editor-input" name={`cell:${index}:3`} bind:value={time[3]} />
-                </label>
-                <button class="inline-editor-remove" type="button" on:click={() => removeTime(index)}>Entfernen</button>
-            </div>
-        {/each}
-        <div class="inline-editor-actions">
-            <button class="inline-editor-apply" type="submit">Übernehmen</button>
-            <button class="inline-editor-secondary" type="button" on:click={addTime}>Zeile hinzufügen</button>
-            <button class="inline-editor-discard" type="button" on:click={() => discardTimeChanges(close)}>
-                Verwerfen
-            </button>
-        </div>
+        <input type="hidden" name="rowCount" value={rows.length} />
+        {#key resetKey}
+            <table class="opening-hours-table">
+                <tbody>
+                    {#each rows as row, index (row.id)}
+                        <tr
+                            class="opening-hours-row"
+                            class:row-dragging={$dragIndex === index}
+                            animate:flip={{ duration: 180 }}
+                            on:dragover={(event) => dnd.handleDragOver(event, index)}
+                            on:drop={dnd.handleDrop}
+                        >
+                            {#if row.cells[0] === "Hinweis"}
+                                <td colspan="2" class="opening-hours-cell opening-hours-center">
+                                    <input type="hidden" name={`cell:${index}:0`} value="Hinweis" />
+                                    <input type="hidden" name={`cell:${index}:2`} value="" />
+                                    <input type="hidden" name={`cell:${index}:3`} value="" />
+                                    <RichText
+                                        inline
+                                        name={`cell:${index}:1`}
+                                        ariaLabel="Hinweis"
+                                        value={row.cells[1]}
+                                        on:init={(event) => setCell(index, 1, event.detail, true)}
+                                        on:change={(event) => setCell(index, 1, event.detail, false)}
+                                    />
+                                    <span class="opening-hours-row-actions">
+                                        <RowDragHandle {dnd} {index} />
+                                        <button
+                                            class="inline-icon-btn"
+                                            type="button"
+                                            aria-label="Zeile entfernen"
+                                            title="Zeile entfernen"
+                                            on:click={() => removeTime(index)}
+                                        >
+                                            <svg aria-hidden="true" viewBox="0 0 24 24">
+                                                <path d="M5 11h14v2H5v-2Z" />
+                                            </svg>
+                                        </button>
+                                    </span>
+                                </td>
+                            {:else}
+                                <td class="opening-hours-cell">
+                                    <input type="hidden" name={`cell:${index}:0`} value="Sprechzeit" />
+                                    <RichText
+                                        inline
+                                        name={`cell:${index}:1`}
+                                        ariaLabel="Tag"
+                                        value={row.cells[1]}
+                                        on:init={(event) => setCell(index, 1, event.detail, true)}
+                                        on:change={(event) => setCell(index, 1, event.detail, false)}
+                                    />
+                                </td>
+                                <td class="opening-hours-cell opening-hours-time">
+                                    <div>
+                                        <RichText
+                                            inline
+                                            name={`cell:${index}:2`}
+                                            ariaLabel="Vormittag"
+                                            value={row.cells[2]}
+                                            on:init={(event) => setCell(index, 2, event.detail, true)}
+                                            on:change={(event) => setCell(index, 2, event.detail, false)}
+                                        />
+                                    </div>
+                                    <div>
+                                        <RichText
+                                            inline
+                                            name={`cell:${index}:3`}
+                                            ariaLabel="Nachmittag"
+                                            value={row.cells[3]}
+                                            on:init={(event) => setCell(index, 3, event.detail, true)}
+                                            on:change={(event) => setCell(index, 3, event.detail, false)}
+                                        />
+                                    </div>
+                                    <span class="opening-hours-row-actions">
+                                        <RowDragHandle {dnd} {index} />
+                                        <button
+                                            class="inline-icon-btn"
+                                            type="button"
+                                            aria-label="Zeile entfernen"
+                                            title="Zeile entfernen"
+                                            on:click={() => removeTime(index)}
+                                        >
+                                            <svg aria-hidden="true" viewBox="0 0 24 24">
+                                                <path d="M5 11h14v2H5v-2Z" />
+                                            </svg>
+                                        </button>
+                                    </span>
+                                </td>
+                            {/if}
+                        </tr>
+                    {/each}
+                </tbody>
+            </table>
+        {/key}
+        <InlineEditorActions
+            {dirty}
+            addActions={[
+                { label: "Sprechzeit hinzufügen", text: "Sprechzeit", run: () => addRow("Sprechzeit") },
+                { label: "Hinweis hinzufügen", text: "Hinweis", run: () => addRow("Hinweis") },
+            ]}
+            onDiscard={discard}
+        />
     </form>
 </EditableBlock>
 
@@ -138,16 +231,10 @@
         text-align: center;
     }
 
-    .editor-row {
-        display: grid;
-        grid-template-columns: 1fr 1.4fr 1fr 1fr auto;
-        gap: 0.75rem;
-        margin-bottom: 0.75rem;
-    }
-
-    @media (max-width: 900px) {
-        .editor-row {
-            grid-template-columns: 1fr;
-        }
+    .opening-hours-row-actions {
+        display: inline-flex;
+        gap: 0.4rem;
+        margin-left: 0.5rem;
+        vertical-align: middle;
     }
 </style>

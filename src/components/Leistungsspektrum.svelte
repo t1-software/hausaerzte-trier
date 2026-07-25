@@ -1,33 +1,58 @@
 <script lang="ts">
+    import { onMount } from "svelte";
+    import { flip } from "svelte/animate";
     import EditableBlock from "./EditableBlock.svelte";
+    import InlineEditorActions from "./InlineEditorActions.svelte";
+    import RichText from "./RichText.svelte";
+    import RowDragHandle from "./RowDragHandle.svelte";
     import { hasContent } from "../utils/content";
     import { marked } from "marked";
+    import { cellsOf, isDirty, moveRow, nextRowId, toRows, type EditableRow } from "$lib/editable-rows";
+    import { createRowDnd } from "$lib/row-dnd";
 
     export let leistungen: string[][] = [];
     export let isEditor = false;
     export let redirectTo = "/leistungsspektrum";
 
-    let draftLeistungen = cloneRows(leistungen);
+    let rows: EditableRow[] = toRows(leistungen, 2);
+    let baseline = cellsOf(rows);
+    let initialised = false;
+    let resetKey = 0;
 
-    function cloneRows(rows: string[][]): string[][] {
-        return rows.map((row) => [row[0] ?? "", row[1] ?? ""]);
+    $: dirty = initialised && isDirty(rows, baseline);
+
+    const dnd = createRowDnd((from, to) => (rows = moveRow(rows, from, to)));
+    const { dragIndex } = dnd;
+
+    onMount(() => {
+        initialised = true;
+    });
+
+    function setCell(rowIndex: number, column: number, value: string, fromInit: boolean) {
+        rows[rowIndex].cells[column] = value;
+        rows = rows;
+
+        if (fromInit && !initialised) {
+            baseline[rowIndex][column] = value;
+            baseline = baseline;
+        }
     }
 
     function addLeistung() {
-        draftLeistungen = [...draftLeistungen, ["", ""]];
+        rows = [...rows, { id: nextRowId(), cells: ["", ""] }];
     }
 
     function removeLeistung(index: number) {
-        draftLeistungen = draftLeistungen.filter((_, rowIndex) => rowIndex !== index);
+        rows = rows.filter((_, rowIndex) => rowIndex !== index);
     }
 
-    function discardLeistungChanges(close: () => void) {
-        draftLeistungen = cloneRows(leistungen);
-        close();
+    function discard() {
+        rows = toRows(baseline, 2);
+        resetKey += 1;
     }
 </script>
 
-<EditableBlock {isEditor} label="Leistungsspektrum bearbeiten">
+<EditableBlock {isEditor}>
     <div class="leistungsspektrum-section">
         <h1 class="leistungsspektrum-title">Leistungsspektrum</h1>
 
@@ -42,45 +67,66 @@
                     </div>
                 {/each}
             </div>
-        {:else}
-            <p class="leistung-placeholder">Leistungsspektrum</p>
         {/if}
     </div>
-    <form
-        slot="editor"
-        let:close
-        class="leistungsspektrum-section inline-editor-panel"
-        method="post"
-        action="/admin/content"
-    >
+    <form slot="editor" class="leistungsspektrum-section" method="post" action="/admin/content">
         <h1 class="leistungsspektrum-title">Leistungsspektrum</h1>
         <input type="hidden" name="action" value="saveRows" />
         <input type="hidden" name="sectionKey" value="Leistungsspektrum" />
         <input type="hidden" name="redirectTo" value={redirectTo} />
-        <input type="hidden" name="rowCount" value={draftLeistungen.length} />
-        {#each draftLeistungen as leistung, index (index)}
-            <div class="editor-row">
-                <label class="inline-editor-label">
-                    Titel
-                    <input class="inline-editor-input" name={`cell:${index}:0`} bind:value={leistung[0]} />
-                </label>
-                <label class="inline-editor-label">
-                    Beschreibung
-                    <textarea class="inline-editor-textarea" name={`cell:${index}:1`} bind:value={leistung[1]}
-                    ></textarea>
-                </label>
-                <button class="inline-editor-remove" type="button" on:click={() => removeLeistung(index)}>
-                    Entfernen
-                </button>
+        <input type="hidden" name="rowCount" value={rows.length} />
+        {#key resetKey}
+            <div class="leistungsspektrum-content" role="list">
+                {#each rows as row, index (row.id)}
+                    <div
+                        class="leistung-item"
+                        role="listitem"
+                        class:row-dragging={$dragIndex === index}
+                        animate:flip={{ duration: 180 }}
+                        on:dragover={(event) => dnd.handleDragOver(event, index)}
+                        on:drop={dnd.handleDrop}
+                    >
+                        <div class="leistung-title">
+                            <RichText
+                                inline
+                                allowBold={false}
+                                name={`cell:${index}:0`}
+                                ariaLabel="Titel"
+                                value={row.cells[0]}
+                                on:init={(event) => setCell(index, 0, event.detail, true)}
+                                on:change={(event) => setCell(index, 0, event.detail, false)}
+                            />
+                        </div>
+                        <div class="leistung-description">
+                            <RichText
+                                name={`cell:${index}:1`}
+                                ariaLabel="Beschreibung"
+                                value={row.cells[1]}
+                                on:init={(event) => setCell(index, 1, event.detail, true)}
+                                on:change={(event) => setCell(index, 1, event.detail, false)}
+                            />
+                        </div>
+                        <RowDragHandle {dnd} {index} />
+                        <button
+                            class="inline-icon-btn"
+                            type="button"
+                            aria-label="Eintrag entfernen"
+                            title="Eintrag entfernen"
+                            on:click={() => removeLeistung(index)}
+                        >
+                            <svg aria-hidden="true" viewBox="0 0 24 24">
+                                <path d="M5 11h14v2H5v-2Z" />
+                            </svg>
+                        </button>
+                    </div>
+                {/each}
             </div>
-        {/each}
-        <div class="inline-editor-actions">
-            <button class="inline-editor-apply" type="submit">Übernehmen</button>
-            <button class="inline-editor-secondary" type="button" on:click={addLeistung}>Zeile hinzufügen</button>
-            <button class="inline-editor-discard" type="button" on:click={() => discardLeistungChanges(close)}>
-                Verwerfen
-            </button>
-        </div>
+        {/key}
+        <InlineEditorActions
+            {dirty}
+            addActions={[{ label: "Eintrag hinzufügen", run: addLeistung }]}
+            onDiscard={discard}
+        />
     </form>
 </EditableBlock>
 
@@ -125,23 +171,5 @@
         text-align: justify;
         width: 100%;
         line-height: 1.6;
-    }
-
-    .editor-row {
-        display: grid;
-        grid-template-columns: 1fr 2fr auto;
-        gap: 0.75rem;
-        margin-bottom: 0.75rem;
-    }
-
-    .leistung-placeholder {
-        color: var(--color-gulfstream-600);
-        font-weight: 700;
-    }
-
-    @media (max-width: 900px) {
-        .editor-row {
-            grid-template-columns: 1fr;
-        }
     }
 </style>

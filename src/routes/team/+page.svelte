@@ -1,9 +1,19 @@
+<script lang="ts">
+    import type { PageData } from "./$types";
+    import EditableText from "../../components/EditableText.svelte";
+    import { editMode } from "$lib/edit-mode";
+    import { textOf } from "$lib/content";
+
+    export let data: PageData;
+
+    $: isEditor = data.isEditor && $editMode;
+    $: intro = textOf(data.content, "Team");
+</script>
+
 <h1>Über uns</h1>
 <br />
 
-Der persönliche Kontakt ist uns besonders wichtig. Als Team aus Ärzten und Arzthelferinnen ist es unser Ziel, Sie bei
-jeder Gelegenheit gut zu betreuen. Wir hoffen, Sie werden sich jederzeit gut aufgehoben fühlen. Lernen Sie unser Team
-kennen.
+<EditableText sectionKey="Team" ariaLabel="Über uns" text={intro} {isEditor} redirectTo="/team" />
 
 <br />
 <br />

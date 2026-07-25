@@ -1,5 +1,5 @@
 <script lang="ts">
-    export let isEditor = false;
+    export let isAuthenticated = false;
 </script>
 
 <div class="bg-gradient-to-r from-gulfstream-400 to-gulfstream-500 w-full">
@@ -9,13 +9,13 @@
                 <a href="/impressum" class="text-white">Impressum</a>
                 <a href="/datenschutz" class="text-white">Datenschutz</a>
             </div>
-            {#if isEditor}
+            {#if isAuthenticated}
                 <form class="footer-login text-center md:text-right" method="post" action="/admin?/logout">
                     <button
                         class="footer-login__summary footer-login__summary--active"
                         type="submit"
-                        aria-label="Bearbeitungsmodus abmelden"
-                        title="Bearbeitungsmodus abmelden"
+                        aria-label="Admin abmelden"
+                        title="Admin abmelden"
                     >
                         <svg aria-hidden="true" viewBox="0 0 24 24">
                             <path
@@ -26,11 +26,7 @@
                 </form>
             {:else}
                 <details class="footer-login text-center md:text-right">
-                    <summary
-                        class="footer-login__summary"
-                        aria-label="Bearbeitungsmodus anmelden"
-                        title="Bearbeitungsmodus anmelden"
-                    >
+                    <summary class="footer-login__summary" aria-label="Admin anmelden" title="Admin anmelden">
                         <svg aria-hidden="true" viewBox="0 0 24 24">
                             <path
                                 d="M17 9h-1V7a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2ZM10 7a2 2 0 1 1 4 0v2h-4V7Zm7 12H7v-8h10v8Z"

@@ -1,39 +1,63 @@
 <script lang="ts">
     import EditableBlock from "./EditableBlock.svelte";
+    import InlineEditorActions from "./InlineEditorActions.svelte";
+    import RichText from "./RichText.svelte";
+    import SuggestionListEditor from "./SuggestionListEditor.svelte";
     import { marked } from "marked";
     import { hasContent, formatNewsContent } from "../utils/content";
 
     export let news: string[][] = [];
     export let isEditor = false;
     export let redirectTo = "/";
+    /** Gepflegte Einträge, die beim Tippen als Vorschlag erscheinen. */
+    export let suggestionEntries: string[][] = [];
+
+    $: suggestions = suggestionEntries.map((row) => row[0]).filter(Boolean);
 
     $: newsString = formatNewsContent(news);
+
+    let baseline: string | null = null;
+    let draft = "";
+    let resetKey = 0;
+
+    $: dirty = baseline !== null && draft !== baseline;
+
+    function discard() {
+        draft = baseline ?? "";
+        resetKey += 1;
+    }
 </script>
 
 {#if isEditor || hasContent(news)}
-    <EditableBlock {isEditor} label="Neuigkeiten bearbeiten">
+    <EditableBlock {isEditor}>
         <div class="news-section">
             <h1 class="news-title anchor" id="neuigkeiten">Aktuelle Neuigkeiten</h1>
             <div class="news-content">
-                {#if hasContent(news)}
-                    {@html marked(newsString)}
-                {:else}
-                    <p class="news-placeholder">Neuigkeiten</p>
-                {/if}
+                {@html marked(newsString)}
             </div>
         </div>
-        <form slot="editor" let:close class="news-section inline-editor-panel" method="post" action="/admin/content">
+        <form slot="editor" class="news-section" method="post" action="/admin/content">
             <input type="hidden" name="action" value="saveBlock" />
             <input type="hidden" name="sectionKey" value="Neuigkeiten" />
             <input type="hidden" name="redirectTo" value={redirectTo} />
             <h1 class="news-title anchor" id="neuigkeiten">Aktuelle Neuigkeiten</h1>
-            <label class="inline-editor-label">
-                Neuigkeiten
-                <textarea name="text" class="inline-editor-textarea">{newsString}</textarea>
-            </label>
-            <div class="inline-editor-actions">
-                <button class="inline-editor-apply" type="submit">Übernehmen</button>
-                <button class="inline-editor-discard" type="button" on:click={close}>Verwerfen</button>
+            <div class="news-content">
+                {#key resetKey}
+                    <RichText
+                        allowList
+                        {suggestions}
+                        name="text"
+                        ariaLabel="Neuigkeiten"
+                        value={baseline ?? newsString}
+                        on:init={(event) => {
+                            baseline = event.detail;
+                            draft = event.detail;
+                        }}
+                        on:change={(event) => (draft = event.detail)}
+                    />
+                {/key}
+                <InlineEditorActions {dirty} onDiscard={discard} />
+                <SuggestionListEditor entries={suggestionEntries} {redirectTo} />
             </div>
         </form>
     </EditableBlock>
@@ -79,11 +103,6 @@
     }
 
     .news-content :global(strong) {
-        font-weight: 700;
-    }
-
-    .news-placeholder {
-        color: var(--color-gulfstream-600);
         font-weight: 700;
     }
 </style>

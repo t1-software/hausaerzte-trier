@@ -56,7 +56,88 @@ export const EDITABLE_CONTENT_SECTIONS: ContentSection[] = [
         columns: ["Titel", "Beschreibung"],
         multilineColumns: [1],
     },
+    {
+        key: "Vertretungen",
+        title: "Vertretungen",
+        description: "Vorschlagsliste für Aufzählungen in den Neuigkeiten.",
+        type: "table",
+        columns: ["Eintrag"],
+    },
+    {
+        key: "Titelbild",
+        title: "Titelbild",
+        description: "Text im Titelbild.",
+        type: "richText",
+        columns: ["Text"],
+        multilineColumns: [0],
+    },
+    {
+        key: "Willkommen",
+        title: "Willkommen",
+        description: "Begrüßungstext auf der Startseite.",
+        type: "richText",
+        columns: ["Text"],
+        multilineColumns: [0],
+    },
+    {
+        key: "AnfahrtBus",
+        title: "Anfahrt mit dem Bus",
+        description: "Wegbeschreibung für den Bus.",
+        type: "richText",
+        columns: ["Text"],
+        multilineColumns: [0],
+    },
+    {
+        key: "AnfahrtAuto",
+        title: "Anfahrt mit dem Auto",
+        description: "Wegbeschreibung für das Auto.",
+        type: "richText",
+        columns: ["Text"],
+        multilineColumns: [0],
+    },
+    {
+        key: "Termine",
+        title: "Termin vereinbaren",
+        description: "Text über den Kontaktdaten.",
+        type: "richText",
+        columns: ["Text"],
+        multilineColumns: [0],
+    },
+    {
+        key: "Team",
+        title: "Über uns",
+        description: "Einleitung auf der Team-Seite.",
+        type: "richText",
+        columns: ["Text"],
+        multilineColumns: [0],
+    },
 ];
+
+/** Ausgangstexte, solange für einen Bereich nichts gespeichert ist. */
+export const SECTION_DEFAULT_TEXT: Record<string, string> = {
+    Titelbild: "Hausarztpraxis in Trier\\\nThiemo Stiemert",
+    Willkommen: [
+        "Herzlich Willkommen in unserer Hausärztlichen Praxis.",
+        "Auf den folgenden Seiten möchten wir uns bei Ihnen vorstellen. Sie erhalten Auskünfte zum Leistungsspektrum sowie zur Diagnostik der hausärztlichen Praxis.",
+        "Wir freuen uns auf Ihren Besuch in unserer modern ausgestatteten hausärztlichen Praxis. Unabhängig von der Behandlung versuchen wir unsere Patienten umfassend zu informieren, denn nur gut informierte Patienten sind in der Lage richtige Entscheidungen zu treffen.",
+        "Ihre Gesundheit steht bei uns im Mittelpunkt.",
+        "Uns ist es ein großes Anliegen, dass Sie sich in unserer hausärztlichen Praxis wohl und gut aufgehoben fühlen. Für Rückmeldungen sind wir stets dankbar.",
+        "Ihr Praxisteam",
+    ].join("\n\n"),
+    AnfahrtBus: [
+        'Bushaltestelle "Barbarathermen" in der Südallee: Linien 1, 10, 40, 81\\',
+        "Von dort zu Fuß in 3 Minuten (ca. 210 m). Auf Friedrich-Wilhelm-Straße ca. 170 m nach Süden Richtung Gilbertstraße. Dann rechts abbiegen und ca. 42 m auf Gilbertstraße. Die Gemeinschaftspraxis befindet sich auf der linken Seite.",
+    ].join("\n"),
+    AnfahrtAuto:
+        "Kurzzeitparkplätze (2 Stunden) in der Gilbertstraße und Friedrich-Wilhelm-Straße. 3 Parkplätze vor der Praxis.",
+    Termine:
+        "Terminvereinbarungen aller Art sowie Therapie-,\\\nDiagnoseanfragen sind nur persönlich oder telefonisch möglich! Beachten Sie die Bandansage.",
+    Team: "Der persönliche Kontakt ist uns besonders wichtig. Als Team aus Ärzten und Arzthelferinnen ist es unser Ziel, Sie bei jeder Gelegenheit gut zu betreuen. Wir hoffen, Sie werden sich jederzeit gut aufgehoben fühlen. Lernen Sie unser Team kennen.",
+};
+
+export function textOf(content: SiteContent, key: string): string {
+    return content[key]?.[0]?.[0]?.replaceAll("\r", "") || SECTION_DEFAULT_TEXT[key] || "";
+}
 
 export function normalizeContent(input: unknown): SiteContent {
     if (!input || typeof input !== "object" || Array.isArray(input)) {
@@ -141,8 +222,9 @@ function normalizeRowsForSection(key: string, rows: string[][]): string[][] {
 
     if (key === "Sprechzeiten") {
         return rows.map((row) => {
-            if (row.length >= 4) {
-                return [row[0] || "Sprechzeit", row[1] || "", row[2] || "", row[3] || ""];
+            // Zeilen mit Art-Spalte, auch wenn hintere Spalten leer sind.
+            if (row[0] === "Sprechzeit" || row[0] === "Hinweis") {
+                return [row[0], row[1] || "", row[2] || "", row[3] || ""];
             }
 
             if (row[1]) {

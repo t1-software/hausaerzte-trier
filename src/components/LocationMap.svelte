@@ -1,7 +1,12 @@
 <script lang="ts">
     import { CONTACT_INFO } from "../constants/contact";
+    import EditableText from "./EditableText.svelte";
 
     export let isMobile = false;
+    export let isEditor = false;
+    export let redirectTo = "/";
+    export let busText = "";
+    export let carText = "";
 </script>
 
 <div class={isMobile ? "location-mobile" : "location-desktop"}>
@@ -24,20 +29,28 @@
         <div class="location-directions">
             <div class="location-direction-section">
                 <h3 class="location-direction-title">Anfahrt mit dem Bus:</h3>
-                <p class="location-direction-text">
-                    Bushaltestelle "Barbarathermen" in der Südallee: Linien 1, 10, 40, 81<br />
-                    Von dort zu Fuß in 3 Minuten (ca. 210 m). Auf Friedrich-Wilhelm-Straße ca. 170 m nach Süden Richtung
-                    Gilbertstraße. Dann rechts abbiegen und ca. 42 m auf Gilbertstraße. Die Gemeinschaftspraxis befindet
-                    sich auf der linken Seite.
-                </p>
+                <div class="location-direction-text">
+                    <EditableText
+                        sectionKey="AnfahrtBus"
+                        ariaLabel="Anfahrt mit dem Bus"
+                        text={busText}
+                        {isEditor}
+                        {redirectTo}
+                    />
+                </div>
             </div>
 
             <div class="location-direction-section">
                 <h3 class="location-direction-title">Anfahrt mit dem Auto:</h3>
-                <p class="location-direction-text">
-                    Kurzzeitparkplätze (2 Stunden) in der Gilbertstraße und Friedrich-Wilhelm-Straße. 3 Parkplätze vor
-                    der Praxis.
-                </p>
+                <div class="location-direction-text">
+                    <EditableText
+                        sectionKey="AnfahrtAuto"
+                        ariaLabel="Anfahrt mit dem Auto"
+                        text={carText}
+                        {isEditor}
+                        {redirectTo}
+                    />
+                </div>
             </div>
         </div>
     </div>
