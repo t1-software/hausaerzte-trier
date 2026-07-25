@@ -282,11 +282,11 @@
         gap: 0.75rem;
     }
 
-    .quick-hours li span:first-child {
+    .quick-hours li > span:first-child {
         font-weight: 600;
     }
 
-    .quick-hours li span:last-child {
+    .quick-hours li > span:last-child {
         text-align: right;
     }
 
