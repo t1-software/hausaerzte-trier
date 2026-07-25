@@ -5,6 +5,7 @@
     import InlineEditorActions from "./InlineEditorActions.svelte";
     import RichText from "./RichText.svelte";
     import RowDragHandle from "./RowDragHandle.svelte";
+    import { ajaxSave } from "$lib/ajax-save";
     import { hasContent } from "../utils/content";
     import { cellsOf, isDirty, moveRow, nextRowId, toRows, type EditableRow } from "$lib/editable-rows";
     import { createRowDnd } from "$lib/row-dnd";
@@ -12,6 +13,8 @@
     export let vacations: string[][] = [];
     export let isEditor = false;
     export let redirectTo = "/";
+    /** "card" in der Seitenleiste, "band" als Karte im Info-Band unter dem Titelbild. */
+    export let variant: "card" | "band" = "card";
 
     let rows: EditableRow[] = toRows(vacations, 2);
     let baseline = cellsOf(rows);
@@ -53,76 +56,93 @@
 
 {#if isEditor || hasContent(vacations)}
     <EditableBlock {isEditor}>
-        <div class="vacation-section">
-            <h1 class="vacation-title">Urlaub</h1>
+        <div class="vacation-section" class:card={variant === "card"} class:quick-card={variant === "band"}>
+            {#if variant === "band"}
+                <span class="quick-label">
+                    <svg aria-hidden="true" viewBox="0 0 24 24" class="quick-icon">
+                        <path
+                            d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 15H5V10h14v9Zm0-11H5V6h14v2Z"
+                        />
+                    </svg>
+                    Urlaub
+                </span>
+            {:else}
+                <h2 class="vacation-title">Urlaub</h2>
+            {/if}
             {#if hasContent(vacations)}
-                <table class="vacation-table">
-                    <tbody>
-                        {#each vacations as vacation, index (vacation.join("|") + "|" + index)}
-                            <tr class="vacation-row">
-                                <td class="vacation-cell">{vacation[0]} bis {vacation[1]}</td>
-                            </tr>
-                        {/each}
-                    </tbody>
-                </table>
+                <ul class="vacation-list">
+                    {#each vacations as vacation, index (vacation.join("|") + "|" + index)}
+                        <li class="vacation-row">{vacation[0]} bis {vacation[1]}</li>
+                    {/each}
+                </ul>
+                <p class="vacation-note">In dieser Zeit bleibt die Praxis geschlossen.</p>
             {/if}
         </div>
-        <form slot="editor" class="vacation-section" method="post" action="/admin/content">
-            <h1 class="vacation-title">Urlaub</h1>
+        <form
+            slot="editor"
+            class="vacation-section"
+            class:card={variant === "card"}
+            class:quick-card={variant === "band"}
+            method="post"
+            action="/admin/content"
+            use:ajaxSave
+            on:saved={() => (baseline = cellsOf(rows))}
+        >
+            {#if variant === "band"}
+                <span class="quick-label">Urlaub</span>
+            {:else}
+                <h2 class="vacation-title">Urlaub</h2>
+            {/if}
             <input type="hidden" name="action" value="saveRows" />
             <input type="hidden" name="sectionKey" value="Urlaub" />
             <input type="hidden" name="redirectTo" value={redirectTo} />
             <input type="hidden" name="rowCount" value={rows.length} />
             {#key resetKey}
-                <table class="vacation-table">
-                    <tbody>
-                        {#each rows as row, index (row.id)}
-                            <tr
-                                class="vacation-row"
-                                class:row-dragging={$dragIndex === index}
-                                animate:flip={{ duration: 180 }}
-                                on:dragover={(event) => dnd.handleDragOver(event, index)}
-                                on:drop={dnd.handleDrop}
-                            >
-                                <td class="vacation-cell">
-                                    <span class="vacation-range">
-                                        <RowDragHandle {dnd} {index} />
-                                        <RichText
-                                            inline
-                                            allowBold={false}
-                                            name={`cell:${index}:0`}
-                                            ariaLabel="Von"
-                                            value={row.cells[0]}
-                                            on:init={(event) => setCell(index, 0, event.detail, true)}
-                                            on:change={(event) => setCell(index, 0, event.detail, false)}
-                                        />
-                                        <span>bis</span>
-                                        <RichText
-                                            inline
-                                            allowBold={false}
-                                            name={`cell:${index}:1`}
-                                            ariaLabel="Bis"
-                                            value={row.cells[1]}
-                                            on:init={(event) => setCell(index, 1, event.detail, true)}
-                                            on:change={(event) => setCell(index, 1, event.detail, false)}
-                                        />
-                                        <button
-                                            class="inline-icon-btn vacation-remove"
-                                            type="button"
-                                            aria-label="Zeile entfernen"
-                                            title="Zeile entfernen"
-                                            on:click={() => removeVacation(index)}
-                                        >
-                                            <svg aria-hidden="true" viewBox="0 0 24 24">
-                                                <path d="M5 11h14v2H5v-2Z" />
-                                            </svg>
-                                        </button>
-                                    </span>
-                                </td>
-                            </tr>
-                        {/each}
-                    </tbody>
-                </table>
+                <ul class="vacation-list">
+                    {#each rows as row, index (row.id)}
+                        <li
+                            class="vacation-row"
+                            class:row-dragging={$dragIndex === index}
+                            animate:flip={{ duration: 180 }}
+                            on:dragover={(event) => dnd.handleDragOver(event, index)}
+                            on:drop={dnd.handleDrop}
+                        >
+                            <span class="vacation-range">
+                                <RowDragHandle {dnd} {index} />
+                                <RichText
+                                    inline
+                                    allowBold={false}
+                                    name={`cell:${index}:0`}
+                                    ariaLabel="Von"
+                                    value={row.cells[0]}
+                                    on:init={(event) => setCell(index, 0, event.detail, true)}
+                                    on:change={(event) => setCell(index, 0, event.detail, false)}
+                                />
+                                <span>bis</span>
+                                <RichText
+                                    inline
+                                    allowBold={false}
+                                    name={`cell:${index}:1`}
+                                    ariaLabel="Bis"
+                                    value={row.cells[1]}
+                                    on:init={(event) => setCell(index, 1, event.detail, true)}
+                                    on:change={(event) => setCell(index, 1, event.detail, false)}
+                                />
+                                <button
+                                    class="inline-icon-btn vacation-remove"
+                                    type="button"
+                                    aria-label="Zeile entfernen"
+                                    title="Zeile entfernen"
+                                    on:click={() => removeVacation(index)}
+                                >
+                                    <svg aria-hidden="true" viewBox="0 0 24 24">
+                                        <path d="M5 11h14v2H5v-2Z" />
+                                    </svg>
+                                </button>
+                            </span>
+                        </li>
+                    {/each}
+                </ul>
             {/key}
             <InlineEditorActions
                 {dirty}
@@ -134,48 +154,76 @@
 {/if}
 
 <style>
-    .vacation-section {
-        margin-top: 1.5rem;
+    .vacation-section.card {
+        padding: 1.5rem;
+    }
+
+    .vacation-section.quick-card :global(.vacation-row) {
+        font-size: 0.9rem;
+        padding: 0.3rem 0;
+    }
+
+    .vacation-section.quick-card .vacation-note {
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
     }
 
     .vacation-title {
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin-bottom: 1.5rem;
-        letter-spacing: -0.025em;
+        margin-bottom: 0.75rem;
     }
 
-    .vacation-table {
-        margin-top: 1.5rem;
-        width: 100%;
-    }
-
-    .vacation-row:nth-child(odd) {
-        background-color: var(--color-gulfstream-100);
-    }
-
-    .vacation-row:nth-child(even) {
-        background-color: var(--color-gulfstream-200);
+    .vacation-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
     }
 
     .vacation-row {
-        border: 1px solid #d1d5db;
-        text-align: center;
+        padding: 0.4rem 0;
         font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        border-bottom: 1px solid var(--color-sand-200);
     }
 
-    .vacation-cell {
-        padding: 1rem;
+    .vacation-row:last-child {
+        border-bottom: none;
     }
 
+    .vacation-note {
+        margin-top: 0.75rem;
+        font-size: 0.9rem;
+        color: var(--color-sand-900);
+    }
+
+    /* Two compact rows per entry: "Von" next to the handle, "bis <Bis>" below. */
     .vacation-range {
-        display: inline-flex;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
         align-items: center;
-        justify-content: center;
-        gap: 0.4rem;
+        column-gap: 0.4rem;
+        row-gap: 0.2rem;
+        width: 100%;
+    }
+
+    .vacation-range :global(.rich-text) {
+        min-width: 0;
+    }
+
+    .vacation-range > :global(:nth-child(3)) {
+        grid-row: 2;
+        grid-column: 1;
+        justify-self: center;
+        font-weight: 400;
+        color: var(--color-sand-900);
+    }
+
+    .vacation-range > :global(:nth-child(4)) {
+        grid-row: 2;
+        grid-column: 2;
     }
 
     .vacation-remove {
-        margin-left: 0.25rem;
+        grid-row: 1;
+        grid-column: 3;
     }
 </style>

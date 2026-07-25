@@ -1,6 +1,8 @@
 import { get, put } from "@vercel/blob";
+import { dev } from "$app/environment";
 import { env } from "$env/dynamic/private";
 import { normalizeContent, type SiteContent } from "$lib/content";
+import { SAMPLE_CONTENT } from "./sample-content";
 
 const CONTENT_BLOB_PATH = "site-content/content.json";
 
@@ -13,6 +15,10 @@ export async function loadSiteContent(): Promise<SiteContent> {
 
     if (blobContent) {
         return blobContent;
+    }
+
+    if (dev && !isContentStoreConfigured()) {
+        return normalizeContent(SAMPLE_CONTENT);
     }
 
     return normalizeContent({});

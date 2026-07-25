@@ -5,6 +5,7 @@
     import InlineEditorActions from "./InlineEditorActions.svelte";
     import RichText from "./RichText.svelte";
     import RowDragHandle from "./RowDragHandle.svelte";
+    import { ajaxSave } from "$lib/ajax-save";
     import { hasContent } from "../utils/content";
     import { marked } from "marked";
     import { cellsOf, isDirty, moveRow, nextRowId, toRows, type EditableRow } from "$lib/editable-rows";
@@ -54,13 +55,20 @@
 
 <EditableBlock {isEditor}>
     <div class="leistungsspektrum-section">
-        <h1 class="leistungsspektrum-title">Leistungsspektrum</h1>
-
         {#if hasContent(leistungen)}
             <div class="leistungsspektrum-content">
                 {#each leistungen as leistung, index (leistung.join("|") + "|" + index)}
-                    <div class="leistung-item">
-                        <h2 class="leistung-title">{leistung[0]}</h2>
+                    <div class="leistung-item card">
+                        <div class="leistung-head">
+                            <span class="leistung-mark" aria-hidden="true">
+                                <svg viewBox="0 0 24 24">
+                                    <path
+                                        d="M10.5 5.5A1.5 1.5 0 0 1 12 4a1.5 1.5 0 0 1 1.5 1.5v5h5A1.5 1.5 0 0 1 20 12a1.5 1.5 0 0 1-1.5 1.5h-5v5A1.5 1.5 0 0 1 12 20a1.5 1.5 0 0 1-1.5-1.5v-5h-5A1.5 1.5 0 0 1 4 12a1.5 1.5 0 0 1 1.5-1.5h5z"
+                                    />
+                                </svg>
+                            </span>
+                            <h2 class="leistung-title">{leistung[0]}</h2>
+                        </div>
                         <div class="leistung-description">
                             {@html marked(leistung[1] ?? "")}
                         </div>
@@ -69,8 +77,15 @@
             </div>
         {/if}
     </div>
-    <form slot="editor" class="leistungsspektrum-section" method="post" action="/admin/content">
-        <h1 class="leistungsspektrum-title">Leistungsspektrum</h1>
+    <form
+        slot="editor"
+        class="leistungsspektrum-section"
+        method="post"
+        action="/admin/content"
+        use:ajaxSave
+        on:saved={() => (baseline = cellsOf(rows))}
+    >
+        <h2 class="leistungsspektrum-title">Leistungsspektrum</h2>
         <input type="hidden" name="action" value="saveRows" />
         <input type="hidden" name="sectionKey" value="Leistungsspektrum" />
         <input type="hidden" name="redirectTo" value={redirectTo} />
@@ -79,7 +94,7 @@
             <div class="leistungsspektrum-content" role="list">
                 {#each rows as row, index (row.id)}
                     <div
-                        class="leistung-item"
+                        class="leistung-item card"
                         role="listitem"
                         class:row-dragging={$dragIndex === index}
                         animate:flip={{ duration: 180 }}
@@ -136,40 +151,68 @@
     }
 
     .leistungsspektrum-title {
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin-bottom: 2rem;
-        letter-spacing: -0.025em;
+        margin-bottom: 1rem;
     }
 
     .leistungsspektrum-content {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
+        display: grid;
+        gap: 1rem;
+    }
+
+    @media (min-width: 768px) {
+        .leistungsspektrum-content {
+            grid-template-columns: 1fr 1fr;
+        }
     }
 
     .leistung-item {
-        border-bottom: 1px solid var(--color-gulfstream-200);
-        padding-bottom: 1.5rem;
+        padding: 1.5rem;
+        transition:
+            box-shadow 0.15s ease,
+            transform 0.15s ease;
     }
 
-    .leistung-item:last-child {
-        border-bottom: none;
+    .leistung-item:hover {
+        box-shadow: 0 10px 24px -12px rgb(14 31 24 / 0.35);
+        transform: translateY(-2px);
+    }
+
+    .leistung-head {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin-bottom: 0.6rem;
+    }
+
+    .leistung-mark {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.9rem;
+        height: 1.9rem;
+        flex: none;
+        border-radius: 0.55rem;
+        background: var(--color-pine-100);
+    }
+
+    .leistung-mark svg {
+        width: 1.1rem;
+        height: 1.1rem;
+        fill: var(--color-pine-700);
     }
 
     .leistung-title {
-        font-size: 1.25rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-        letter-spacing: -0.025em;
-        color: var(--color-gulfstream-700);
+        font-size: 1.2rem;
+        margin-bottom: 0;
     }
 
     .leistung-description {
-        padding-top: 0.5rem;
-        padding-bottom: 1.5rem;
-        text-align: justify;
-        width: 100%;
         line-height: 1.6;
+        color: var(--color-sand-900);
+        font-size: 0.975rem;
+    }
+
+    .leistung-description :global(p) {
+        overflow: visible;
     }
 </style>
