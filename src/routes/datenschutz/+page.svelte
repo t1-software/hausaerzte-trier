@@ -264,15 +264,26 @@
     <p><strong>Eingesetzte Dienste und Diensteanbieter:</strong></p>
     <ul class="list-disc list-inside">
         <li
-            ><strong>Host Europe: </strong>Leistungen auf dem Gebiet der Bereitstellung von informationstechnischer
-            Infrastruktur und verbundenen Dienstleistungen (z.B. Speicherplatz und/oder Rechenkapazitäten,
-            E-Mail-Hosting);
-            <strong>Dienstanbieter: </strong>Host Europe GmbH, Hansestraße 111, 51149 Köln, Deutschland;
-            <strong>Website: </strong><a href="https://www.hosteurope.de">https://www.hosteurope.de</a>;
-            <strong>Datenschutzerklärung: </strong><a href="https://www.hosteurope.de/AGB/Datenschutzerklaerung"
-                >Datenschutzerklaerung</a
-            >; <strong>Auftragsverarbeitungsvertrag: </strong><a href="https://www.hosteurope.de/Dokumente/"
-                >Dokumente/</a
+            ><strong>Vercel: </strong>Bereitstellung von informationstechnischer Infrastruktur und verbundenen
+            Dienstleistungen für den Betrieb dieser Website (z.B. Rechenkapazitäten, Speicherplatz,
+            Content-Delivery-Network);
+            <strong>Dienstanbieter: </strong>Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA;
+            <strong>Website: </strong><a href="https://vercel.com">https://vercel.com</a>;
+            <strong>Datenschutzerklärung: </strong><a href="https://vercel.com/legal/privacy-policy"
+                >vercel.com/legal/privacy-policy</a
+            >; <strong>Auftragsverarbeitungsvertrag: </strong><a href="https://vercel.com/legal/dpa"
+                >vercel.com/legal/dpa</a
+            >. Die Übermittlung in die USA erfolgt auf Grundlage des EU-US Data Privacy Framework sowie von
+            Standardvertragsklauseln gem. Art. 46 DSGVO.</li
+        >
+        <li
+            ><strong>Microsoft 365 (Exchange Online): </strong>E-Mail-Hosting und -Versand;
+            <strong>Dienstanbieter: </strong>Microsoft Ireland Operations Limited, One Microsoft Place, South County
+            Business Park, Leopardstown, Dublin 18, Irland;
+            <strong>Website: </strong><a href="https://www.microsoft.com/de-de/microsoft-365"
+                >microsoft.com/de-de/microsoft-365</a
+            >; <strong>Datenschutzerklärung: </strong><a href="https://privacy.microsoft.com/de-de/privacystatement"
+                >privacy.microsoft.com/de-de/privacystatement</a
             >.</li
         >
     </ul>
@@ -339,24 +350,15 @@
         Service. Rechtsgrundlagen: Berechtigte Interessen (Art. 6 Abs. 1 S. 1 lit. f. DSGVO).</p
     >
     <p><strong>Eingesetzte Dienste und Diensteanbieter:</strong></p>
-    <ul class="list-disc list-inside">
-        <li
-            ><strong>OpenStreetMap:</strong> Wir binden die Landkarten des Dienstes „OpenStreetMap“ ein, die auf
-            Grundlage der Open Data Commons Open Database Lizenz (ODbL) durch die OpenStreetMap Foundation (OSMF)
-            angeboten werden.
-            <strong>Diensteanbieter:</strong>
-            FOSSGIS e.V., Bundesallee 23, 10717 Berlin, Deutschland. Die Daten der Nutzer werden durch OpenStreetMap ausschließlich
-            zu Zwecken der Darstellung der Kartenfunktionen und zur Zwischenspeicherung der gewählten Einstellungen verwendet.
-            Zu diesen Daten können insbesondere IP-Adressen und Standortdaten der Nutzer gehören, die jedoch nicht ohne deren
-            Einwilligung (im Regelfall im Rahmen der Einstellungen ihrer Mobilgeräte vollzogen) erhoben werden. Dienstanbieter:
-            OpenStreetMap Foundation (OSMF); <strong>Website:</strong>
-            <a href="https://www.openstreetmap.de">openstreetmap.de</a>;
-            <strong>Datenschutzerklärung:</strong>
-            <a href="https://wiki.openstreetmap.org/wiki/Privacy_Policy">Privacy_Policy</a>.</li
-        >
-    </ul>
+    <p
+        >Derzeit binden wir keine Inhalte oder Funktionen von Drittanbietern in unser Onlineangebot ein. Schriftarten
+        werden lokal von unserem Server geladen; dabei wird keine Verbindung zu Servern Dritter aufgebaut. Soweit wir
+        auf externe Dienste verlinken (z.B. die Anzeige unseres Standorts über Google Maps), öffnen diese Links den
+        jeweiligen Dienst in einem neuen Fenster; erst mit dem Aufruf gelten die Datenschutzhinweise des jeweiligen
+        Anbieters (für Google Maps: <a href="https://policies.google.com/privacy">policies.google.com/privacy</a>).</p
+    >
 
-    <p>Stand: 17.09.2024</p>
+    <p>Stand: 25.07.2026</p>
 
     <style>
         p {
