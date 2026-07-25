@@ -131,6 +131,55 @@ a {
     }
 }
 
+/* Long-form legal pages (Impressum, Datenschutz) */
+.legal-page {
+    max-width: 75ch;
+    margin-top: 2rem;
+}
+
+.legal-page h1 {
+    margin-bottom: 0.5rem;
+}
+
+.legal-page h2 {
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.legal-page h3 {
+    margin-top: 1.25rem;
+    margin-bottom: 0.35rem;
+}
+
+.legal-page p {
+    margin-bottom: 0.9rem;
+    overflow: visible;
+}
+
+.legal-page ul {
+    list-style: disc;
+    margin: 0 0 0.9rem 1.25rem;
+}
+
+.legal-page li {
+    margin-bottom: 0.35rem;
+}
+
+.legal-page a {
+    color: var(--color-pine-700);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    overflow-wrap: anywhere;
+}
+
+.legal-page a:hover {
+    color: var(--color-pine-500);
+}
+
+.legal-page > br {
+    display: none;
+}
+
 .anchor::before {
     content: "";
     display: block;

@@ -1,14 +1,11 @@
 <script lang="ts">
     import type { LayoutData } from "./$types";
-    import EditableBlock from "../components/EditableBlock.svelte";
     import EditableText from "../components/EditableText.svelte";
-    import InlineEditorActions from "../components/InlineEditorActions.svelte";
-    import RichText from "../components/RichText.svelte";
     import Footer from "../components/Footer.svelte";
     import Header from "../components/Header.svelte";
+    import NoticeBanner from "../components/NoticeBanner.svelte";
     import QuickInfoBand from "../components/QuickInfoBand.svelte";
     import { page } from "$app/stores";
-    import { marked } from "marked";
     import { editMode } from "$lib/edit-mode";
     import { textOf } from "$lib/content";
 
@@ -17,21 +14,9 @@
     $: content = data.content;
     $: isAuthenticated = data.isEditor;
     $: isEditor = isAuthenticated && $editMode;
-    $: important = content["Wichtig"]?.[0]?.[0]?.replaceAll("\r", "") || "";
     $: heroText = textOf(content, "Titelbild");
     $: isAdmin = $page.route.id?.startsWith("/admin") ?? false;
     $: redirectTo = $page.url.pathname + $page.url.search + $page.url.hash;
-
-    let importantBaseline: string | null = null;
-    let importantDraft = "";
-    let importantResetKey = 0;
-
-    $: importantDirty = importantBaseline !== null && importantDraft !== importantBaseline;
-
-    function discardImportant() {
-        importantDraft = importantBaseline ?? "";
-        importantResetKey += 1;
-    }
 
     $: hero = getHero($page.route.id);
 
@@ -136,45 +121,7 @@
             <QuickInfoBand times={content["Sprechzeiten"] || []} {isEditor} {redirectTo} />
         {/if}
 
-        {#if isEditor || important.length > 0}
-            <EditableBlock {isEditor}>
-                {#if important.length > 0}
-                    <div class="w-full bg-pine-100 py-4 text-center font-bold text-pine-900">
-                        <div class="important-content mx-auto max-w-4xl px-4">
-                            {@html marked(important)}
-                        </div>
-                    </div>
-                {/if}
-                <form
-                    slot="editor"
-                    class="w-full bg-pine-100 py-4 text-center font-bold text-pine-900"
-                    method="post"
-                    action="/admin/content"
-                >
-                    <input type="hidden" name="action" value="saveBlock" />
-                    <input type="hidden" name="sectionKey" value="Wichtig" />
-                    <input type="hidden" name="redirectTo" value={redirectTo} />
-                    <div class="mx-auto max-w-4xl px-4">
-                        <div class="important-content">
-                            {#key importantResetKey}
-                                <RichText
-                                    allowBold={false}
-                                    name="text"
-                                    ariaLabel="Wichtig"
-                                    value={importantBaseline ?? important}
-                                    on:init={(event) => {
-                                        importantBaseline = event.detail;
-                                        importantDraft = event.detail;
-                                    }}
-                                    on:change={(event) => (importantDraft = event.detail)}
-                                />
-                            {/key}
-                        </div>
-                        <InlineEditorActions align="center" dirty={importantDirty} onDiscard={discardImportant} />
-                    </div>
-                </form>
-            </EditableBlock>
-        {/if}
+        <NoticeBanner {content} {isEditor} {redirectTo} />
         <main class="mx-auto w-full max-w-7xl grow px-4 pb-16">
             <slot />
         </main>
@@ -208,11 +155,6 @@
     .admin-toggle__option--active:hover {
         background: var(--color-pine-700);
         color: white;
-    }
-
-    .important-content :global(p) {
-        margin: 0;
-        overflow: visible;
     }
 
     .hero {

@@ -14,19 +14,14 @@
         Sie finden uns in der <strong>{CONTACT_INFO.ADDRESS}</strong>.
     </p>
 
-    <div class="location-map-container">
-        <a href={CONTACT_INFO.GOOGLE_MAPS_URL} target="_blank" rel="noopener noreferrer" class="location-map-link">
-            <div class="location-map-placeholder">
-                <svg aria-hidden="true" viewBox="0 0 24 24" class="location-map-icon">
-                    <path
-                        d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 14.5 9 2.5 2.5 0 0 1 12 11.5Z"
-                    />
-                </svg>
-                <div class="location-map-address">{CONTACT_INFO.ADDRESS}</div>
-                <div class="location-map-hint">Karte in Google Maps öffnen</div>
-            </div>
-        </a>
-    </div>
+    <a href={CONTACT_INFO.GOOGLE_MAPS_URL} target="_blank" rel="noopener noreferrer" class="location-map-link">
+        <svg aria-hidden="true" viewBox="0 0 24 24" class="location-map-icon">
+            <path
+                d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 14.5 9 2.5 2.5 0 0 1 12 11.5Z"
+            />
+        </svg>
+        Karte in Google Maps öffnen
+    </a>
 
     <div class="location-directions">
         <div class="location-direction-section">
@@ -70,53 +65,29 @@
         margin-bottom: 1rem;
     }
 
-    .location-map-container {
-        width: 100%;
-        height: 260px;
-        margin-top: 0.5rem;
-    }
-
     .location-map-link {
-        display: block;
-        width: 100%;
-        height: 100%;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.25rem;
+        padding: 0.5rem 1rem;
         background-color: var(--color-sand-100);
         border: 1px solid var(--color-sand-200);
-        border-radius: 0.75rem;
+        border-radius: 9999px;
+        font-weight: 600;
+        color: var(--color-pine-800);
         text-decoration: none;
         transition: background-color 0.2s;
     }
 
     .location-map-link:hover {
-        background-color: var(--color-sand-200);
-    }
-
-    .location-map-placeholder {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
-        text-align: center;
+        background-color: white;
     }
 
     .location-map-icon {
-        width: 2.5rem;
-        height: 2.5rem;
-        margin-bottom: 0.5rem;
+        width: 1.1rem;
+        height: 1.1rem;
         fill: var(--color-pine-600);
-    }
-
-    .location-map-address {
-        font-size: 1.125rem;
-        font-weight: 600;
-        color: var(--color-pine-900);
-        margin-bottom: 0.25rem;
-    }
-
-    .location-map-hint {
-        font-size: 0.875rem;
-        color: var(--color-sand-900);
     }
 
     .location-directions {

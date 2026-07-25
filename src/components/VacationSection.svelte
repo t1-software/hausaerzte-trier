@@ -129,7 +129,6 @@
 <style>
     .vacation-section {
         padding: 1.5rem;
-        border-left: 4px solid var(--color-copper-500);
     }
 
     .vacation-title {
