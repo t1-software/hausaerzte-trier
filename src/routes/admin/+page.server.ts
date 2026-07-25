@@ -22,6 +22,7 @@ export const actions: Actions = {
     login: async ({ cookies, request }) => {
         const formData = await request.formData();
         const password = formData.get("password");
+        const redirectTo = formData.get("redirectTo");
 
         if (typeof password !== "string" || !isValidAdminPassword(password)) {
             return fail(401, {
@@ -30,7 +31,11 @@ export const actions: Actions = {
         }
 
         setAdminSession(cookies);
-        redirect(303, "/");
+        const target =
+            typeof redirectTo === "string" && redirectTo.startsWith("/") && !redirectTo.startsWith("//")
+                ? redirectTo
+                : "/";
+        redirect(303, target);
     },
     logout: async ({ cookies }) => {
         clearAdminSession(cookies);

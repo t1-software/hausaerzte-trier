@@ -1,7 +1,25 @@
 <script lang="ts">
+    import { enhance } from "$app/forms";
+    import { page } from "$app/stores";
     import { CONTACT_INFO } from "../constants/contact";
 
     export let isAuthenticated = false;
+
+    let loginFailed = false;
+
+    /** Anmeldung ohne Seitenwechsel: falsches Passwort zeigt den Fehler direkt hier. */
+    const handleLogin: import("@sveltejs/kit").SubmitFunction = () => {
+        loginFailed = false;
+
+        return async ({ result, update }) => {
+            if (result.type === "failure") {
+                loginFailed = true;
+                return;
+            }
+
+            await update();
+        };
+    };
 </script>
 
 <footer class="bg-pine-950 text-pine-100">
@@ -77,7 +95,8 @@
                             />
                         </svg>
                     </summary>
-                    <form class="footer-login__form" method="post" action="/admin?/login">
+                    <form class="footer-login__form" method="post" action="/admin?/login" use:enhance={handleLogin}>
+                        <input type="hidden" name="redirectTo" value={$page.url.pathname} />
                         <input
                             name="password"
                             type="password"
@@ -85,7 +104,12 @@
                             required
                             aria-label="Passwort"
                             placeholder="Passwort"
+                            aria-invalid={loginFailed}
+                            on:input={() => (loginFailed = false)}
                         />
+                        {#if loginFailed}
+                            <span class="footer-login__error" role="alert">Das Passwort ist nicht korrekt.</span>
+                        {/if}
                     </form>
                 </details>
             {/if}
@@ -174,6 +198,12 @@
     .footer-login__form {
         display: inline-flex;
         align-items: center;
+    }
+
+    .footer-login__error {
+        font-size: 0.8rem;
+        color: var(--color-sand-300);
+        white-space: nowrap;
     }
 
     .footer-login__form input {

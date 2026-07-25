@@ -29,6 +29,8 @@ SvelteKit-Website der Hausarztpraxis Trier (Svelte 4-Syntax, Tailwind 4, TypeScr
 
 ## Bearbeitungsmodus
 
+- Anmeldung im Footer läuft über `use:enhance`: falsches Passwort zeigt den Fehler inline im Footer
+  (keine /admin-Seite), Erfolg leitet per `redirectTo` auf die Seite zurück, von der man kam.
 - Anmeldung im Footer, Badge oben rechts zeigt `Admin` mit Umschalter `Ansicht | Bearbeiten`
   (`src/lib/edit-mode.ts`, pro Browser-Sitzung in `sessionStorage`). `isEditor = angemeldet && Bearbeiten`.
 - Kein Stift und kein Einzelmodus pro Block: im Bearbeitungsmodus sind alle Felder sofort editierbar
@@ -60,6 +62,18 @@ SvelteKit-Website der Hausarztpraxis Trier (Svelte 4-Syntax, Tailwind 4, TypeScr
   Spalten (Name, Adresse, Telefon); ein übernommener Vorschlag wird als Karte eingefügt.
 - Serverseitig gibt es kein ProseMirror: bis `onMount` zeigt das Feld den mit `marked` gerenderten Text.
 
+## Team-Seite & Medienbibliothek
+
+- Team-Karten kommen aus dem Bereich `Team-Mitglieder` (Name, Rolle, Bild, Sichtbarkeit);
+  `DEFAULT_TEAM` in `content.ts` greift, solange nie gespeichert wurde. Spalte 4 = `ausgeblendet`
+  versteckt die einzelne Karte für Besucher (Auge pro Karte, wird mit Übernehmen gespeichert).
+- Bilder: Upload mit Zuschneiden (`CropDialog`, Seitenverhältnis 4/5, Export max. 1200px JPEG) über
+  die `MediaLibrary`. Der Blob Store ist **privat** — `access: "public"` schlägt fehl. Bilder liegen
+  unter `site-images/` und werden über die eigene Route `/media/<name>` ausgeliefert
+  (immutable gecacht; Dateinamen sind zeitstempel-eindeutig). Gespeichert wird die `/media/…`-URL.
+- Die Bibliothek (`GET/POST /admin/media`) behält alle Uploads, bis sie dort ausdrücklich gelöscht
+  werden — Bilder aus Karten zu entfernen löscht nichts im Store.
+
 ## Ausblenden statt Löschen
 
 Jeder Bereich kann für Besucher ausgeblendet werden (Auge im Bearbeitungsmodus, `action=toggleHidden`).
@@ -74,7 +88,9 @@ umgebende Überschriften müssen die Elternkomponenten selbst mit ausblenden.
 (`animate:flip` in den Komponenten). Zwei Details verhindern Flackern: Getauscht wird erst, wenn der
 Zeiger die Mitte der Zielzeile überschritten hat, und zwischen zwei Bewegungen liegt eine kurze Sperre.
 Ein abgebrochener Vorgang (`dragend` ohne `drop`) stellt die Ausgangsreihenfolge wieder her.
-Tastatur: Alt + Pfeil hoch/runter auf dem Griff.
+In Rastern (Team, Leistungsspektrum) entscheidet die Achse mit dem größeren Abstand zwischen
+gezogener Karte (`.row-dragging`) und Ziel, ob die horizontale oder vertikale Mitte zählt.
+Tastatur: Alt + Pfeiltasten auf dem Griff.
 
 ## Layout-Hinweise
 

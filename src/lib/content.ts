@@ -111,6 +111,29 @@ export const EDITABLE_CONTENT_SECTIONS: ContentSection[] = [
         columns: ["Text"],
         multilineColumns: [0],
     },
+    {
+        key: "Team-Mitglieder",
+        title: "Team-Mitglieder",
+        description: "Karten auf der Team-Seite: Name, Rolle, Bild; Spalte 4 markiert ausgeblendete Karten.",
+        type: "table",
+        columns: ["Name", "Rolle", "Bild", "Sichtbarkeit"],
+    },
+];
+
+/** Ausgangsbesetzung, solange noch nie gespeichert wurde. */
+export const DEFAULT_TEAM: string[][] = [
+    ["Thiemo Stiemert", "Praxisinhaber · Facharzt Allgemeinmedizin", "/stiemert_thiemo.jpg"],
+    [
+        "San.-Rat Dr. med. Detlef Stiemert",
+        "Angestellter Arzt · Facharzt Allgemeinmedizin, Notfallmedizin",
+        "/stiemert_detlef2.jpeg",
+    ],
+    ["Anne-Britt van der Werff-Stiemert", "Weiterbildungsassistentin", "/van_der_werff-stiemert_anne-brit.jpg"],
+    ["Susanne Dahm", "Medizinische Fachangestellte", "/dahm_susanne.jpg"],
+    ["Julia Weber", "Medizinische Fachangestellte", "/weber_julia.jpg"],
+    ["Linda Hontheim", "Medizinische Fachangestellte", ""],
+    ["Julia Heinz", "Medizinische Fachangestellte", "/heinz_julia.jpg"],
+    ["Ieman Toomeh", "Auszubildende", ""],
 ];
 
 /** Ausgangstexte, solange für einen Bereich nichts gespeichert ist. */

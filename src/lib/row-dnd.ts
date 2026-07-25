@@ -1,12 +1,12 @@
 import { writable } from "svelte/store";
 
 /**
- * Ziehen und Ablegen zum Sortieren von Zeilenlisten.
- * Die Zeile wird bereits beim Überfahren eines Ziels verschoben, damit die neue
- * Reihenfolge während des Ziehens sichtbar ist. Ein abgebrochener Vorgang
+ * Ziehen und Ablegen zum Sortieren von Zeilenlisten und Kartenrastern.
+ * Der Eintrag wird bereits beim Überfahren eines Ziels verschoben, damit die
+ * neue Reihenfolge während des Ziehens sichtbar ist. Ein abgebrochener Vorgang
  * stellt die Ausgangsreihenfolge wieder her.
  */
-const moveCooldown = 160;
+const moveCooldown = 220;
 
 export function createRowDnd(apply: (from: number, to: number) => void) {
     const dragIndex = writable<number | null>(null);
@@ -39,7 +39,7 @@ export function createRowDnd(apply: (from: number, to: number) => void) {
             event.dataTransfer.dropEffect = "move";
         }
 
-        if (index === current || !crossedMidpoint(event, index)) {
+        if (index === current || !crossedMidpoint(event)) {
             return;
         }
 
@@ -57,20 +57,36 @@ export function createRowDnd(apply: (from: number, to: number) => void) {
     }
 
     /**
-     * Erst tauschen, wenn der Zeiger die Mitte der Zielzeile überschritten hat.
-     * Ohne diese Schwelle springt die Zeile zwischen zwei Positionen hin und her.
+     * Erst tauschen, wenn der Zeiger die Mitte des Ziels überschritten hat —
+     * sonst springt der Eintrag zwischen zwei Positionen hin und her.
+     * In Rastern zählt die Achse, auf der Ziel und gezogenes Element auseinanderliegen:
+     * Nachbarn in derselben Zeile werden an der horizontalen Mitte gemessen,
+     * alle anderen an der vertikalen.
      */
-    function crossedMidpoint(event: DragEvent, index: number): boolean {
+    function crossedMidpoint(event: DragEvent): boolean {
         const target = event.currentTarget as HTMLElement | null;
 
-        if (!target || current === null) {
+        if (!target) {
             return true;
         }
 
-        const box = target.getBoundingClientRect();
-        const midpoint = box.top + box.height / 2;
+        const targetBox = target.getBoundingClientRect();
+        const sourceBox = document.querySelector(".row-dragging")?.getBoundingClientRect();
 
-        return index > current ? event.clientY >= midpoint : event.clientY <= midpoint;
+        if (!sourceBox) {
+            return true;
+        }
+
+        const deltaX = targetBox.left + targetBox.width / 2 - (sourceBox.left + sourceBox.width / 2);
+        const deltaY = targetBox.top + targetBox.height / 2 - (sourceBox.top + sourceBox.height / 2);
+
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+            const midpoint = targetBox.left + targetBox.width / 2;
+            return deltaX > 0 ? event.clientX >= midpoint : event.clientX <= midpoint;
+        }
+
+        const midpoint = targetBox.top + targetBox.height / 2;
+        return deltaY > 0 ? event.clientY >= midpoint : event.clientY <= midpoint;
     }
 
     function handleDrop(event: DragEvent) {
@@ -91,14 +107,21 @@ export function createRowDnd(apply: (from: number, to: number) => void) {
         reset();
     }
 
-    /** Tastatur-Alternative: Alt + Pfeil hoch/runter verschiebt die Zeile. */
+    /** Tastatur-Alternative: Alt + Pfeiltasten verschieben den Eintrag. */
     function handleKeydown(event: KeyboardEvent, index: number) {
-        if (!event.altKey || (event.key !== "ArrowUp" && event.key !== "ArrowDown")) {
+        const step =
+            event.key === "ArrowUp" || event.key === "ArrowLeft"
+                ? -1
+                : event.key === "ArrowDown" || event.key === "ArrowRight"
+                  ? 1
+                  : 0;
+
+        if (!event.altKey || step === 0) {
             return;
         }
 
         event.preventDefault();
-        apply(index, event.key === "ArrowUp" ? index - 1 : index + 1);
+        apply(index, index + step);
     }
 
     function reset() {
