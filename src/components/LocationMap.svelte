@@ -67,7 +67,10 @@
     }
 
     .location-map-link {
-        display: inline-flex;
+        display: flex;
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
         align-items: center;
         gap: 0.5rem;
         margin-top: 0.25rem;

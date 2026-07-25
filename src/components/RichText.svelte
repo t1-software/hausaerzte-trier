@@ -34,7 +34,7 @@
     let emActive = false;
     let listActive = false;
     let matches: string[] = [];
-    let matchIndex = 0;
+    let matchIndex: number | null = null;
     let matchTop = 0;
     let matchLeft = 0;
 
@@ -193,7 +193,7 @@
         );
 
         matches = found.slice(0, 6);
-        matchIndex = 0;
+        matchIndex = null;
 
         if (matches.length > 0 && view) {
             const caret = view.coordsAtPos(view.state.selection.head);
@@ -208,7 +208,12 @@
             return false;
         }
 
-        matchIndex = (matchIndex + delta + matches.length) % matches.length;
+        if (matchIndex === null) {
+            matchIndex = delta > 0 ? 0 : matches.length - 1;
+        } else {
+            matchIndex = (matchIndex + delta + matches.length) % matches.length;
+        }
+
         return true;
     }
 
@@ -223,7 +228,8 @@
 
     /** Ersetzt den angefangenen Absatz durch den gewählten Vorschlag. */
     function applyMatch(entry?: string): boolean {
-        const chosen = entry ?? matches[matchIndex];
+        // Ohne aktive Auswahl übernimmt Enter nichts — erst Pfeiltasten oder Klick wählen aus.
+        const chosen = entry ?? (matchIndex === null ? undefined : matches[matchIndex]);
 
         if (!view || !chosen) {
             return false;

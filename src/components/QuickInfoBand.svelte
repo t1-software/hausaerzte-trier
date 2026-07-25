@@ -286,8 +286,9 @@
         text-align: right;
     }
 
-    .quick-hours-note {
+    .quick-hours li.quick-hours-note {
         justify-content: center;
+        text-align: center;
         font-size: 0.85rem;
         color: var(--color-sand-900);
     }
