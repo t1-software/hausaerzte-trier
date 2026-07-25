@@ -4,8 +4,9 @@
     import RichText from "./RichText.svelte";
     import SuggestionListEditor from "./SuggestionListEditor.svelte";
     import { ajaxSave } from "$lib/ajax-save";
-    import { marked } from "marked";
     import { hasContent, formatNewsContent } from "../utils/content";
+    import { renderNews } from "$lib/news-render";
+    import { praxisLine } from "$lib/richtext";
 
     export let news: string[][] = [];
     export let isEditor = false;
@@ -14,8 +15,17 @@
     export let variant: "flow" | "card" = "flow";
     /** Gepflegte Einträge, die beim Tippen als Vorschlag erscheinen. */
     export let suggestionEntries: string[][] = [];
+    /** Für Besucher ausgeblendet; im Bearbeitungsmodus gedimmt sichtbar. */
+    export let hidden = false;
 
-    $: suggestions = suggestionEntries.map((row) => row[0]).filter(Boolean);
+    // Neue Einträge haben drei Spalten (Name, Adresse, Telefon), alte eine Volltextspalte.
+    $: suggestions = suggestionEntries
+        .map((row) =>
+            row.length >= 3 && (row[1] || row[2])
+                ? praxisLine({ name: row[0] ?? "", address: row[1] ?? "", phone: row[2] ?? "" })
+                : (row[0] ?? "")
+        )
+        .filter(Boolean);
 
     $: newsString = formatNewsContent(news);
 
@@ -31,12 +41,12 @@
     }
 </script>
 
-{#if isEditor || hasContent(news)}
-    <EditableBlock {isEditor}>
+{#if isEditor || (hasContent(news) && !hidden)}
+    <EditableBlock {isEditor} sectionKey="Neuigkeiten" {hidden} {redirectTo}>
         <div class="news-section" class:card={variant === "card"} class:news-section--card={variant === "card"}>
             <h2 class="news-title anchor" id="neuigkeiten">Aktuelle Neuigkeiten</h2>
             <div class="news-content">
-                {@html marked(newsString)}
+                {@html renderNews(newsString)}
             </div>
         </div>
         <form
@@ -57,6 +67,7 @@
                 {#key resetKey}
                     <RichText
                         allowList
+                        praxisCards
                         {suggestions}
                         name="text"
                         ariaLabel="Neuigkeiten"

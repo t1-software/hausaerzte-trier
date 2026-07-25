@@ -6,14 +6,14 @@
     import RichText from "./RichText.svelte";
     import RowDragHandle from "./RowDragHandle.svelte";
     import ContactSection from "./ContactSection.svelte";
-    import VacationSection from "./VacationSection.svelte";
     import { ajaxSave } from "$lib/ajax-save";
     import { cellsOf, isDirty, moveRow, nextRowId, toRows, type EditableRow } from "$lib/editable-rows";
     import { createRowDnd } from "$lib/row-dnd";
 
     export let times: string[][] = [];
-    export let vacations: string[][] = [];
     export let appointmentText = "";
+    export let timesHidden = false;
+    export let appointmentHidden = false;
     export let isEditor = false;
     export let redirectTo = "/";
 
@@ -66,7 +66,7 @@
 
 <div class="relative z-10 mx-auto -mt-12 w-full max-w-7xl px-4">
     <div class="quick-grid">
-        <EditableBlock {isEditor}>
+        <EditableBlock {isEditor} sectionKey="Sprechzeiten" hidden={timesHidden} {redirectTo}>
             <div id="sprechzeiten" class="quick-card h-full">
                 <span class="quick-label">
                     <svg aria-hidden="true" viewBox="0 0 24 24" class="quick-icon">
@@ -85,9 +85,8 @@
                                 <li>
                                     <span>{row[1]}</span>
                                     <span class="quick-hours-times tabular-nums">
-                                        {#each [row[2], row[3]].filter(Boolean) as time (time)}
-                                            <span>{time}</span>
-                                        {/each}
+                                        <span>{row[2]}</span>
+                                        <span>{row[3]}</span>
                                     </span>
                                 </li>
                             {/if}
@@ -200,9 +199,7 @@
             </form>
         </EditableBlock>
 
-        <VacationSection {vacations} {isEditor} {redirectTo} variant="band" />
-
-        <ContactSection {isEditor} {redirectTo} {appointmentText} variant="band" />
+        <ContactSection {isEditor} {redirectTo} {appointmentText} {appointmentHidden} variant="band" />
     </div>
 </div>
 
@@ -214,8 +211,12 @@
 
     @media (min-width: 768px) {
         .quick-grid {
-            grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 1fr);
+            grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
             gap: 1rem;
+        }
+
+        .quick-grid > :global(.editable-block:first-child) {
+            min-width: 0;
         }
     }
 
@@ -247,6 +248,15 @@
         border-bottom: 1px solid var(--color-sand-200);
     }
 
+    /* Ab Tablet-Breite fluchten Vormittag und Nachmittag als feste Spalten. */
+    @media (min-width: 768px) {
+        .quick-hours li {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 9rem 14.5rem;
+            align-items: baseline;
+        }
+    }
+
     .quick-hours li:last-child {
         border-bottom: none;
     }
@@ -262,18 +272,32 @@
     .quick-hours .quick-hours-times {
         display: flex;
         flex-direction: column;
-        text-align: right;
         font-weight: 400;
     }
 
+    .quick-hours .quick-hours-times > span {
+        text-align: right;
+    }
+
+    .quick-hours .quick-hours-times > span:empty {
+        display: none;
+    }
+
+    /* Die beiden Zeitspalten liegen im Zeilenraster, damit sie über alle Zeilen fluchten. */
+    @media (min-width: 768px) {
+        .quick-hours .quick-hours-times {
+            display: contents;
+        }
+    }
+
     .quick-hours li.quick-hours-note {
+        display: flex;
         justify-content: center;
         text-align: center;
         font-size: 0.85rem;
         color: var(--color-sand-900);
         margin: 0.5rem -0.5rem 0;
         padding-top: 0.5rem;
-        border-top: 1px solid var(--color-sand-200);
     }
 
     .quick-hours--editing li {
@@ -281,14 +305,29 @@
         padding: 0.2rem 0;
     }
 
-    .quick-edit-day {
-        flex: 1;
+    @media (min-width: 768px) {
+        .quick-hours--editing li {
+            grid-template-columns: minmax(0, 1fr) 9rem 14.5rem auto;
+        }
+    }
+
+    .quick-hours--editing li.quick-hours-note {
+        display: flex;
     }
 
     .quick-edit-times {
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
+    }
+
+    @media (min-width: 768px) {
+        .quick-edit-times {
+            display: contents;
+        }
+    }
+
+    .quick-edit-times > :global(.rich-text) {
         text-align: right;
     }
 

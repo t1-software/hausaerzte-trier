@@ -109,11 +109,6 @@ a {
     padding: 1rem 1.25rem;
     text-decoration: none;
     color: var(--color-pine-950);
-    transition: background-color 0.15s ease;
-}
-
-.quick-card:hover {
-    background: white;
 }
 
 .quick-label {
@@ -167,6 +162,133 @@ a {
     }
 }
 
+/* Vertretungskarte: Praxisname, Adresse, Telefon — in Anzeige, Editor und Vorschlagsliste. */
+.praxis-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.praxis-card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 0.6rem;
+    row-gap: 0.1rem;
+    border: 1px solid var(--color-sand-200);
+    border-radius: 0.5rem;
+    background: var(--color-sand-50);
+    padding: 0.6rem 0.85rem;
+    font-size: 0.925rem;
+    line-height: 1.45;
+}
+
+/* Zwei Zeilen: Name oben, Adresse und Telefon darunter. */
+.praxis-card > strong {
+    width: 100%;
+    font-weight: 700;
+    color: var(--color-pine-900);
+}
+
+.praxis-card > span {
+    color: var(--color-sand-900);
+}
+
+.praxis-card > span::after {
+    content: "·";
+    margin-left: 0.6rem;
+    color: var(--color-sand-300);
+}
+
+.praxis-card > a {
+    width: fit-content;
+    color: var(--color-pine-700);
+    font-weight: 600;
+    text-decoration: none;
+    font-variant-numeric: tabular-nums;
+}
+
+.praxis-card > a:hover {
+    text-decoration: underline;
+}
+
+/* Karte im Editor: drei nahtlose Felder plus Entfernen-Knopf. */
+.praxis-card--editing {
+    position: relative;
+    margin: 0.35rem 0;
+    padding-right: 2.6rem;
+}
+
+.praxis-card__input {
+    flex: 1 1 8rem;
+    min-width: 0;
+    border: none;
+    border-bottom: 1px dashed transparent;
+    background: transparent;
+    color: var(--color-sand-900);
+    font: inherit;
+    outline: none;
+    padding: 0;
+}
+
+.praxis-card__input--name {
+    flex-basis: 100%;
+    font-weight: 700;
+    color: var(--color-pine-900);
+}
+
+.praxis-card__input--phone {
+    flex: 0 1 9rem;
+    font-weight: 600;
+    color: var(--color-pine-700);
+    font-variant-numeric: tabular-nums;
+}
+
+.praxis-card__input:hover {
+    border-bottom-color: var(--color-pine-300);
+}
+
+.praxis-card__input:focus {
+    border-bottom-color: var(--color-pine-600);
+}
+
+.praxis-card__input::placeholder {
+    color: var(--color-sand-700);
+    font-weight: 400;
+}
+
+.praxis-card__remove {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: inline-flex;
+    width: 1.6rem;
+    height: 1.6rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-sand-200);
+    border-radius: 9999px;
+    background: white;
+    color: var(--color-pine-700);
+}
+
+.praxis-card__remove:hover {
+    background: var(--color-pine-100);
+}
+
+.praxis-card__remove svg {
+    width: 0.9rem;
+    height: 0.9rem;
+    fill: currentColor;
+}
+
+/* Ausgewählte Karte im Editor sichtbar markieren */
+.ProseMirror-selectednode.praxis-card--editing {
+    outline: 2px solid var(--color-pine-500);
+    outline-offset: 1px;
+}
+
 /* Long-form legal pages (Impressum, Datenschutz) */
 .legal-page {
     max-width: 75ch;
@@ -214,6 +336,10 @@ a {
 
 .legal-page > br {
     display: none;
+}
+
+#sprechzeiten {
+    scroll-margin-top: 7rem;
 }
 
 .anchor::before {

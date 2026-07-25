@@ -14,6 +14,8 @@
     export let leistungen: string[][] = [];
     export let isEditor = false;
     export let redirectTo = "/leistungsspektrum";
+    /** Für Besucher ausgeblendet; im Bearbeitungsmodus gedimmt sichtbar. */
+    export let hidden = false;
 
     let rows: EditableRow[] = toRows(leistungen, 2);
     let baseline = cellsOf(rows);
@@ -53,22 +55,13 @@
     }
 </script>
 
-<EditableBlock {isEditor}>
+<EditableBlock {isEditor} sectionKey="Leistungsspektrum" {hidden} {redirectTo}>
     <div class="leistungsspektrum-section">
         {#if hasContent(leistungen)}
             <div class="leistungsspektrum-content">
                 {#each leistungen as leistung, index (leistung.join("|") + "|" + index)}
                     <div class="leistung-item card">
-                        <div class="leistung-head">
-                            <span class="leistung-mark" aria-hidden="true">
-                                <svg viewBox="0 0 24 24">
-                                    <path
-                                        d="M10.5 5.5A1.5 1.5 0 0 1 12 4a1.5 1.5 0 0 1 1.5 1.5v5h5A1.5 1.5 0 0 1 20 12a1.5 1.5 0 0 1-1.5 1.5h-5v5A1.5 1.5 0 0 1 12 20a1.5 1.5 0 0 1-1.5-1.5v-5h-5A1.5 1.5 0 0 1 4 12a1.5 1.5 0 0 1 1.5-1.5h5z"
-                                    />
-                                </svg>
-                            </span>
-                            <h2 class="leistung-title">{leistung[0]}</h2>
-                        </div>
+                        <h2 class="leistung-title">{leistung[0]}</h2>
                         <div class="leistung-description">
                             {@html marked(leistung[1] ?? "")}
                         </div>
@@ -167,43 +160,11 @@
 
     .leistung-item {
         padding: 1.5rem;
-        transition:
-            box-shadow 0.15s ease,
-            transform 0.15s ease;
-    }
-
-    .leistung-item:hover {
-        box-shadow: 0 10px 24px -12px rgb(14 31 24 / 0.35);
-        transform: translateY(-2px);
-    }
-
-    .leistung-head {
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
-        margin-bottom: 0.6rem;
-    }
-
-    .leistung-mark {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 1.9rem;
-        height: 1.9rem;
-        flex: none;
-        border-radius: 0.55rem;
-        background: var(--color-pine-100);
-    }
-
-    .leistung-mark svg {
-        width: 1.1rem;
-        height: 1.1rem;
-        fill: var(--color-pine-700);
     }
 
     .leistung-title {
         font-size: 1.2rem;
-        margin-bottom: 0;
+        margin-bottom: 0.6rem;
     }
 
     .leistung-description {

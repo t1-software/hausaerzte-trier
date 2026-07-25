@@ -10,7 +10,7 @@
     import { page } from "$app/stores";
     import { marked } from "marked";
     import { editMode } from "$lib/edit-mode";
-    import { textOf } from "$lib/content";
+    import { isSectionHidden, textOf } from "$lib/content";
 
     export let data: LayoutData;
 
@@ -30,6 +30,16 @@
         title: string;
         home: boolean;
     } {
+        if (routeId === "/impressum" || routeId === "/datenschutz") {
+            return {
+                image: "praxis2.jpeg",
+                position: "center",
+                eyebrow: "Hausarztpraxis Thiemo Stiemert",
+                title: routeId === "/impressum" ? "Impressum" : "Datenschutz",
+                home: false,
+            };
+        }
+
         if (routeId === "/team") {
             return {
                 image: "praxis3.jpeg",
@@ -61,36 +71,12 @@
     <slot />
 {:else}
     <div class="flex min-h-screen flex-col">
-        <Header {content} />
-        {#if isAuthenticated}
-            <div
-                class="fixed right-4 top-16 z-50 flex items-center gap-3 rounded border border-pine-300 bg-white px-3 py-2 text-sm shadow-lg"
-            >
-                <span class="font-bold text-pine-800">Admin</span>
-                <div class="admin-toggle" role="group" aria-label="Darstellung wählen">
-                    <button
-                        class="admin-toggle__option"
-                        class:admin-toggle__option--active={!$editMode}
-                        type="button"
-                        aria-pressed={!$editMode}
-                        on:click={() => ($editMode = false)}
-                    >
-                        Ansicht
-                    </button>
-                    <button
-                        class="admin-toggle__option"
-                        class:admin-toggle__option--active={$editMode}
-                        type="button"
-                        aria-pressed={$editMode}
-                        on:click={() => ($editMode = true)}
-                    >
-                        Bearbeiten
-                    </button>
-                </div>
-            </div>
-        {/if}
+        <Header {isAuthenticated} />
 
-        <section class="hero relative mt-14 w-full" class:hero--slim={!hero.home}>
+        <div class="sticky top-14 z-30 mt-14">
+            <NoticeBanner {content} {isEditor} {redirectTo} />
+        </div>
+        <section class="hero relative w-full" class:hero--slim={!hero.home}>
             <img
                 src="/{hero.image}"
                 alt="Praxisräume der Hausarztpraxis"
@@ -117,14 +103,13 @@
         {#if hero.home}
             <QuickInfoBand
                 times={content["Sprechzeiten"] || []}
-                vacations={content["Urlaub"] || []}
                 appointmentText={textOf(content, "Termine")}
+                timesHidden={isSectionHidden(content, "Sprechzeiten")}
+                appointmentHidden={isSectionHidden(content, "Termine")}
                 {isEditor}
                 {redirectTo}
             />
         {/if}
-
-        <NoticeBanner {content} {isEditor} {redirectTo} />
         <main class="mx-auto w-full max-w-7xl grow px-4 pb-16">
             <slot />
         </main>
@@ -134,31 +119,6 @@
 
 <style lang="scss" global>
     @import "../app.css";
-
-    .admin-toggle {
-        display: inline-flex;
-        overflow: hidden;
-        border: 1px solid var(--color-pine-300);
-        border-radius: 0.25rem;
-    }
-
-    .admin-toggle__option {
-        padding: 0.15rem 0.5rem;
-        background: white;
-        color: var(--color-pine-700);
-        font-size: 0.8rem;
-        font-weight: 700;
-    }
-
-    .admin-toggle__option:hover {
-        background: var(--color-pine-100);
-    }
-
-    .admin-toggle__option--active,
-    .admin-toggle__option--active:hover {
-        background: var(--color-pine-700);
-        color: white;
-    }
 
     .hero {
         height: 440px;
@@ -174,7 +134,7 @@
         }
 
         .hero--slim {
-            height: 240px;
+            height: 220px;
         }
     }
 
@@ -203,6 +163,12 @@
     @media (min-width: 768px) {
         .hero-title {
             font-size: 3.25rem;
+        }
+    }
+
+    @media (max-width: 420px) {
+        .hero-title {
+            font-size: 1.7rem;
         }
     }
 </style>

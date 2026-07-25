@@ -2,59 +2,26 @@
     import { onMount } from "svelte";
     import { page } from "$app/stores";
     import { CONTACT_INFO } from "../constants/contact";
+    import { editMode } from "$lib/edit-mode";
 
-    export let content: Record<string, string[][]> = {};
+    /** Angemeldete Admins sehen den Umschalter zwischen Ansicht und Bearbeiten. */
+    export let isAuthenticated = false;
 
-    $: news = content["Neuigkeiten"] || [];
     $: routeId = $page.route.id;
 
-    // Scroll spy: "Neuigkeiten" becomes active once its section crosses the upper
-    // third of the viewport — or when the page is scrolled to the end and the
-    // section is visible (short pages can't scroll it all the way to the top).
-    let newsInView = false;
+    // On the homepage the hero already shows the practice name; the navbar
+    // brand fades in once the hero title is scrolled out of view.
     let scrolledPastHero = false;
-    const NAV_OFFSET = 80;
-
-    function updateNewsInView() {
-        // On the homepage the hero already shows the practice name; the navbar
-        // brand fades in once the hero title is scrolled out of view.
-        scrolledPastHero = window.scrollY > 240;
-
-        const anchor = document.getElementById("neuigkeiten");
-        const section = anchor?.closest(".news-section");
-
-        if (!section) {
-            newsInView = false;
-            return;
-        }
-
-        const rect = section.getBoundingClientRect();
-        const line = Math.max(NAV_OFFSET, window.innerHeight * 0.35);
-        const atPageEnd = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
-        const visible = rect.top < window.innerHeight && rect.bottom > NAV_OFFSET;
-
-        newsInView = (rect.top <= line && rect.bottom > NAV_OFFSET) || (atPageEnd && visible);
-    }
 
     onMount(() => {
-        const schedule = () => requestAnimationFrame(updateNewsInView);
+        const schedule = () => requestAnimationFrame(() => (scrolledPastHero = window.scrollY > 240));
         schedule();
         window.addEventListener("scroll", schedule, { passive: true });
-        window.addEventListener("resize", schedule);
-        window.addEventListener("hashchange", schedule);
         return () => {
             window.removeEventListener("scroll", schedule);
-            window.removeEventListener("resize", schedule);
-            window.removeEventListener("hashchange", schedule);
         };
     });
 
-    // Re-measure after client-side navigation (the section mounts with the new page).
-    $: if (typeof window !== "undefined" && routeId) {
-        requestAnimationFrame(updateNewsInView);
-    }
-
-    $: newsActive = routeId === "/" && newsInView;
     $: brandVisible = routeId !== "/" || scrolledPastHero;
 </script>
 
@@ -71,12 +38,31 @@
             <span>Thiemo Stiemert</span>
         </a>
         <nav class="site-nav flex items-center gap-3 md:gap-7" aria-label="Hauptnavigation">
-            <a href="/" class:active={routeId === "/" && !newsActive}>Startseite</a>
-            {#if news.length > 0}
-                <a href="/#neuigkeiten" class:active={newsActive}>Neuigkeiten</a>
-            {/if}
+            <a href="/" class:active={routeId === "/"}>Startseite</a>
             <a href="/team" class:active={routeId === "/team"}>Über uns</a>
             <a href="/leistungsspektrum" class:active={routeId === "/leistungsspektrum"}>Leistungsspektrum</a>
+            {#if isAuthenticated}
+                <div class="admin-toggle" role="group" aria-label="Darstellung wählen">
+                    <button
+                        class="admin-toggle__option"
+                        class:admin-toggle__option--active={!$editMode}
+                        type="button"
+                        aria-pressed={!$editMode}
+                        on:click={() => ($editMode = false)}
+                    >
+                        Ansicht
+                    </button>
+                    <button
+                        class="admin-toggle__option"
+                        class:admin-toggle__option--active={$editMode}
+                        type="button"
+                        aria-pressed={$editMode}
+                        on:click={() => ($editMode = true)}
+                    >
+                        Bearbeiten
+                    </button>
+                </div>
+            {/if}
             <a href="tel:{CONTACT_INFO.PHONE}" class="phone-link hidden lg:inline-flex" title="Anrufen">
                 <svg aria-hidden="true" viewBox="0 0 24 24" class="h-4 w-4 fill-current">
                     <path
@@ -137,6 +123,44 @@
     .site-nav a.active {
         color: white;
         border-bottom-color: var(--color-sand-300);
+    }
+
+    .admin-toggle {
+        display: inline-flex;
+        overflow: hidden;
+        border: 1px solid var(--color-pine-500);
+        border-radius: 9999px;
+    }
+
+    /* Auf schmalen Bildschirmen passt der Umschalter nicht in die Navigationszeile:
+       als schwebende Pille unten links, gegenüber dem Telefonknopf. */
+    @media (max-width: 767px) {
+        .admin-toggle {
+            position: fixed;
+            bottom: 1.25rem;
+            left: 1rem;
+            z-index: 40;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+        }
+
+        .admin-toggle__option {
+            padding: 0.45rem 0.9rem;
+            font-size: 0.85rem;
+        }
+    }
+
+    .admin-toggle__option {
+        padding: 0.2rem 0.7rem;
+        background: var(--color-pine-800);
+        color: var(--color-pine-100);
+        font-size: 0.8rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .admin-toggle__option--active {
+        background: var(--color-sand-100);
+        color: var(--color-pine-900);
     }
 
     .site-nav .phone-link {

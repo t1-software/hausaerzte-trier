@@ -59,9 +59,9 @@ export const EDITABLE_CONTENT_SECTIONS: ContentSection[] = [
     {
         key: "Vertretungen",
         title: "Vertretungen",
-        description: "Vorschlagsliste für Aufzählungen in den Neuigkeiten.",
+        description: "Vorschlagsliste für Vertretungskarten in den Neuigkeiten.",
         type: "table",
-        columns: ["Eintrag"],
+        columns: ["Name", "Adresse", "Telefon"],
     },
     {
         key: "Titelbild",
@@ -133,6 +133,16 @@ export const SECTION_DEFAULT_TEXT: Record<string, string> = {
     Team: "Der persönliche Kontakt ist uns besonders wichtig. Als Team aus Ärzten und Arzthelferinnen ist es unser Ziel, Sie bei jeder Gelegenheit gut zu betreuen. Wir hoffen, Sie werden sich jederzeit gut aufgehoben fühlen. Lernen Sie unser Team kennen.",
 };
 
+/**
+ * Reservierter Bereich: Schlüssel der Bereiche, die für Besucher ausgeblendet sind.
+ * Der Inhalt bleibt gespeichert und dient als Vorlage für das nächste Mal.
+ */
+export const HIDDEN_SECTION_KEY = "Ausgeblendet";
+
+export function isSectionHidden(content: SiteContent, key: string): boolean {
+    return (content[HIDDEN_SECTION_KEY] ?? []).some((row) => row[0] === key);
+}
+
 export function textOf(content: SiteContent, key: string): string {
     return content[key]?.[0]?.[0]?.replaceAll("\r", "") || SECTION_DEFAULT_TEXT[key] || "";
 }
@@ -169,7 +179,7 @@ export function normalizeContent(input: unknown): SiteContent {
 export function getSectionsForContent(content: SiteContent): ContentSection[] {
     const knownKeys = new Set(EDITABLE_CONTENT_SECTIONS.map((section) => section.key));
     const unknownSections = Object.keys(content)
-        .filter((key) => !knownKeys.has(key))
+        .filter((key) => !knownKeys.has(key) && key !== HIDDEN_SECTION_KEY)
         .sort((a, b) => a.localeCompare(b, "de"))
         .map((key) => createGenericSection(key, content[key]));
 

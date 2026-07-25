@@ -7,6 +7,8 @@
     export let appointmentText = "";
     /** "card" in der Seitenleiste, "band" als Karte im Info-Band unter dem Titelbild. */
     export let variant: "card" | "band" = "card";
+    /** Termine-Text für Besucher ausgeblendet. */
+    export let appointmentHidden = false;
 </script>
 
 <div class="contact-section" class:card={variant === "card"} class:quick-card={variant === "band"}>
@@ -23,15 +25,18 @@
         <h2 class="contact-title">Termin & Rezepte</h2>
     {/if}
 
-    <div class="contact-description">
-        <EditableText
-            sectionKey="Termine"
-            ariaLabel="Termin vereinbaren"
-            text={appointmentText}
-            {isEditor}
-            {redirectTo}
-        />
-    </div>
+    {#if isEditor || !appointmentHidden}
+        <div class="contact-description">
+            <EditableText
+                sectionKey="Termine"
+                ariaLabel="Termin vereinbaren"
+                text={appointmentText}
+                hidden={appointmentHidden}
+                {isEditor}
+                {redirectTo}
+            />
+        </div>
+    {/if}
 
     <ul class="contact-list">
         <li class="contact-item">

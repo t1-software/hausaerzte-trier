@@ -1,5 +1,5 @@
 import { error, redirect, type RequestHandler } from "@sveltejs/kit";
-import { EDITABLE_CONTENT_SECTIONS, normalizeContent, type ContentSection } from "$lib/content";
+import { EDITABLE_CONTENT_SECTIONS, HIDDEN_SECTION_KEY, normalizeContent, type ContentSection } from "$lib/content";
 import { isAdminAuthenticated } from "$lib/server/admin-auth";
 import { loadSiteContent, saveSiteContent } from "$lib/server/content-store";
 
@@ -41,6 +41,16 @@ export const POST: RequestHandler = async ({ cookies, request, url }) => {
     } else if (action === "removeRow") {
         const rowIndex = Number(valueOf(formData.get("rowIndex")));
         nextContent[section.key] = parseRows(section, formData).filter((_, index) => index !== rowIndex);
+    } else if (action === "toggleHidden") {
+        const hidden = new Set((nextContent[HIDDEN_SECTION_KEY] ?? []).map((row) => row[0]).filter(Boolean));
+
+        if (hidden.has(section.key)) {
+            hidden.delete(section.key);
+        } else {
+            hidden.add(section.key);
+        }
+
+        nextContent[HIDDEN_SECTION_KEY] = [...hidden].map((key) => [key]);
     } else {
         error(400, {
             message: "Die Aktion ist ungültig.",

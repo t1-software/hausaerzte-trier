@@ -1,5 +1,8 @@
+<svelte:head>
+    <title>Datenschutz | Hausarztpraxis Trier</title>
+</svelte:head>
+
 <div class="legal-page">
-    <h1>Datenschutz</h1>
     <p>Datenschutzhinweise gemäß Art. 13 DSGVO</p>
 
     <h2>Einleitung</h2>

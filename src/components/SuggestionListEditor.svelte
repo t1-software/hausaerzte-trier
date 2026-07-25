@@ -2,18 +2,30 @@
     import { onMount } from "svelte";
     import { flip } from "svelte/animate";
     import InlineEditorActions from "./InlineEditorActions.svelte";
-    import RichText from "./RichText.svelte";
     import RowDragHandle from "./RowDragHandle.svelte";
     import { ajaxSave } from "$lib/ajax-save";
     import { cellsOf, isDirty, moveRow, nextRowId, toRows, type EditableRow } from "$lib/editable-rows";
     import { createRowDnd } from "$lib/row-dnd";
+    import { parsePraxisLine } from "$lib/richtext";
 
-    /** Pflegt die Vorschlagsliste, die in den Neuigkeiten als Autovervollständigung dient. */
+    /** Pflegt die Vorschlagsliste, die in den Neuigkeiten als Vertretungskarten erscheint. */
     export let entries: string[][] = [];
     export let redirectTo = "/";
 
+    /** Alte einspaltige Einträge ("Name, Adresse, Tel.: Nummer") in drei Spalten auffächern. */
+    function normalise(source: string[][]): string[][] {
+        return source.map((row) => {
+            if (row.length >= 3) {
+                return [row[0] ?? "", row[1] ?? "", row[2] ?? ""];
+            }
+
+            const praxis = parsePraxisLine(row[0] ?? "");
+            return praxis ? [praxis.name, praxis.address, praxis.phone] : [row[0] ?? "", "", ""];
+        });
+    }
+
     let open = false;
-    let rows: EditableRow[] = toRows(entries, 1);
+    let rows: EditableRow[] = toRows(normalise(entries), 3);
     let baseline = cellsOf(rows);
     let initialised = false;
     let resetKey = 0;
@@ -27,18 +39,13 @@
         initialised = true;
     });
 
-    function setCell(rowIndex: number, value: string, fromInit: boolean) {
-        rows[rowIndex].cells[0] = value;
+    function setCell(rowIndex: number, column: number, value: string) {
+        rows[rowIndex].cells[column] = value;
         rows = rows;
-
-        if (fromInit && !initialised) {
-            baseline[rowIndex][0] = value;
-            baseline = baseline;
-        }
     }
 
     function addEntry() {
-        rows = [...rows, { id: nextRowId(), cells: [""] }];
+        rows = [...rows, { id: nextRowId(), cells: ["", "", ""] }];
     }
 
     function removeEntry(index: number) {
@@ -46,7 +53,7 @@
     }
 
     function discard() {
-        rows = toRows(baseline, 1);
+        rows = toRows(baseline, 3);
         resetKey += 1;
     }
 </script>
@@ -78,15 +85,30 @@
                             on:drop={dnd.handleDrop}
                         >
                             <RowDragHandle {dnd} {index} />
-                            <div class="suggestion-list__field">
-                                <RichText
-                                    inline
-                                    allowBold={false}
+                            <div class="praxis-card praxis-card--editing suggestion-list__card">
+                                <input
+                                    class="praxis-card__input praxis-card__input--name"
                                     name={`cell:${index}:0`}
-                                    ariaLabel="Vorschlag"
+                                    placeholder="Name der Praxis"
+                                    aria-label="Name der Praxis"
                                     value={row.cells[0]}
-                                    on:init={(event) => setCell(index, event.detail, true)}
-                                    on:change={(event) => setCell(index, event.detail, false)}
+                                    on:input={(event) => setCell(index, 0, event.currentTarget.value)}
+                                />
+                                <input
+                                    class="praxis-card__input"
+                                    name={`cell:${index}:1`}
+                                    placeholder="Adresse"
+                                    aria-label="Adresse"
+                                    value={row.cells[1]}
+                                    on:input={(event) => setCell(index, 1, event.currentTarget.value)}
+                                />
+                                <input
+                                    class="praxis-card__input praxis-card__input--phone"
+                                    name={`cell:${index}:2`}
+                                    placeholder="Telefonnummer"
+                                    aria-label="Telefonnummer"
+                                    value={row.cells[2]}
+                                    on:input={(event) => setCell(index, 2, event.currentTarget.value)}
                                 />
                             </div>
                             <button
@@ -146,8 +168,9 @@
         font-size: 0.9rem;
     }
 
-    .suggestion-list__field {
+    .suggestion-list__card {
         flex: 1;
         min-width: 0;
+        padding-right: 0.85rem;
     }
 </style>

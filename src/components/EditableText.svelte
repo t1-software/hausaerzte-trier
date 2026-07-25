@@ -14,6 +14,8 @@
     export let allowBold = true;
     export let allowList = false;
     export let align: "start" | "center" | "end" = "start";
+    /** Für Besucher ausgeblendet; im Bearbeitungsmodus gedimmt sichtbar. */
+    export let hidden = false;
 
     let baseline: string | null = null;
     let draft = "";
@@ -27,7 +29,7 @@
     }
 </script>
 
-<EditableBlock {isEditor}>
+<EditableBlock {isEditor} {sectionKey} {hidden} {redirectTo}>
     <div class="editable-text">{@html marked(text)}</div>
     <form
         slot="editor"

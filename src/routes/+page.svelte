@@ -5,7 +5,7 @@
     import LocationMap from "../components/LocationMap.svelte";
     import FloatingPhoneButton from "../components/FloatingPhoneButton.svelte";
     import { editMode } from "$lib/edit-mode";
-    import { textOf } from "$lib/content";
+    import { isSectionHidden, textOf } from "$lib/content";
 
     export let data: PageData;
     const redirectTo = "/";
@@ -17,23 +17,36 @@
     $: busDirections = textOf(content, "AnfahrtBus");
     $: carDirections = textOf(content, "AnfahrtAuto");
     $: isEditor = data.isEditor && $editMode;
+    $: welcomeHidden = isSectionHidden(content, "Willkommen");
+    $: newsHidden = isSectionHidden(content, "Neuigkeiten");
+    $: busHidden = isSectionHidden(content, "AnfahrtBus");
+    $: carHidden = isSectionHidden(content, "AnfahrtAuto");
 </script>
 
 <div class="mt-12 flex flex-col gap-10 lg:flex-row lg:gap-14">
     <div class="min-w-0 flex-1">
-        <p class="eyebrow">Herzlich Willkommen</p>
-        <h2 class="mt-1 !text-3xl">Ihre Gesundheit steht bei uns im Mittelpunkt</h2>
+        {#if isEditor || !welcomeHidden}
+            <p class="eyebrow">Herzlich Willkommen</p>
+            <h2 class="mt-1 !text-3xl">Ihre Gesundheit steht bei uns im Mittelpunkt</h2>
 
-        <div class="welcome-text mt-6 max-w-prose">
-            <EditableText sectionKey="Willkommen" ariaLabel="Begrüßung" text={welcome} {isEditor} {redirectTo} />
-            <p class="welcome-signature" aria-hidden="true">Thiemo Stiemert</p>
-        </div>
+            <div class="welcome-text mt-6 max-w-prose">
+                <EditableText
+                    sectionKey="Willkommen"
+                    ariaLabel="Begrüßung"
+                    text={welcome}
+                    hidden={welcomeHidden}
+                    {isEditor}
+                    {redirectTo}
+                />
+                <p class="welcome-signature" aria-hidden="true">Thiemo Stiemert</p>
+            </div>
+        {/if}
 
-        <LocationMap {isEditor} {redirectTo} busText={busDirections} carText={carDirections} />
+        <LocationMap {isEditor} {redirectTo} busText={busDirections} carText={carDirections} {busHidden} {carHidden} />
     </div>
 
-    <div class="order-first w-full shrink-0 lg:order-none lg:w-[380px]">
-        <NewsSection {news} {isEditor} {redirectTo} {suggestionEntries} variant="card" />
+    <div class="order-first w-full shrink-0 lg:order-none lg:w-[calc((100%-1rem)/3)]">
+        <NewsSection {news} {isEditor} {redirectTo} {suggestionEntries} hidden={newsHidden} variant="card" />
     </div>
 </div>
 

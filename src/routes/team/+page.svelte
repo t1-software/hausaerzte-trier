@@ -2,12 +2,13 @@
     import type { PageData } from "./$types";
     import EditableText from "../../components/EditableText.svelte";
     import { editMode } from "$lib/edit-mode";
-    import { textOf } from "$lib/content";
+    import { isSectionHidden, textOf } from "$lib/content";
 
     export let data: PageData;
 
     $: isEditor = data.isEditor && $editMode;
     $: intro = textOf(data.content, "Team");
+    $: introHidden = isSectionHidden(data.content, "Team");
 
     const team: { name: string; role: string; image?: string }[] = [
         { name: "Thiemo Stiemert", role: "Praxisinhaber · Facharzt Allgemeinmedizin", image: "/stiemert_thiemo.jpg" },
@@ -37,7 +38,14 @@
 </script>
 
 <div class="team-intro mt-8 max-w-prose">
-    <EditableText sectionKey="Team" ariaLabel="Über uns" text={intro} {isEditor} redirectTo="/team" />
+    <EditableText
+        sectionKey="Team"
+        ariaLabel="Über uns"
+        text={intro}
+        hidden={introHidden}
+        {isEditor}
+        redirectTo="/team"
+    />
 </div>
 
 <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

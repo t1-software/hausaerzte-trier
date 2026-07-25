@@ -53,7 +53,20 @@ SvelteKit-Website der Hausarztpraxis Trier (Svelte 4-Syntax, Tailwind 4, TypeScr
 - Autovervollständigung: `suggestions` (aus dem Bereich `Vertretungen`) blendet ab zwei Zeichen
   passende Einträge ein; Enter/Tab übernimmt, Escape schließt. Die Liste selbst pflegt
   `SuggestionListEditor` unter dem Neuigkeiten-Editor.
+- Vertretungskarten: Zeilen im Format `- Name, Adresse, Tel.: Nummer` (Regex `PRAXIS_LINE`) werden
+  überall als Karte dargestellt — Anzeige über `renderNews()` (`$lib/news-render`), Editor über den
+  `praxis`-Knoten im `newsSchema` (NodeView mit drei Eingabefeldern, `praxisCards`-Prop an RichText).
+  Gespeichert wird unverändert Markdown; das Format ist die Schnittstelle. `Vertretungen` hat drei
+  Spalten (Name, Adresse, Telefon); ein übernommener Vorschlag wird als Karte eingefügt.
 - Serverseitig gibt es kein ProseMirror: bis `onMount` zeigt das Feld den mit `marked` gerenderten Text.
+
+## Ausblenden statt Löschen
+
+Jeder Bereich kann für Besucher ausgeblendet werden (Auge im Bearbeitungsmodus, `action=toggleHidden`).
+Die Schlüssel stehen im reservierten Bereich `Ausgeblendet` (`HIDDEN_SECTION_KEY` in `src/lib/content.ts`).
+Ausgeblendete Bereiche bleiben gespeichert und im Bearbeitungsmodus gedimmt editierbar — als Vorlage
+für das nächste Mal. `EditableBlock` übernimmt Auge + Dimmung, sobald ein `sectionKey` gesetzt ist;
+umgebende Überschriften müssen die Elternkomponenten selbst mit ausblenden.
 
 ## Sortieren per Drag & Drop
 
@@ -67,8 +80,27 @@ Tastatur: Alt + Pfeil hoch/runter auf dem Griff.
 
 - Der Header ist `fixed` und braucht `z-40`, sonst liegen die Bearbeiten-Overlays darüber
   (Badge selbst liegt auf `z-50`).
-- Leere Bereiche zeigen im Bearbeitungsmodus keinen Platzhaltertext, aber die Fläche bleibt sichtbar
-  (z. B. leere Hinweisleiste unter dem Titelbild).
+- Der Wichtig-Hinweis ist eine schmale Leiste direkt unter dem Header, `sticky top-14 z-30` —
+  bleibt beim Scrollen auf allen Seiten sichtbar. Kein Icon, keine Überschrift. Grün (`pine-500`),
+  bewusst heller als der Header; das Editorfeld wird darin dunkel statt hell hinterlegt,
+  damit der helle Text beim Bearbeiten lesbar bleibt. Die Formatierungsleiste öffnet hier unterhalb
+  des Feldes (oben wäre sie unter dem Header verborgen), Übernehmen/Verwerfen rücken dafür nach unten.
+- Der Admin-Umschalter (Ansicht | Bearbeiten) sitzt in der Header-Navigation; unter `md` als
+  schwebende Pille unten links, weil die Navigationszeile sonst überläuft.
+- Keine Akzent-Linksränder an Karten ("Claude-Design-Marker", ausdrücklich unerwünscht) und
+  keine Hover-Effekte auf rein informativen Karten.
+- Das Info-Band auf der Startseite überlappt das Titelbild (`-mt-12 z-10`). Es enthält nur noch
+  Sprechzeiten (zwei Spalten breit) und Termin & Rezepte; Urlaub wurde entfernt.
+- Sprechzeiten-Zeiten fluchten über alle Zeilen: ab `md` ist jede Zeile ein Grid
+  (`1fr 9rem 14.5rem`), die beiden Zeitspalten liegen per `display: contents` im Zeilenraster.
+  Unter `md` gestapelt (`span:empty` wird ausgeblendet), sonst läuft die Karte auf Handys über.
+- Leere Bereiche zeigen im Bearbeitungsmodus keinen Platzhaltertext, aber die Fläche bleibt sichtbar.
+- Impressum/Datenschutz bekommen eigene Hero-Titel über `getHero()` im Layout; die Seiteninhalte
+  haben deshalb kein eigenes `<h1>` mehr.
+- Abschnittsrhythmus: Eyebrow (`.eyebrow`) + große Serifen-Überschrift (`!text-3xl`) für
+  Willkommens- und Anfahrtsbereich. Neue Startseiten-Abschnitte sollten diesem Muster folgen.
+- Svelte-`<style>`-Blöcke: Media-Query-Overrides müssen NACH der Basisregel stehen
+  (gleiche Spezifität, Reihenfolge entscheidet — hat den mobilen Hero-Titel schon einmal gekostet).
 
 ## Entwicklung
 

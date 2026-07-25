@@ -1,5 +1,8 @@
+<svelte:head>
+    <title>Impressum | Hausarztpraxis Trier</title>
+</svelte:head>
+
 <div class="legal-page">
-    <h1>Impressum</h1>
     <p
         ><strong>Dienstanbieter:</strong><br />Hausarztpraxis Thiemo Stiemert<br />Facharzt für Allgemeinmedizin<br
         />Gilbertstraße 59, 54290 Trier, Deutschland</p
