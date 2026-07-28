@@ -1,59 +1,174 @@
 <script lang="ts">
+    import "@fontsource-variable/source-serif-4";
+    import "@fontsource-variable/source-sans-3";
+    import "@fontsource-variable/caveat";
     import type { LayoutData } from "./$types";
     import Footer from "../components/Footer.svelte";
     import Header from "../components/Header.svelte";
+    import NoticeBanner from "../components/NoticeBanner.svelte";
+    import QuickInfoBand from "../components/QuickInfoBand.svelte";
     import { page } from "$app/stores";
+    import { marked } from "marked";
+    import { editMode } from "$lib/edit-mode";
+    import { isSectionHidden, textOf } from "$lib/content";
 
     export let data: LayoutData;
 
     $: content = data.content;
-    $: important = content["Wichtig"]?.[0]?.[0]?.replaceAll("\r", "") || "";
+    $: isAuthenticated = data.isEditor;
+    $: isEditor = isAuthenticated && $editMode;
+    $: heroText = textOf(content, "Titelbild");
+    $: isAdmin = $page.route.id?.startsWith("/admin") ?? false;
+    $: redirectTo = $page.url.pathname + $page.url.search + $page.url.hash;
 
-    let headerImage: string;
-    let headerPosition: string;
+    $: hero = getHero($page.route.id);
 
-    $: ({ headerImage, headerPosition } = getHeaderImage($page.route.id));
-
-    function getHeaderImage(routeId: string | null): { headerImage: string; headerPosition: string } {
-        if (routeId === "/team") {
-            return { headerImage: "praxis3.jpeg", headerPosition: "0% 30%" };
-        } else if (routeId === "/leistungsspektrum") {
-            return { headerImage: "praxis1.jpeg", headerPosition: "center" };
+    function getHero(routeId: string | null): {
+        image: string;
+        position: string;
+        eyebrow: string;
+        title: string;
+        home: boolean;
+    } {
+        if (routeId === "/impressum" || routeId === "/datenschutz") {
+            return {
+                image: "praxis2.jpeg",
+                position: "center",
+                eyebrow: "Hausarztpraxis Thiemo Stiemert",
+                title: routeId === "/impressum" ? "Impressum" : "Datenschutz",
+                home: false,
+            };
         }
-        return { headerImage: "praxis2.jpeg", headerPosition: "center" };
+
+        if (routeId === "/team") {
+            return {
+                image: "praxis3.jpeg",
+                position: "0% 30%",
+                eyebrow: "Hausarztpraxis Thiemo Stiemert",
+                title: "Über uns",
+                home: false,
+            };
+        } else if (routeId === "/leistungsspektrum") {
+            return {
+                image: "praxis1.jpeg",
+                position: "center",
+                eyebrow: "Hausarztpraxis Thiemo Stiemert",
+                title: "Leistungsspektrum",
+                home: false,
+            };
+        }
+        return {
+            image: "praxis2.jpeg",
+            position: "center",
+            eyebrow: "Hausärztliche Versorgung in Trier",
+            title: "Hausarztpraxis Thiemo Stiemert",
+            home: routeId === "/",
+        };
     }
 </script>
 
-<div class="flex flex-col min-h-screen">
-    <div class="flex flex-col">
-        <Header {content} />
-        <div
-            class="absolute -z-10 bg-cover bg-no-repeat opacity-80 w-full lg:h-[500px] md:h-[400px] h-[300px]"
-            style="background-image: url('/{headerImage}'); background-position: {headerPosition};"
-        >
-            <div class="w-full h-full max-w-7xl relative mx-auto">
-                <div
-                    class="absolute right-0 bottom-0 mb-4 mr-4 bg-gulfstream-400 opacity-90 py-2 px-4 lg:text-3xl md:text-2xl text-2xl text-left"
-                >
-                    Hausarztpraxis in Trier<br />
-                    Thiemo Stiemert
-                </div>
+{#if isAdmin}
+    <slot />
+{:else}
+    <div class="flex min-h-screen flex-col">
+        <Header {isAuthenticated} />
+
+        <div class="sticky top-14 z-30 mt-14">
+            <NoticeBanner {content} {isEditor} {redirectTo} />
+        </div>
+        <section class="hero relative w-full" class:hero--slim={!hero.home}>
+            <img
+                src="/{hero.image}"
+                alt="Praxisräume der Hausarztpraxis"
+                class="absolute inset-0 h-full w-full object-cover"
+                style="object-position: {hero.position};"
+            />
+            <div class="hero-overlay absolute inset-0"></div>
+            <div
+                class="relative mx-auto flex h-full w-full max-w-7xl flex-col justify-end px-4 {hero.home
+                    ? 'pb-20 md:pb-24'
+                    : 'pb-10 md:pb-14'}"
+            >
+                <p class="eyebrow !text-sand-200">{hero.eyebrow}</p>
+                {#if hero.home}
+                    <h1 class="hero-title mt-1">
+                        {@html marked(heroText)}
+                    </h1>
+                {:else}
+                    <h1 class="hero-title mt-1">{hero.title}</h1>
+                {/if}
             </div>
-        </div>
+        </section>
+
+        {#if hero.home}
+            <QuickInfoBand
+                times={content["Sprechzeiten"] || []}
+                appointmentText={textOf(content, "Termine")}
+                timesHidden={isSectionHidden(content, "Sprechzeiten")}
+                appointmentHidden={isSectionHidden(content, "Termine")}
+                {isEditor}
+                {redirectTo}
+            />
+        {/if}
+        <main class="mx-auto w-full max-w-7xl grow px-4 pb-16">
+            <slot />
+        </main>
     </div>
-    <div class="lg:mt-[500px] md:mt-[400px] mt-[300px] bg-gradient-to-r from-gulfstream-400 to-gulfstream-500 h-1"
-    ></div>
-    {#if important.length > 0}
-        <div class="bg-gulfstream-100 w-full py-4 flex align-center justify-center text-center font-bold">
-            {important}
-        </div>
-    {/if}
-    <div class="w-full max-w-7xl mx-auto p-4 mt-8 mb-8">
-        <slot />
-    </div>
-</div>
-<Footer />
+    <Footer {isAuthenticated} />
+{/if}
 
 <style lang="scss" global>
     @import "../app.css";
+
+    .hero {
+        height: 440px;
+    }
+
+    .hero--slim {
+        height: 300px;
+    }
+
+    @media (max-width: 767px) {
+        .hero {
+            height: 340px;
+        }
+
+        .hero--slim {
+            height: 220px;
+        }
+    }
+
+    .hero-overlay {
+        background:
+            linear-gradient(to top, rgb(14 31 24 / 0.82) 0%, rgb(14 31 24 / 0.35) 45%, rgb(14 31 24 / 0.08) 75%),
+            linear-gradient(to right, rgb(14 31 24 / 0.25), transparent 60%);
+    }
+
+    .hero-title {
+        color: white;
+        font-family: var(--font-display);
+        font-size: 2.5rem;
+        line-height: 1.15;
+        font-weight: 650;
+        letter-spacing: -0.01em;
+        max-width: 40rem;
+        text-wrap: balance;
+    }
+
+    .hero-title :global(p) {
+        margin: 0;
+        overflow: visible;
+    }
+
+    @media (min-width: 768px) {
+        .hero-title {
+            font-size: 3.25rem;
+        }
+    }
+
+    @media (max-width: 420px) {
+        .hero-title {
+            font-size: 1.7rem;
+        }
+    }
 </style>

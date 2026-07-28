@@ -1,123 +1,144 @@
+/* Fonts are imported in +layout.svelte (JS imports) so Vite emits the woff2 assets. */
 @import "tailwindcss";
 
-@font-face {
-    font-display: swap;
-    font-family: "Roboto";
-    font-style: normal;
-    font-weight: 100;
-    src: url("/fonts/roboto/Roboto-Thin.ttf") format("truetype");
-}
+@theme {
+    /* Tiefgrün & Sandstein — see DESIGN_DECISIONS.md */
+    --color-pine-50: #eff4f1;
+    --color-pine-100: #dbe7df;
+    --color-pine-200: #b9d0c2;
+    --color-pine-300: #8fb3a0;
+    --color-pine-400: #64937d;
+    --color-pine-500: #47775f;
+    --color-pine-600: #355e4b;
+    --color-pine-700: #2b4c3d;
+    --color-pine-800: #223d31;
+    --color-pine-900: #1b3128;
+    --color-pine-950: #0e1f18;
 
-@font-face {
-    font-display: swap;
-    font-family: "Roboto";
-    font-style: italic;
-    font-weight: 100;
-    src: url("/fonts/roboto/Roboto-ThinItalic.ttf") format("truetype");
-}
+    --color-sand-50: #faf7f0;
+    --color-sand-100: #f3ede0;
+    --color-sand-200: #e8dfc9;
+    --color-sand-300: #d9cba9;
+    --color-sand-700: #857450;
+    --color-sand-900: #4d4330;
 
-@font-face {
-    font-display: swap;
-    font-family: "Roboto";
-    font-style: normal;
-    font-weight: 300;
-    src: url("/fonts/roboto/Roboto-Light.ttf") format("truetype");
-}
+    --color-copper-500: #b5622d;
+    --color-copper-600: #9a4f20;
+    --color-copper-700: #7c3f18;
 
-@font-face {
-    font-display: swap;
-    font-family: "Roboto";
-    font-style: italic;
-    font-weight: 300;
-    src: url("/fonts/roboto/Roboto-LightItalic.ttf") format("truetype");
-}
+    /* Legacy alias: components/editors still using gulfstream-* pick up the new palette. */
+    --color-gulfstream-50: var(--color-pine-50);
+    --color-gulfstream-100: var(--color-pine-100);
+    --color-gulfstream-200: var(--color-pine-200);
+    --color-gulfstream-300: var(--color-pine-300);
+    --color-gulfstream-400: var(--color-pine-400);
+    --color-gulfstream-500: var(--color-pine-500);
+    --color-gulfstream-600: var(--color-pine-600);
+    --color-gulfstream-700: var(--color-pine-700);
+    --color-gulfstream-800: var(--color-pine-800);
+    --color-gulfstream-900: var(--color-pine-900);
+    --color-gulfstream-950: var(--color-pine-950);
 
-@font-face {
-    font-display: swap;
-    font-family: "Roboto";
-    font-style: normal;
-    font-weight: 400;
-    src: url("/fonts/roboto/Roboto-Regular.ttf") format("truetype");
-}
-
-@font-face {
-    font-display: swap;
-    font-family: "Roboto";
-    font-style: italic;
-    font-weight: 400;
-    src: url("/fonts/roboto/Roboto-RegularItalic.ttf") format("truetype");
-}
-
-@font-face {
-    font-display: swap;
-    font-family: "Roboto";
-    font-style: normal;
-    font-weight: 500;
-    src: url("/fonts/roboto/Roboto-Medium.ttf") format("truetype");
-}
-
-@font-face {
-    font-display: swap;
-    font-family: "Roboto";
-    font-style: italic;
-    font-weight: 500;
-    src: url("/fonts/roboto/Roboto-MediumItalic.ttf") format("truetype");
-}
-
-@font-face {
-    font-display: swap;
-    font-family: "Roboto";
-    font-style: normal;
-    font-weight: 700;
-    src: url("/fonts/roboto/Roboto-Bold.ttf") format("truetype");
-}
-
-@font-face {
-    font-display: swap;
-    font-family: "Roboto";
-    font-style: italic;
-    font-weight: 700;
-    src: url("/fonts/roboto/Roboto-BoldItalic.ttf") format("truetype");
-}
-
-@font-face {
-    font-display: swap;
-    font-family: "Roboto";
-    font-style: normal;
-    font-weight: 900;
-    src: url("/fonts/roboto/Roboto-Black.ttf") format("truetype");
-}
-
-@font-face {
-    font-display: swap;
-    font-family: "Roboto";
-    font-style: italic;
-    font-weight: 900;
-    src: url("/fonts/roboto/Roboto-BlackItalic.ttf") format("truetype");
+    --font-display: "Source Serif 4 Variable", Georgia, serif;
+    --font-sans: "Source Sans 3 Variable", system-ui, sans-serif;
+    --font-hand: "Caveat Variable", cursive;
 }
 
 body {
-    font-family: "Roboto", sans-serif;
+    font-family: var(--font-sans);
     font-weight: 400;
-    background-color: var(--color-gulfstream-50);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    background-color: var(--color-sand-50);
+    color: var(--color-pine-950);
 }
 
 p {
     overflow: hidden;
 }
 
+h1,
+h2,
+h3 {
+    font-family: var(--font-display);
+    color: var(--color-pine-900);
+    letter-spacing: -0.01em;
+}
+
 h1 {
-    font-size: 1.5rem;
-    line-height: 2rem;
-    font-weight: 700;
-    letter-spacing: -0.025em;
+    font-size: 2.25rem;
+    line-height: 1.15;
+    font-weight: 650;
 }
 
 h2 {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
+    font-size: 1.5rem;
+    line-height: 1.3;
+    font-weight: 650;
+}
+
+h3 {
+    font-size: 1.2rem;
+    line-height: 1.35;
+    font-weight: 600;
+}
+
+a {
+    color: var(--color-pine-700);
+}
+
+/* Small-caps sans eyebrow above serif headings */
+.eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
     font-weight: 700;
-    letter-spacing: -0.025em;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-pine-500);
+}
+
+/* Sandstone info card in the band under the hero */
+.quick-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    background: var(--color-sand-100);
+    border: 1px solid var(--color-sand-200);
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 20px -8px rgb(14 31 24 / 0.35);
+    padding: 1rem 1.25rem;
+    text-decoration: none;
+    color: var(--color-pine-950);
+}
+
+.quick-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-pine-600);
+}
+
+.quick-icon {
+    width: 1rem;
+    height: 1rem;
+    fill: currentColor;
+}
+
+/* White card on sandstone background */
+.card {
+    background: white;
+    border: 1px solid var(--color-sand-200);
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 2px rgb(14 31 24 / 0.05);
+}
+
+:focus-visible {
+    outline: 2px solid var(--color-pine-600);
+    outline-offset: 2px;
 }
 
 .news {
@@ -141,18 +162,184 @@ h2 {
     }
 }
 
-@theme {
-    --color-gulfstream-50: #f2f7f2;
-    --color-gulfstream-100: #e0ecdf;
-    --color-gulfstream-200: #c2d8c2;
-    --color-gulfstream-300: #8db58f;
-    --color-gulfstream-400: #6c9b70;
-    --color-gulfstream-500: #4b7e51;
-    --color-gulfstream-600: #38633e;
-    --color-gulfstream-700: #2d4f32;
-    --color-gulfstream-800: #254029;
-    --color-gulfstream-900: #1f3523;
-    --color-gulfstream-950: #111d13;
+/* Vertretungskarte: Praxisname, Adresse, Telefon — in Anzeige, Editor und Vorschlagsliste. */
+.praxis-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.praxis-card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 0.6rem;
+    row-gap: 0.1rem;
+    border: 1px solid var(--color-sand-200);
+    border-radius: 0.5rem;
+    background: var(--color-sand-50);
+    padding: 0.6rem 0.85rem;
+    font-size: 0.925rem;
+    line-height: 1.45;
+}
+
+/* Zwei Zeilen: Name oben, Adresse und Telefon darunter. */
+.praxis-card > strong {
+    width: 100%;
+    font-weight: 700;
+    color: var(--color-pine-900);
+}
+
+.praxis-card > span {
+    color: var(--color-sand-900);
+}
+
+.praxis-card > span::after {
+    content: "·";
+    margin-left: 0.6rem;
+    color: var(--color-sand-300);
+}
+
+.praxis-card > a {
+    width: fit-content;
+    color: var(--color-pine-700);
+    font-weight: 600;
+    text-decoration: none;
+    font-variant-numeric: tabular-nums;
+}
+
+.praxis-card > a:hover {
+    text-decoration: underline;
+}
+
+/* Karte im Editor: drei nahtlose Felder plus Entfernen-Knopf. */
+.praxis-card--editing {
+    position: relative;
+    margin: 0.35rem 0;
+    padding-right: 2.6rem;
+}
+
+.praxis-card__input {
+    flex: 1 1 8rem;
+    min-width: 0;
+    border: none;
+    border-bottom: 1px dashed transparent;
+    background: transparent;
+    color: var(--color-sand-900);
+    font: inherit;
+    outline: none;
+    padding: 0;
+}
+
+.praxis-card__input--name {
+    flex-basis: 100%;
+    font-weight: 700;
+    color: var(--color-pine-900);
+}
+
+.praxis-card__input--phone {
+    flex: 0 1 9rem;
+    font-weight: 600;
+    color: var(--color-pine-700);
+    font-variant-numeric: tabular-nums;
+}
+
+.praxis-card__input:hover {
+    border-bottom-color: var(--color-pine-300);
+}
+
+.praxis-card__input:focus {
+    border-bottom-color: var(--color-pine-600);
+}
+
+.praxis-card__input::placeholder {
+    color: var(--color-sand-700);
+    font-weight: 400;
+}
+
+.praxis-card__remove {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: inline-flex;
+    width: 1.6rem;
+    height: 1.6rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-sand-200);
+    border-radius: 9999px;
+    background: white;
+    color: var(--color-pine-700);
+}
+
+.praxis-card__remove:hover {
+    background: var(--color-pine-100);
+}
+
+.praxis-card__remove svg {
+    width: 0.9rem;
+    height: 0.9rem;
+    fill: currentColor;
+}
+
+/* Ausgewählte Karte im Editor sichtbar markieren */
+.ProseMirror-selectednode.praxis-card--editing {
+    outline: 2px solid var(--color-pine-500);
+    outline-offset: 1px;
+}
+
+/* Long-form legal pages (Impressum, Datenschutz) */
+.legal-page {
+    max-width: 75ch;
+    margin-top: 2rem;
+}
+
+.legal-page h1 {
+    margin-bottom: 0.5rem;
+}
+
+.legal-page h2 {
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.legal-page h3 {
+    margin-top: 1.25rem;
+    margin-bottom: 0.35rem;
+}
+
+.legal-page p {
+    margin-bottom: 0.9rem;
+    overflow: visible;
+}
+
+.legal-page ul {
+    list-style: disc;
+    margin: 0 0 0.9rem 1.25rem;
+}
+
+.legal-page li {
+    margin-bottom: 0.35rem;
+}
+
+.legal-page a {
+    color: var(--color-pine-700);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    overflow-wrap: anywhere;
+}
+
+.legal-page a:hover {
+    color: var(--color-pine-500);
+}
+
+.legal-page > br {
+    display: none;
+}
+
+#sprechzeiten {
+    scroll-margin-top: 7rem;
 }
 
 .anchor::before {
