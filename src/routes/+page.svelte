@@ -4,6 +4,7 @@
     import NewsSection from "../components/NewsSection.svelte";
     import LocationMap from "../components/LocationMap.svelte";
     import FloatingPhoneButton from "../components/FloatingPhoneButton.svelte";
+    import { browser } from "$app/environment";
     import { editMode } from "$lib/edit-mode";
     import { isSectionHidden, textOf } from "$lib/content";
 
@@ -16,7 +17,7 @@
     $: welcome = textOf(content, "Willkommen");
     $: busDirections = textOf(content, "AnfahrtBus");
     $: carDirections = textOf(content, "AnfahrtAuto");
-    $: isEditor = data.isEditor && $editMode;
+    $: isEditor = data.isEditor && (browser ? $editMode : data.editMode);
     $: welcomeHidden = isSectionHidden(content, "Willkommen");
     $: newsHidden = isSectionHidden(content, "Neuigkeiten");
     $: busHidden = isSectionHidden(content, "AnfahrtBus");
@@ -45,9 +46,13 @@
         <LocationMap {isEditor} {redirectTo} busText={busDirections} carText={carDirections} {busHidden} {carHidden} />
     </div>
 
-    <div class="order-first w-full shrink-0 lg:order-none lg:w-[calc((100%-1rem)/3)]">
-        <NewsSection {news} {isEditor} {redirectTo} {suggestionEntries} hidden={newsHidden} variant="card" />
-    </div>
+    {#if isEditor || !newsHidden}
+        <!-- Ohne diese Bedingung bliebe die Spalte als leere Fläche stehen, sobald
+             die Neuigkeiten (auch zeitgesteuert) verschwinden. -->
+        <div class="order-first w-full shrink-0 lg:order-none lg:w-[calc((100%-1rem)/3)]">
+            <NewsSection {news} {isEditor} {redirectTo} {suggestionEntries} hidden={newsHidden} variant="card" />
+        </div>
+    {/if}
 </div>
 
 <FloatingPhoneButton />

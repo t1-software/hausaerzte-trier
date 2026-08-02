@@ -1,3 +1,5 @@
+import { isHideAtReached } from "$lib/schedule";
+
 export type SiteContent = Record<string, string[][]>;
 
 export interface ContentSection {
@@ -159,11 +161,31 @@ export const SECTION_DEFAULT_TEXT: Record<string, string> = {
 /**
  * Reservierter Bereich: Schlüssel der Bereiche, die für Besucher ausgeblendet sind.
  * Der Inhalt bleibt gespeichert und dient als Vorlage für das nächste Mal.
+ *
+ * Eine Zeile ist entweder [Schlüssel] — sofort ausgeblendet — oder
+ * [Schlüssel, ISO-Zeitpunkt]: bis dahin sichtbar, danach ausgeblendet.
  */
 export const HIDDEN_SECTION_KEY = "Ausgeblendet";
 
-export function isSectionHidden(content: SiteContent, key: string): boolean {
-    return (content[HIDDEN_SECTION_KEY] ?? []).some((row) => row[0] === key);
+function hiddenRowOf(content: SiteContent, key: string): string[] | undefined {
+    return (content[HIDDEN_SECTION_KEY] ?? []).find((row) => row[0] === key);
+}
+
+/** Geplanter Ausblendzeitpunkt (ISO) oder leer, wenn keiner gesetzt ist. */
+export function hideAtOf(content: SiteContent, key: string): string {
+    return hiddenRowOf(content, key)?.[1] ?? "";
+}
+
+export function isSectionHidden(content: SiteContent, key: string, now: number = Date.now()): boolean {
+    const row = hiddenRowOf(content, key);
+
+    if (!row) {
+        return false;
+    }
+
+    const hideAt = row[1] ?? "";
+
+    return hideAt === "" || isHideAtReached(hideAt, now);
 }
 
 export function textOf(content: SiteContent, key: string): string {

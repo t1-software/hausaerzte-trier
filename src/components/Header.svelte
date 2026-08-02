@@ -6,6 +6,8 @@
 
     /** Angemeldete Admins sehen den Umschalter zwischen Ansicht und Bearbeiten. */
     export let isAuthenticated = false;
+    /** Aktuelle Darstellung; kommt vom Layout, damit sie auch serverseitig stimmt. */
+    export let editing = true;
 
     $: routeId = $page.route.id;
 
@@ -45,18 +47,18 @@
                 <div class="admin-toggle" role="group" aria-label="Darstellung wählen">
                     <button
                         class="admin-toggle__option"
-                        class:admin-toggle__option--active={!$editMode}
+                        class:admin-toggle__option--active={!editing}
                         type="button"
-                        aria-pressed={!$editMode}
+                        aria-pressed={!editing}
                         on:click={() => ($editMode = false)}
                     >
                         Ansicht
                     </button>
                     <button
                         class="admin-toggle__option"
-                        class:admin-toggle__option--active={$editMode}
+                        class:admin-toggle__option--active={editing}
                         type="button"
-                        aria-pressed={$editMode}
+                        aria-pressed={editing}
                         on:click={() => ($editMode = true)}
                     >
                         Bearbeiten

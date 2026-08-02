@@ -2,12 +2,13 @@
     import type { PageData } from "./$types";
     import EditableText from "../../components/EditableText.svelte";
     import TeamSection from "../../components/TeamSection.svelte";
+    import { browser } from "$app/environment";
     import { editMode } from "$lib/edit-mode";
     import { DEFAULT_TEAM, isSectionHidden, textOf } from "$lib/content";
 
     export let data: PageData;
 
-    $: isEditor = data.isEditor && $editMode;
+    $: isEditor = data.isEditor && (browser ? $editMode : data.editMode);
     $: intro = textOf(data.content, "Team");
     $: introHidden = isSectionHidden(data.content, "Team");
     $: members = data.content["Team-Mitglieder"]?.length ? data.content["Team-Mitglieder"] : DEFAULT_TEAM;

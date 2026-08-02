@@ -2,11 +2,17 @@
     import "@fontsource-variable/source-serif-4";
     import "@fontsource-variable/source-sans-3";
     import "@fontsource-variable/caveat";
+    // Die beiden Schriften über der Falz werden vorgeladen (?url liefert den gehashten Pfad).
+    // Ohne das lädt der Browser sie erst nach dem Stylesheet und der Text springt beim Wechsel
+    // von der Ersatzschrift auf die richtige um.
+    import sansUrl from "@fontsource-variable/source-sans-3/files/source-sans-3-latin-wght-normal.woff2?url";
+    import serifUrl from "@fontsource-variable/source-serif-4/files/source-serif-4-latin-wght-normal.woff2?url";
     import type { LayoutData } from "./$types";
     import Footer from "../components/Footer.svelte";
     import Header from "../components/Header.svelte";
     import NoticeBanner from "../components/NoticeBanner.svelte";
     import QuickInfoBand from "../components/QuickInfoBand.svelte";
+    import { browser } from "$app/environment";
     import { page } from "$app/stores";
     import { marked } from "marked";
     import { editMode } from "$lib/edit-mode";
@@ -16,7 +22,10 @@
 
     $: content = data.content;
     $: isAuthenticated = data.isEditor;
-    $: isEditor = isAuthenticated && $editMode;
+    // Beim Rendern auf dem Server zählt der Cookie-Wert aus den Layout-Daten,
+    // im Browser der Store — beide starten gleich, deshalb kein Flackern.
+    $: editing = browser ? $editMode : data.editMode;
+    $: isEditor = isAuthenticated && editing;
     $: heroText = textOf(content, "Titelbild");
     $: isAdmin = $page.route.id?.startsWith("/admin") ?? false;
     $: redirectTo = $page.url.pathname + $page.url.search + $page.url.hash;
@@ -67,11 +76,16 @@
     }
 </script>
 
+<svelte:head>
+    <link rel="preload" as="font" type="font/woff2" href={sansUrl} crossorigin="anonymous" />
+    <link rel="preload" as="font" type="font/woff2" href={serifUrl} crossorigin="anonymous" />
+</svelte:head>
+
 {#if isAdmin}
     <slot />
 {:else}
     <div class="flex min-h-screen flex-col">
-        <Header {isAuthenticated} />
+        <Header {isAuthenticated} {editing} />
 
         <div class="sticky top-14 z-30 mt-14">
             <NoticeBanner {content} {isEditor} {redirectTo} />

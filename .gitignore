@@ -6,5 +6,7 @@ node_modules
 .env
 .env.*
 !.env.example
+# Lokaler Inhaltsspeicher (CONTENT_FILE)
+/*.local.json
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
