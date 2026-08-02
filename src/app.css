@@ -1,6 +1,32 @@
 /* Fonts are imported in +layout.svelte (JS imports) so Vite emits the woff2 assets. */
 @import "tailwindcss";
 
+/*
+ * Metrisch angeglichene Ersatzschriften: bis die Webschrift geladen ist, rendert der
+ * Browser Arial bzw. Georgia auf derselben Höhe und Breite — der Text bricht danach nicht
+ * mehr um. Ascender/Descender stammen aus den Schriftdateien, size-adjust ist am tatsächlichen
+ * deutschen Seitentext gemessen (Fließtext für die Grotesk, Überschriften für die Serife);
+ * bei einem Schriftwechsel neu bestimmen. Fehlt die lokale Schrift, greift einfach der
+ * nächste Eintrag im Stack.
+ */
+@font-face {
+    font-family: "Source Sans 3 Fallback";
+    src: local("Arial"), local("Helvetica Neue"), local("Liberation Sans");
+    size-adjust: 93.04%;
+    ascent-override: 110.05%;
+    descent-override: 42.99%;
+    line-gap-override: 0%;
+}
+
+@font-face {
+    font-family: "Source Serif 4 Fallback";
+    src: local("Georgia");
+    size-adjust: 106.69%;
+    ascent-override: 97.11%;
+    descent-override: 31.4%;
+    line-gap-override: 0%;
+}
+
 @theme {
     /* Tiefgrün & Sandstein — see DESIGN_DECISIONS.md */
     --color-pine-50: #eff4f1;
@@ -39,8 +65,8 @@
     --color-gulfstream-900: var(--color-pine-900);
     --color-gulfstream-950: var(--color-pine-950);
 
-    --font-display: "Source Serif 4 Variable", Georgia, serif;
-    --font-sans: "Source Sans 3 Variable", system-ui, sans-serif;
+    --font-display: "Source Serif 4 Variable", "Source Serif 4 Fallback", Georgia, serif;
+    --font-sans: "Source Sans 3 Variable", "Source Sans 3 Fallback", system-ui, sans-serif;
     --font-hand: "Caveat Variable", cursive;
 }
 

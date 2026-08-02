@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { PageData } from "./$types";
     import Leistungsspektrum from "../../components/Leistungsspektrum.svelte";
+    import { browser } from "$app/environment";
     import { editMode } from "$lib/edit-mode";
     import { isSectionHidden } from "$lib/content";
 
@@ -8,7 +9,7 @@
 
     $: content = data.content;
     $: leistungen = content["Leistungsspektrum"] || [];
-    $: isEditor = data.isEditor && $editMode;
+    $: isEditor = data.isEditor && (browser ? $editMode : data.editMode);
 </script>
 
 <Leistungsspektrum

@@ -32,7 +32,13 @@ SvelteKit-Website der Hausarztpraxis Trier (Svelte 4-Syntax, Tailwind 4, TypeScr
 - Anmeldung im Footer läuft über `use:enhance`: falsches Passwort zeigt den Fehler inline im Footer
   (keine /admin-Seite), Erfolg leitet per `redirectTo` auf die Seite zurück, von der man kam.
 - Anmeldung im Footer, Badge oben rechts zeigt `Admin` mit Umschalter `Ansicht | Bearbeiten`
-  (`src/lib/edit-mode.ts`, pro Browser-Sitzung in `sessionStorage`). `isEditor = angemeldet && Bearbeiten`.
+  (`src/lib/edit-mode.ts`). `isEditor = angemeldet && Bearbeiten`.
+- Die Darstellung liegt im Sitzungs-Cookie `edit_mode` (nicht mehr `sessionStorage`): der Server liest
+  ihn in `+layout.server.ts` und rendert gleich richtig. Sonst zeigt die Seite nach jedem Neuladen kurz
+  die Bearbeitungsansicht, bevor die Hydration auf Ansicht zurückschaltet.
+  Beim Rendern gilt deshalb `browser ? $editMode : data.editMode` — den Store erst im Browser fragen,
+  weil ein Modul-Store auf dem Server über Requests hinweg geteilt würde. Der Header bekommt den Wert
+  als `editing`-Prop.
 - Kein Stift und kein Einzelmodus pro Block: im Bearbeitungsmodus sind alle Felder sofort editierbar
   (`EditableBlock` rendert dann ausschließlich den `editor`-Slot).
 - Übernehmen/Verwerfen (`InlineEditorActions`) bleiben gesperrt, bis sich etwas geändert hat.
@@ -78,9 +84,25 @@ SvelteKit-Website der Hausarztpraxis Trier (Svelte 4-Syntax, Tailwind 4, TypeScr
 
 Jeder Bereich kann für Besucher ausgeblendet werden (Auge im Bearbeitungsmodus, `action=toggleHidden`).
 Die Schlüssel stehen im reservierten Bereich `Ausgeblendet` (`HIDDEN_SECTION_KEY` in `src/lib/content.ts`).
+Eine Zeile ist entweder `[Schlüssel]` (sofort ausgeblendet) oder `[Schlüssel, ISO-Zeitpunkt]`
+(bis dahin sichtbar, danach ausgeblendet — die Uhr neben dem Auge, `action=setHideAt`).
 Ausgeblendete Bereiche bleiben gespeichert und im Bearbeitungsmodus gedimmt editierbar — als Vorlage
-für das nächste Mal. `EditableBlock` übernimmt Auge + Dimmung, sobald ein `sectionKey` gesetzt ist;
+für das nächste Mal. `EditableBlock` übernimmt Auge + Uhr + Dimmung, sobald ein `sectionKey` gesetzt ist;
 umgebende Überschriften müssen die Elternkomponenten selbst mit ausblenden.
+
+### Zeitgesteuert ausblenden
+
+- Die Uhr öffnet ein kleines Feld (`datetime-local`) und speichert über `action=setHideAt`.
+  Leeres Feld bzw. „Zeitpunkt entfernen“ löscht die Zeile wieder.
+- Gespeichert wird ein absoluter Zeitpunkt in UTC, eingegeben und angezeigt wird deutsche Ortszeit
+  (`src/lib/schedule.ts`). Der Server läuft in UTC und würde eine naiv gespeicherte Uhrzeit sonst
+  ein bis zwei Stunden zu früh ausblenden.
+- Das Auge bleibt der Sofort-Schalter: sichtbar → sofort ausblenden (ein geplanter Zeitpunkt entfällt),
+  ausgeblendet (auch durch einen erreichten Zeitpunkt) → wieder sichtbar, Zeitpunkt gelöscht.
+- Ausgewertet wird beim Rendern (`isSectionHidden(content, key, now)`). Eine bereits geöffnete Seite
+  blendet den Bereich also erst beim nächsten Laden aus, kein Timer im Browser.
+- Den Zeitpunkt holt sich `EditableBlock` selbst aus `$page.data.content` — bewusst kein weiteres Prop
+  durch alle Elternkomponenten.
 
 ## Sortieren per Drag & Drop
 
@@ -124,11 +146,29 @@ Tastatur: Alt + Pfeiltasten auf dem Griff.
   `npx prettier --write src`.
 - **Port 5173 niemals für die eigene Verifikation benutzen** — dort läuft parallel Thomas' eigener
   Dev-Server. Immer einen anderen Port explizit setzen, z. B. `npm run dev -- --port 5199 --strictPort`.
+- **Jede neue Funktion muss Thomas selbst ausprobieren können**: am Ende einer Änderung immer einen
+  Dev-Server über `portless` starten und die URL nennen — nicht nur selbst verifizieren.
+  `CONTENT_FILE=content.local.json portless <name> bash -c 'npm run dev -- --port $PORT --strictPort'`
+  (eigener Name je Branch/Feature, sonst kollidiert die Route mit Thomas' laufendem Server;
+  `--force` nur, wenn die alte Route nachweislich tot ist). `portless list` zeigt die Routen.
+  Der Umweg über `bash -c` ist nötig, weil `$PORT` sonst nicht ersetzt wird; portless spricht **http**
+  mit der App — den Dev-Server nicht auf TLS umstellen, das gibt 502.
+- `kit.csrf.checkOrigin` ist deshalb im Dev-Server aus (`svelte.config.js`): hinter dem HTTPS-Proxy
+  passt der Origin-Header nicht zur Adresse des Dev-Servers, sonst endet jedes Anmelden mit 403.
+  Im Produktions-Build bleibt die Prüfung an.
 - Mit `BLOB_READ_WRITE_TOKEN` in `.env` liest UND schreibt der lokale Dev-Server die
   Produktionsinhalte — beim Testen keine Editor-Speicherungen absenden.
+- Sicherer zum Testen: `CONTENT_FILE=content.local.json` (`.env` oder vorangestellt). Dann liest und
+  schreibt der Store diese Datei statt des Blob Stores; fehlt sie, startet sie mit `SAMPLE_CONTENT`.
+  `*.local.json` im Projektstamm ist ignoriert. `CONTENT_FILE` hat Vorrang vor dem Blob-Token.
 - Schriften sind selbst gehostete @fontsource-Pakete und werden als JS-Imports in
   `src/routes/+layout.svelte` geladen (nicht per CSS-`@import` in `app.css` — der Sass-Umweg
   zerbricht die relativen woff2-Pfade im Produktions-Build).
+- Die zwei Schriften über der Falz (Source Sans, Source Serif, jeweils latin) werden in
+  `<svelte:head>` per `rel="preload"` vorgeladen; die URL kommt aus einem `?url`-Import, damit sie
+  denselben gehashten Pfad trifft wie die `@font-face`-Regel (sonst zwei Downloads). Ohne Preload
+  startet der Ladevorgang erst nach dem Stylesheet und der Text springt sichtbar um
+  (`font-display: swap`). Caveat steht weit unten und bleibt ungepreloadet.
 - Nach dem Installieren neuer Abhängigkeiten `node_modules/.vite` löschen und den Dev-Server neu starten.
   Veraltete optimierte Abhängigkeiten führen sonst zu `Failed to hydrate` und einer leeren Seite.
 - `.env`: `ADMIN_PASSWORD`, `ADMIN_SESSION_SECRET`, `BLOB_READ_WRITE_TOKEN`, `BLOB_STORE_ID`.
