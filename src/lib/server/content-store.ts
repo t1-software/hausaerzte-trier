@@ -20,14 +20,23 @@ function contentFile(): string {
     return env.CONTENT_FILE ?? "";
 }
 
-export async function loadSiteContent(): Promise<SiteContent> {
+export type LoadOptions = {
+    /**
+     * Am CDN-Cache vorbei direkt aus dem Blob Store lesen. Nur für Editoren gedacht: sie müssen
+     * ihre eigene Änderung sofort sehen. Für Besucher ist der Cache richtig — jeder Treffer dort
+     * kostet keine Blob-Operation (gezählt wird nur ein Cache-Miss).
+     */
+    fresh?: boolean;
+};
+
+export async function loadSiteContent(options: LoadOptions = {}): Promise<SiteContent> {
     const file = contentFile();
 
     if (file) {
         return normalizeContent(await readContentFile(file));
     }
 
-    const blobContent = await loadBlobContent();
+    const blobContent = await loadBlobContent(options.fresh ?? false);
 
     if (blobContent) {
         return blobContent;
@@ -77,7 +86,11 @@ async function readContentFile(file: string): Promise<unknown> {
     }
 }
 
-async function loadBlobContent(): Promise<SiteContent | null> {
+/**
+ * Aus dem Cache gelesene Inhalte sind bis zu `cacheControlMaxAge` Sekunden alt (siehe
+ * `saveSiteContent`). Ohne Cache wäre jeder Seitenaufruf eine Blob-Operation.
+ */
+async function loadBlobContent(fresh: boolean): Promise<SiteContent | null> {
     const token = env.BLOB_READ_WRITE_TOKEN;
 
     if (!token) {
@@ -88,7 +101,7 @@ async function loadBlobContent(): Promise<SiteContent | null> {
         const blob = await get(CONTENT_BLOB_PATH, {
             access: "private",
             token,
-            useCache: false,
+            useCache: !fresh,
         });
 
         if (!blob || blob.statusCode !== 200) {
