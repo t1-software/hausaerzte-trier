@@ -7,6 +7,15 @@ import { SAMPLE_CONTENT } from "./sample-content";
 
 const CONTENT_BLOB_PATH = "site-content/content.json";
 
+/**
+ * Wie lange das CDN die Inhalte ausliefert, bevor es erneut im Blob Store nachfragt. Nur ein
+ * solcher Miss zählt als Blob-Operation, und der Free Tier erlaubt 10.000 im Monat — 60 Sekunden
+ * waren dafür zu kurz: zwischen zwei Seitenaufrufen liegt hier meist mehr als eine Minute, jeder
+ * Aufruf war also wieder ein Miss. Der Preis sind bis zu 10 Minuten alte Inhalte für Besucher,
+ * auch beim zeitgesteuerten Ausblenden. Redakteure lesen weiter direkt (siehe `LoadOptions`).
+ */
+const CONTENT_CACHE_SECONDS = 600;
+
 export function isContentStoreConfigured(): boolean {
     return Boolean(env.CONTENT_FILE || env.BLOB_READ_WRITE_TOKEN);
 }
@@ -68,7 +77,7 @@ export async function saveSiteContent(content: SiteContent): Promise<void> {
         access: "private",
         allowOverwrite: true,
         contentType: "application/json; charset=utf-8",
-        cacheControlMaxAge: 60,
+        cacheControlMaxAge: CONTENT_CACHE_SECONDS,
         token,
     });
 }

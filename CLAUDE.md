@@ -20,6 +20,12 @@ SvelteKit-Website der Hausarztpraxis Trier (Svelte 4-Syntax, Tailwind 4, TypeScr
 - `main` (Produktion) holt die Inhalte noch aus einem veröffentlichten Google Sheet
   (`src/routes/+layout.server.ts` auf `main`). Der Blob-Inhalt dieses Branches wurde daraus übernommen;
   das Sheet ist die Quelle, wenn Inhalte verglichen oder neu befüllt werden müssen.
+- Besucher lesen die Inhalte über den CDN-Cache (`CONTENT_CACHE_SECONDS`, 10 Minuten), Redakteure per
+  `loadSiteContent({ fresh: true })` direkt aus dem Store. Grund: der Blob Store zählt nur Cache-Misses
+  als Operation und der Free Tier erlaubt 10.000 im Monat — ein Read pro Seitenaufruf reißt das.
+  Folge, die man kennen muss: eine gespeicherte Änderung und ein erreichter Ausblende-Zeitpunkt
+  wirken für Besucher bis zu 10 Minuten später. Eine neue Cache-Dauer gilt erst nach dem nächsten
+  Speichern, weil sie beim `put()` am Blob hängt.
 - Speichern läuft über `POST /admin/content` (Cookie `admin_session` nötig, Origin-Header wegen CSRF):
     - `action=saveBlock` + `text=<markdown>`
     - `action=saveRows` + `rowCount=<n>` + `cell:<zeile>:<spalte>=<wert>`
