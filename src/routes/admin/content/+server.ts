@@ -37,7 +37,9 @@ export const POST: RequestHandler = async ({ cookies, request, url }) => {
         });
     }
 
-    const content = await loadSiteContent();
+    // Beim Speichern zwingend am Cache vorbei: die anderen Bereiche werden unverändert
+    // mitgeschrieben, ein veralteter Stand würde fremde Änderungen überschreiben.
+    const content = await loadSiteContent({ fresh: true });
     const nextContent = normalizeContent(content);
 
     if (action === "saveBlock") {
