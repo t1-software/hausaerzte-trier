@@ -74,6 +74,13 @@ export const EDITABLE_CONTENT_SECTIONS: ContentSection[] = [
         multilineColumns: [0],
     },
     {
+        key: "Impfbanner",
+        title: "Impfbanner",
+        description: "Kampagnenbanner „Impfen beim Profi“ auf der Startseite (nur ein- oder ausblendbar).",
+        type: "richText",
+        columns: ["Text"],
+    },
+    {
         key: "Willkommen",
         title: "Willkommen",
         description: "Begrüßungstext auf der Startseite.",
