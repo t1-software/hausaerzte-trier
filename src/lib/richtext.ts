@@ -116,6 +116,11 @@ function liftPraxisNodes(doc: ProseNode): ProseNode {
         flushPlain();
     });
 
+    // Hinter einer Karte am Ende braucht der Editor einen Absatz für die Schreibmarke.
+    if (blocks.length === 0 || blocks[blocks.length - 1].type.name === "praxis") {
+        blocks.push(newsSchema.node("paragraph"));
+    }
+
     return newsSchema.node("doc", null, blocks);
 }
 

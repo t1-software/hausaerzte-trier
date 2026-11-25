@@ -1,6 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher, onDestroy, onMount } from "svelte";
-    import { EditorState, type Command } from "prosemirror-state";
+    import { EditorState, Plugin, type Command } from "prosemirror-state";
     import { EditorView } from "prosemirror-view";
     import { keymap } from "prosemirror-keymap";
     import { baseKeymap, chainCommands, toggleMark } from "prosemirror-commands";
@@ -50,6 +50,7 @@
     function praxisNodeView(node: ProseNode, editorView: EditorView, getPos: () => number | undefined): NodeView {
         const dom = document.createElement("div");
         dom.className = "praxis-card praxis-card--editing";
+        cardPositions.set(dom, getPos);
 
         const fields: Array<{ attr: "name" | "address" | "phone"; placeholder: string }> = [
             { attr: "name", placeholder: "Name der Praxis" },
@@ -81,6 +82,14 @@
                         [field.attr]: input.value,
                     })
                 );
+            });
+            input.addEventListener("keydown", (event) => {
+                // Enter legt direkt die nächste Karte an — so lassen sich viele Vertretungen
+                // nacheinander eintippen, auch hinter der letzten Karte.
+                if (event.key === "Enter" && !event.isComposing) {
+                    event.preventDefault();
+                    insertPraxisCardAfter(getPos());
+                }
             });
             dom.appendChild(input);
             return { input, attr: field.attr };
@@ -128,18 +137,95 @@
         };
     }
 
-    /** Fügt an der Schreibmarke eine leere Vertretungskarte ein. */
+    /** Kartenelement → Position im Dokument, damit „Karte“ weiß, hinter welche Karte es einfügt. */
+    const cardPositions = new WeakMap<HTMLElement, () => number | undefined>();
+
+    /**
+     * Fügt eine leere Vertretungskarte ein: steht der Fokus in einer Karte, direkt dahinter,
+     * sonst an der Schreibmarke. Danach steht der Cursor im Namensfeld der neuen Karte.
+     */
     function insertPraxisCard() {
+        const card = document.activeElement?.closest<HTMLElement>(".praxis-card--editing");
+        const getPos = card && host.contains(card) ? cardPositions.get(card) : undefined;
+
+        if (getPos) {
+            insertPraxisCardAfter(getPos());
+            return;
+        }
+
         if (!view) {
             return;
         }
 
-        const praxis = newsSchema.nodes.praxis.create({ name: "", address: "", phone: "" });
+        const praxis = emptyPraxis();
         view.dispatch(view.state.tr.replaceSelectionWith(praxis).scrollIntoView());
-        view.focus();
+        focusPraxis(praxis);
     }
 
+    function insertPraxisCardAfter(pos: number | undefined) {
+        if (!view || pos === undefined) {
+            return;
+        }
+
+        const node = view.state.doc.nodeAt(pos);
+
+        if (!node) {
+            return;
+        }
+
+        const praxis = emptyPraxis();
+        view.dispatch(view.state.tr.insert(pos + node.nodeSize, praxis).scrollIntoView());
+        focusPraxis(praxis);
+    }
+
+    function emptyPraxis(): ProseNode {
+        return newsSchema.nodes.praxis.create({ name: "", address: "", phone: "" });
+    }
+
+    /** Setzt den Cursor in das Namensfeld der gerade eingefügten Karte. */
+    function focusPraxis(praxis: ProseNode) {
+        if (!view) {
+            return;
+        }
+
+        let found: number | null = null;
+
+        view.state.doc.descendants((child, pos) => {
+            if (found === null && child === praxis) {
+                found = pos;
+            }
+
+            return found === null;
+        });
+
+        const dom = found === null ? null : view.nodeDOM(found);
+
+        if (dom instanceof HTMLElement) {
+            dom.querySelector("input")?.focus();
+        } else {
+            view.focus();
+        }
+    }
+
+    /**
+     * Endet das Dokument mit einer Karte, gäbe es dahinter keine Schreibmarke mehr —
+     * weitere Karten oder Text ließen sich am Ende nicht anfügen. Deshalb bleibt dort
+     * immer ein (beim Speichern unsichtbarer) leerer Absatz stehen.
+     */
+    const trailingParagraph = new Plugin({
+        appendTransaction(_transactions, _oldState, state) {
+            const last = state.doc.lastChild;
+
+            if (last && last.type === newsSchema.nodes.praxis) {
+                return state.tr.insert(state.doc.content.size, newsSchema.nodes.paragraph.create());
+            }
+
+            return null;
+        },
+    });
+
     let host: HTMLDivElement;
+    let wrapper: HTMLDivElement;
     let view: EditorView | null = null;
     let mounted = false;
     let focused = false;
@@ -163,6 +249,7 @@
                 doc,
                 plugins: [
                     history(),
+                    ...(praxisCards ? [trailingParagraph] : []),
                     // Muss vor den übrigen Bindungen liegen, damit Enter den Vorschlag übernimmt.
                     keymap({
                         ArrowDown: () => moveMatch(1),
@@ -221,16 +308,6 @@
                     current = serialize(next.doc);
                     dispatch("change", current);
                 }
-            },
-            handleDOMEvents: {
-                focus: () => {
-                    focused = true;
-                    return false;
-                },
-                blur: () => {
-                    focused = false;
-                    return false;
-                },
             },
         });
 
@@ -376,7 +453,15 @@
     }
 </script>
 
-<div class="rich-text" class:rich-text--inline={inline} class:rich-text--focused={focused}>
+<!-- Fokus zählt im ganzen Feld, auch in den Eingaben einer Vertretungskarte: sonst fehlt dort die Leiste mit „Karte“. -->
+<div
+    class="rich-text"
+    class:rich-text--inline={inline}
+    class:rich-text--focused={focused}
+    bind:this={wrapper}
+    on:focusin={() => (focused = true)}
+    on:focusout={(event) => (focused = wrapper.contains(event.relatedTarget as Node | null))}
+>
     {#if focused}
         <div class="rich-text__toolbar">
             {#if allowBold}
